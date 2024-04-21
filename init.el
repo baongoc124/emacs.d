@@ -295,10 +295,11 @@
 (use-package free-keys)
 
 (use-package fcitx
-  :init
-  (setq fcitx-use-dbus t)
   :config
+  (setq fcix-use-dbus 'fcitx5)
+  (setq fcitx-remote-command "fcitx5-remote")
   (fcitx-default-setup))
+;; TODO atm, fcix doesn't work
 
 ;;  _____ ____      _    __  __ ____
 ;; |_   _|  _ \    / \  |  \/  |  _ \
