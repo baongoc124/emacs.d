@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: quick ev print debug
+# key: ev
+# --
+EV << $0 << "\n";

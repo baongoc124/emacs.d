@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: constructor
+# key: ini
+# --
+def __init__(self, $1):
+    ${1:$(mapconcat (lambda (f) (concat "self." f " = " f))
+                    (split-string yas-text " *," t " *") "\n")}

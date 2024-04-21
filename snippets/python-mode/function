@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: def
+# key: f
+# group: function
+# --
+def ${1:method_name}(${2:args}):
+    ${3:pass}
