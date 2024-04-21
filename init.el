@@ -194,30 +194,6 @@
   :config
   (winner-mode 1))
 
-
-(require 'repeat)
-(defun make-repeatable-command (cmd)
-  "Returns a new command that is a repeatable version of CMD.
-The new command is named CMD-repeat.  CMD should be a quoted
-command.
-This allows you to bind the command to a compound keystroke and
-repeat it with just the final key.  For example:
-  (global-set-key (kbd \"C-c a\") (make-repeatable-command 'foo))
-will create a new command called foo-repeat.  Typing C-c a will
-just invoke foo.  Typing C-c a a a will invoke foo three times,
-and so on.
-See related discussion here:
-http://batsov.com/articles/2012/03/08/emacs-tip-number-4-repeat-last-command/#comment-459843643
-https://groups.google.com/forum/?hl=en&fromgroups=#!topic/gnu.emacs.help/RHKP2gjx7I8"
-  (fset (intern (concat (symbol-name cmd) "-repeat"))
-        `(lambda ,(help-function-arglist cmd) ;; arg list
-           ,(format "A repeatable version of `%s'." (symbol-name cmd)) ;; doc string
-           ,(interactive-form cmd) ;; interactive form
-           ;; see also repeat-message-function
-           (setq last-repeatable-command ',cmd)
-           (repeat nil)))
-  (intern (concat (symbol-name cmd) "-repeat")))
-
 (defun vsplit-last-buffer ()
   (interactive)
   (split-window-vertically)
@@ -236,20 +212,19 @@ https://groups.google.com/forum/?hl=en&fromgroups=#!topic/gnu.emacs.help/RHKP2gj
   (interactive)
   (switch-to-buffer nil))
 
-(global-set-key (kbd "C-x C-o") (make-repeatable-command 'other-window))
-(global-set-key (kbd "C-x k") 'kill-this-buffer)
-(global-set-key (kbd "C-1") 'delete-other-windows)
-(global-set-key (kbd "C-2") 'split-window-below)
-(global-set-key (kbd "C-3") 'hsplit-last-buffer)
-(global-set-key (kbd "C-TAB") 'switch-to-last-buffer)
-(global-set-key (kbd "C-0") 'delete-window)
-(global-set-key (kbd "C-=") 'balance-windows)
-(global-set-key (kbd "C-<left>") 'shrink-window-horizontally)
+(global-set-key (kbd "C-x k")     'kill-this-buffer)
+(global-set-key (kbd "C-1")       'delete-other-windows)
+(global-set-key (kbd "C-2")       'split-window-below)
+(global-set-key (kbd "C-3")       'hsplit-last-buffer)
+;; (global-set-key (kbd "C-TAB")     'switch-to-last-buffer) ;; conflicts with magit binding
+(global-set-key (kbd "C-0")       'delete-window)
+(global-set-key (kbd "C-=")       'balance-windows)
+(global-set-key (kbd "C-<left>")  'shrink-window-horizontally)
 (global-set-key (kbd "C-<right>") 'enlarge-window-horizontally)
-(global-set-key (kbd "C-<down>") 'shrink-window)
-(global-set-key (kbd "C-<up>") 'enlarge-window)
-(global-set-key (kbd "C-c g") 'ag-regexp) ; TODO use counsel-ag
-(global-set-key (kbd "C-x b") 'switch-to-buffer)
+(global-set-key (kbd "C-<down>")  'shrink-window)
+(global-set-key (kbd "C-<up>")    'enlarge-window)
+(global-set-key (kbd "C-c g")     'ag-regexp) ; TODO use counsel-ag
+(global-set-key (kbd "C-x b")     'switch-to-buffer)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                              VOLATILE HIGHLIGHTS
@@ -566,9 +541,10 @@ https://groups.google.com/forum/?hl=en&fromgroups=#!topic/gnu.emacs.help/RHKP2gj
 (setq dired-listing-switches "-lah")
 (setq delete-by-moving-to-trash t)
 (setq dired-dwim-target t)
-(use-package dired-efap
-  :config
-  (define-key dired-mode-map (kbd "r") 'dired-efap))
+
+;; (use-package dired-efap
+;;   :config
+;;   (define-key dired-mode-map (kbd "r") 'dired-efap))
 
 (use-package dired-open
   :config
@@ -599,46 +575,10 @@ https://groups.google.com/forum/?hl=en&fromgroups=#!topic/gnu.emacs.help/RHKP2gj
 (use-package free-keys)
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                              IMPATIENT MODE
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'impatient-mode)
-
-;; ugly with fixed backend
-(defun my-imp-filter (buffer)
-  (let ((m (with-current-buffer buffer major-mode)))
-    (case m
-      (org-mode
-       (insert-buffer-substring (htmlize-buffer
-                                 (with-current-buffer buffer
-                                   (org-export-as 'reveal)))))
-      (t
-       (let ((html-buffer (save-match-data (htmlize-buffer buffer))))
-         (insert-buffer-substring html-buffer)
-         (kill-buffer html-buffer))))))
-
-(setq-default imp-user-filter 'my-imp-filter)
-
-(defun chrome-reload ()
-  (interactive)
-  (shell-command "chromereload.py"))
-
-(defun save-and-refresh ()
-  (interactive)
-  (save-buffer)
-  (chrome-reload))
-
-(use-package zeal-at-point)
-(global-set-key "\C-cd" 'zeal-at-point)
-(add-hook 'projectile-rails-mode-hook
-          (lambda () (setq zeal-at-point-docset "ruby,rails")))
-(add-to-list 'zeal-at-point-mode-alist '(c++-mode . ""))
-
-
-;; (use-package keyfreq
-;;   :init
-;;   (keyfreq-mode 1)
-;;   (keyfreq-autosave-mode 1))
+(use-package keyfreq
+  :init
+  (keyfreq-mode 1)
+  (keyfreq-autosave-mode 1))
 
 
 (use-package dockerfile-mode)
