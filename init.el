@@ -128,7 +128,8 @@
   (doom-themes-org-config))
 
 (add-hook 'window-setup-hook '(lambda ()
-                                (set-cursor-color "#69E300")))
+                                (set-cursor-color "#69E300")
+                                (set-frame-font (font-spec :family "Roboto Mono" :size 10.0 :weight 'medium))))
 
 (use-package hl-line
   :config
@@ -150,7 +151,7 @@
   (modify-frame-parameters frame
                            '((vertical-scroll-bars . nil)
                              (horizontal-scroll-bars . nil)))
-  (set-frame-font (font-spec :family "DejaVu Sans Mono" :size 10.0) 1 frame t)
+  ;; (set-frame-font (font-spec :family "DejaVu Sans Mono" :size 10.0) 1 frame t)
   (setq frame-resize-pixelwise t)
   (setq frame-inhibit-implied-resize t))
 
