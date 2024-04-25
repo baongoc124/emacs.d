@@ -762,6 +762,21 @@ Version: 2015-10-01"
 ;; default is t and it will always indent
 ;; (setq-default tab-always-indent nil)
 
+
+(defun ngoc/align-dwim ()
+  (interactive)
+  (if current-prefix-arg
+      (save-mark-and-excursion
+        (if (not (region-active-p))
+            (mark-paragraph))
+        (call-interactively 'align-regexp))
+    (if (region-active-p)
+        (call-interactively 'align-entire)
+      (align-current))))
+
+(global-set-key (kbd "C-h C-=") 'ngoc/align-dwim)
+
+
 (require 'dabbrev)
 (setq dabbrev-abbrev-char-regexp "\\sw\\|\\s_\\|\\s.")
 (setq dabbrev-case-fold-search nil)
