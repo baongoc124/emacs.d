@@ -48,14 +48,6 @@
 (use-package diminish)
 (use-package dtrt-indent)
 (use-package evil)
-(use-package evil-avy)
-(use-package evil-leader)
-(use-package evil-matchit)
-(use-package evil-nerd-commenter)
-(use-package evil-numbers)
-(use-package evil-snipe)
-(use-package evil-surround)
-(use-package evil-visualstar)
 (use-package expand-region)
 (use-package fancy-battery)
 (use-package flycheck)
@@ -78,7 +70,6 @@
 (use-package ox-reveal)
 (use-package php-mode)
 (use-package powerline)
-(use-package powerline-evil)
 (use-package projectile)
 ;; (use-package quasi-monochrome-theme)
 (use-package spaceline)
@@ -104,109 +95,6 @@
 
 ;; (require 'framemove)
 ;; (setq framemove-hook-into-windmove t)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                              EVIL
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'evil)
-(evil-mode 1)
-(setq evil-want-fine-undo t)
-(setq evil-emacs-state-cursor '("pink" box))
-(setq evil-normal-state-cursor '("#00B400" box))
-(setq evil-visual-state-cursor '("orange" box))
-(setq evil-insert-state-cursor '("green" bar))
-(setq evil-replace-state-cursor '("pink" bar))
-(setq evil-operator-state-cursor '("cyan" hollow))
-
-;; disable evil insert state keybinding
-(setcdr evil-insert-state-map nil)
-(define-key evil-insert-state-map
-  (read-kbd-macro evil-toggle-key) 'evil-normal-state)
-(define-key evil-insert-state-map [escape] 'evil-normal-state)
-
-;; consistency with C, D
-(define-key evil-normal-state-map (kbd "Y") (kbd "y$"))
-;; (define-key evil-emacs-state-map [escape] 'evil-normal-state)
-(define-key evil-emacs-state-map [escape] nil)
-(define-key evil-visual-state-map (kbd "v") 'er/expand-region)
-
-;; (define-key evil-normal-state-map (kbd "RET")
-;;   (lambda ()
-;;     (interactive)
-;;     (evil-insert-newline-below)
-;;     (evil-previous-line)))
-
-;; (define-key evil-normal-state-map [shift return]
-;;   (lambda ()
-;;     (interactive)
-;;     (evil-insert-newline-above)
-;;     (evil-next-line)))
-
-(setq-default evil-symbol-word-search t)
-;; consistency with dw, yw
-(setq evil-want-change-word-to-end nil)
-;; consistency with C, D
-;; (setq evil-want-Y-yank-to-eol t)
-
-;; unbind C-w for WindowsMode
-;;(eval-after-load "evil-maps"
-;;  (dolist (map '(evil-motion-state-map
-;;                 evil-insert-state-map
-;;                 evil-emacs-state-map))
-;;    (define-key (eval map) "\C-w" nil)))
-
-;; use C-j, C-k to move line down, up in visual mode
-(define-key evil-visual-state-map (kbd "c-j")
-            (concat ":m '>+1" (kbd "ret") "gv=gv"))
-(define-key evil-visual-state-map (kbd "c-k")
-            (concat ":m '<-2" (kbd "ret") "gv=gv"))
-
-
-;; MAKE LARGE JK JUMP MOTIONS
-(defun my-jumpy-before-next-or-previous-line (&optional count)
-  (when count
-    (evil-set-jump)))
-
-(add-function :before (symbol-function 'evil-next-line) #'my-jumpy-before-next-or-previous-line)
-(add-function :before (symbol-function 'evil-previous-line) #'my-jumpy-before-next-or-previous-line)
-;; (remove-function (symbol-function 'evil-next-line) #'my-jumpy-before-next-line)
-
-;; (require 'evil-snipe)
-;; (evil-snipe-mode 1)
-;; (evil-snipe-override-mode -1)
-;; (add-hook 'magit-mode-hook 'turn-off-evil-snipe-override-mode)
-;; (setq evil-snipe-scope 'buffer)
-;; (require 'evil-easymotion)
-;; (evilem-default-keybindings "s")
-
-;; (require 'evil-mc)
-;; (global-evil-mc-mode 1)
-;; (setq evil-mc-mode-line-prefix "m")
-
-;; (require 'avy)
-;; (define-key evil-motion-state-map (kbd "s w") #'evil-avy-goto-word-or-subword-1)
-;; (define-key evil-motion-state-map (kbd "s c") #'evil-avy-goto-char)
-;; (define-key evil-normal-state-map (kbd "s w") #'evil-avy-goto-word-or-subword-1)
-;; (define-key evil-normal-state-map (kbd "s c") #'evil-avy-goto-char)
-;; (require 'evil-avy)
-;; (evil-avy-mode t)
-
-;; Disable evil on some modes
-(evil-set-initial-state 'term-mode 'emacs)
-(evil-set-initial-state 'help-mode 'emacs)
-(evil-set-initial-state 'info-mode 'emacs)
-(evil-set-initial-state 'eshell-mode 'emacs)
-(evil-set-initial-state 'shell-mode 'emacs)
-(evil-set-initial-state 'dired-mode 'emacs)
-(evil-set-initial-state 'win:switch-menu-mode 'emacs)
-(evil-set-initial-state 'compilation-mode 'emacs)
-(evil-set-initial-state 'elfeed-show-mode 'emacs)
-(evil-set-initial-state 'elfeed-search-mode 'emacs)
-(evil-set-initial-state 'exwm-mode 'emacs)
-
-(setq evil-insert-state-modes (append evil-insert-state-modes evil-motion-state-modes))
-(setq evil-motion-state-modes '())
-
-
 (require 'ace-link)
 (ace-link-setup-default)
 
@@ -238,122 +126,11 @@
 (set-face-background 'hl-line "#FFFAE6")
 (global-hl-line-mode t)
 
-(require 'evil-visualstar)
-(global-evil-visualstar-mode)
-
-(require 'spaceline-config)
-(spaceline-spacemacs-theme)
-(setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)
-(setq spaceline-evil-state-faces
-      '((normal . powerline-evil-normal-face)
-        (insert . powerline-evil-insert-face)
-        (emacs . powerline-evil-emacs-face)
-        (replace . powerline-evil-replace-face)
-        (visual . powerline-evil-visual-face)
-        (motion . powerline-evil-motion-face)))
-
-(require 'evil-surround)
-(global-evil-surround-mode 1)
-(define-key evil-outer-text-objects-map "a" 'evil-a-bracket)
-(define-key evil-inner-text-objects-map "a" 'evil-inner-bracket)
-;; a for array []
-(setq-default evil-surround-pairs-alist
-              (add-to-list 'evil-surround-pairs-alist '(?a . ("[" . "]"))))
-(setq-default evil-surround-pairs-alist
-              (add-to-list 'evil-surround-pairs-alist '(?d . ("$" . "$"))))
-
-;; this macro was copied from here: https://stackoverflow.com/a/22418983/4921402
-(defmacro define-and-bind-quoted-text-object (name key start-regex end-regex)
-  (let ((inner-name (make-symbol (concat "evil-inner-" name)))
-        (outer-name (make-symbol (concat "evil-a-" name))))
-    `(progn
-       (evil-define-text-object ,inner-name (count &optional beg end type)
-         (evil-select-paren ,start-regex ,end-regex beg end type count nil))
-       (evil-define-text-object ,outer-name (count &optional beg end type)
-         (evil-select-paren ,start-regex ,end-regex beg end type count t))
-       (define-key evil-inner-text-objects-map ,key #',inner-name)
-       (define-key evil-outer-text-objects-map ,key #',outer-name))))
-(define-and-bind-quoted-text-object "dollar" "$" "\\$" "\\$") ;; sometimes your have to escape the regex
-(define-and-bind-quoted-text-object "dollard" "d" "\\$" "\\$") ;; sometimes your have to escape the regex
-
-(require 'evil-args)
-
-;; bind evil-args text objects
-(define-key evil-inner-text-objects-map "i" 'evil-inner-arg)
-(define-key evil-outer-text-objects-map "i" 'evil-outer-arg)
-
-;; ;; bind evil-forward/backward-args
-(define-key evil-normal-state-map "L" 'evil-forward-arg)
-(define-key evil-normal-state-map "H" 'evil-backward-arg)
-(define-key evil-motion-state-map "L" 'evil-forward-arg)
-(define-key evil-motion-state-map "H" 'evil-backward-arg)
-
-;; ;; bind evil-jump-out-args
-(define-key evil-normal-state-map "K" 'evil-jump-out-args)
-
-(require 'evil-matchit)
-(global-evil-matchit-mode 1)
-
-(require 'expand-region)
-
-(require 'evil-nerd-commenter)
-(defun comment-relative-lines (&optional NUM)
-  (interactive "P")
-  (evilnc-comment-or-uncomment-lines (if NUM
-                                         (* (1+ (abs NUM))
-                                            (/ NUM (abs NUM)))
-                                       1)))
 
 (require 'avy)
 (setq avy-all-windows t)
 (setq avy-keys-alist `((avy-goto-line . ,(append (number-sequence ?a ?z) (number-sequence ?0 ?9)))))
 (setq avy-keys '(?a ?o ?e ?u ?h ?t ?n ?s ?c ?r ?j ?m))
-
-
-(require 'evil-leader)
-(setq evil-leader/in-all-states 1)
-(global-evil-leader-mode)
-(evil-leader/set-leader "<SPC>")
-(evil-leader/set-key
-  "i" 'iwb
-  "f" 'counsel-projectile-find-file
-  ;;"v" 'clipboard-yank
-  "u" 'undo-tree-visualize
-  "w" 'save-buffer
-  "r" 'evil-show-registers
-  ;; "z" 'ctl-x-map
-  ;; "k" 'kill-buffer
-  ;; "d" 'dired
-  "d" 'zeal-at-point
-  ;; "c" 'comment-relative-lines ; if you prefer backslash key
-  "c" 'evilnc-comment-operator
-  "C" 'evilnc-comment-or-uncomment-lines
-  ;; "cl" 'evilnc-comment-or-uncomment-to-the-line
-  ;; "ll" 'evilnc-comment-or-uncomment-to-the-line
-  ;; "cc" 'evilnc-copy-and-comment-lines
-  ;; "cp" 'evilnc-comment-or-uncomment-paragraphs
-  ;; "cr" 'comment-or-uncomment-region
-  ;; "cv" 'evilnc-toggle-invert-comment-line-by-line
-  "m" 'dwim-c/compile
-  evil-leader/leader 'rotate-word-at-point
-  "t" 'evil-avy-goto-subword-1
-  "s" 'evil-avy-goto-char-timer
-  "p" 'counsel-yank-pop
-  "<SPC>" 'ff-find-other-file
-  nil)
-
-(require 'evil-numbers)
-(define-key evil-normal-state-map (kbd "C-A") 'evil-numbers/inc-at-pt)
-(define-key evil-normal-state-map (kbd "C-S-A") 'evil-numbers/dec-at-pt)
-
-(use-package evil-lion
-  :ensure t
-  :config
-  (setq evil-lion-left-align-key (kbd "g a"))
-  (setq evil-lion-right-align-key (kbd "g A"))
-  (evil-lion-mode))
-
-(defvar xah-left-brackets '("(" "{" "[" "<" "\"" "'")
   "List of left bracket chars.")
 (defvar xah-right-brackets '(")" "]" "}" ">" "\"" "'")
   "list of right bracket chars.")
@@ -381,9 +158,6 @@ Version 2015-10-01"
 ;; (key-chord-define evil-insert-state-map "hk" 'xah-backward-left-bracket)
 ;; (key-chord-define evil-insert-state-map "tj" 'yas-expand) ; tj tk are also good key-chord
 
-(with-eval-after-load 'evil
-  (require 'evil-anzu)
-  (setq anzu-cons-mode-line-p nil))
 
 ;; disable zap-to-char key
 (global-set-key (kbd "M-z") nil)
@@ -526,8 +300,6 @@ https://groups.google.com/forum/?hl=en&fromgroups=#!topic/gnu.emacs.help/RHKP2gj
 (global-set-key (kbd "C-1") 'delete-other-windows)
 (global-set-key (kbd "C-2") 'split-window-below)
 (global-set-key (kbd "C-3") 'hsplit-last-buffer)
-(global-set-key (kbd "C-8") 'evil-switch-to-windows-last-buffer)
-(global-set-key (kbd "C-9") 'evil-window-rotate-downwards)
 (global-set-key (kbd "C-0") 'delete-window)
 (global-set-key (kbd "C-=") 'balance-windows)
 (global-set-key (kbd "C-<left>") 'shrink-window-horizontally)
@@ -1253,19 +1025,6 @@ official one in emms.el to return filename only (no path)
 ;;                       'evil-paste-pop 'evil-move)
 ;; (vhl/install-extension 'evil)
 
-
-(use-package evil-goggles
-  :ensure t
-  :config
-  (evil-goggles-mode)
-  (setq evil-goggles-pulse nil)
-
-  ;; optionally use diff-mode's faces; as a result, deleted text
-  ;; will be highlighed with `diff-removed` face which is typically
-  ;; some red color (as defined by the color theme)
-  ;; other faces such as `diff-added` will be used for other actions
-  ;; (evil-goggles-use-diff-faces)
-  )
 
 (require 'zeal-at-point)
 (global-set-key "\C-cd" 'zeal-at-point)
