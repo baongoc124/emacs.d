@@ -608,20 +608,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (add-hook 'LaTeX-mode-hook 'TeX-source-correlate-mode)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                              POPWIN
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package popwin
-  :config
-  (popwin-mode 1)
-  (setq popwin:popup-window-height 0.35)
-  ;; (setq display-buffer-function 'popwin:display-buffer)
-  (push '("^CAPTURE-.+\*.org$" :regexp t) popwin:special-display-config)
-  (push '("*Org Select*") popwin:special-display-config)
-  (push '(" *undo-tree*" :height 0.3 :position bottom) popwin:special-display-config)
-  (push '(imenu-list-major-mode :width 60 :position right) popwin:special-display-config))
-
-
 
 
 ;; (require 'netlogo-mode)
