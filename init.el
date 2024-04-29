@@ -571,10 +571,18 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                              DIRED
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; TODO dired dwim target function
+;; TODO dired open file in GUI file manager / associated program
 (require 'dired)
 (setq dired-listing-switches "-lah")
 (setq delete-by-moving-to-trash t)
 (setq dired-dwim-target t)
+
+(defun ngoc/make-line-taller ()
+  (setq line-spacing 0.2))
+
+;; increase line spacing in dired mode -> easier to read
+(add-hook 'dired-mode-hook #'ngoc/make-line-taller)
 
 ;; (use-package dired-efap
 ;;   :config
@@ -591,9 +599,9 @@
           terminal-here-command-flag "--")
     (global-set-key (kbd "C-!") 'terminal-here-launch)))
 
-(use-package stripe-buffer
-  :hook
-    (dired-mode . turn-on-stripe-buffer-mode))
+;; (use-package stripe-buffer
+;;   :hook
+;;   (dired-mode . turn-on-stripe-buffer-mode))
 
 (use-package all-the-icons
   :if (display-graphic-p))
