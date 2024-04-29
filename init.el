@@ -763,7 +763,13 @@ Version: 2015-10-01"
   (add-hook 'writeroom-global-effects 'writeroom-set-internal-border-width))
 
 
-(global-display-line-numbers-mode)
+(require 'display-line-numbers)
+(setq display-line-numbers-current-absolute nil)
+(setq display-line-numbers-type 'relative)
+(add-hook 'prog-mode-hook 'display-line-numbers-mode)
+(add-hook 'text-mode-hook 'display-line-numbers-mode)
+(add-hook 'conf-mode-hook 'display-line-numbers-mode)
+
 
 (use-package elec-pair
   :config
