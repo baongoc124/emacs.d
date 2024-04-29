@@ -45,11 +45,22 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
+;; only auto update on weekends
 (use-package auto-package-update
   :config
-  (setq auto-package-update-interval 1
-        auto-package-update-promp-before-update t)
-  (auto-package-update-maybe))
+  (setq auto-package-update-interval 3
+        auto-package-update-prompt-before-update t)
+
+  (defun ngoc/attempt-auto-update-on-weekend ()
+    (require 'calendar)
+    (let ((current-day (calendar-day-of-week (calendar-current-date))))
+      (when (or (= current-day 0)
+                (= current-day 6))
+        (auto-package-update-maybe))))
+
+  ;; first attempt 1 min after startup. After that, attempt every 3 hours.
+  (run-at-time "1 min" (* 3 3600) #'ngoc/attempt-auto-update-on-weekend))
+
 
 ;; (use-package aggressive-indent)
 ;; (use-package tex-buf)
