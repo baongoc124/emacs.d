@@ -206,9 +206,16 @@
 (require 'uniquify)
 
 
-(setq scroll-margin 3
-      scroll-conservatively 9999
-      scroll-preserve-screen-position t)
+(setq scroll-margin 10000 ;; large number so it always keep 1/4 of the screen in margin
+      maximum-scroll-margin 0.25
+      scroll-conservatively 10
+      scroll-preserve-screen-position t
+      next-screen-context-lines 5
+      isearch-allow-scroll t)
+
+;; ;; improve scrolling performance
+(setq redisplay-skip-fontification-on-input t)
+
 
 (setq truncate-lines nil)
 
