@@ -1444,6 +1444,11 @@ Version: 2015-10-01"
                       (anaconda-mode -1)
                       (anaconda-eldoc-mode -1)))))
 
+(use-package vimrc-mode
+  :defer t
+  :init
+  (add-to-list 'auto-mode-alist '("\\.vim\\(rc\\)?\\'" . vimrc-mode)))
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
