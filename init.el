@@ -1238,7 +1238,8 @@ Version: 2015-10-01"
   :config
   (setq company-dabbrev-downcase nil)
   (setq company-minimum-prefix-length 2)
-  (setq company-idle-delay 0.05))
+  (setq company-idle-delay 0.05)
+  (setq company-format-margin-function 'company-text-icons-margin))
 
  ;;   ____            _ _       _
 ;;  / ___|___  _ __ (_) | ___ | |_
