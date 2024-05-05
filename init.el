@@ -230,6 +230,30 @@
 ;; ;; improve scrolling performance
 (setq redisplay-skip-fontification-on-input t)
 
+;; https://emacs.stackexchange.com/a/52576
+;; modify default isearch behavior
+;; 1. always exit at start of the match
+;; 2. C-RET to have default exit behavior
+(defvar ngoc/isearch-default-exit-behavior nil
+  "If non-nil, isearch will exit with default behavior.")
+
+(defun ngoc/default-isearch-exit ()
+  (interactive)
+  (let ((ngoc/isearch-default-exit-behavior t))
+    (isearch-exit)))
+
+(defun ngoc/isearch-always-exits-at-start ()
+  (when (and isearch-forward
+             (number-or-marker-p isearch-other-end)
+             (not mark-active)
+             (not isearch-mode-end-hook-quit)
+             (not ngoc/isearch-default-exit-behavior))
+    (goto-char isearch-other-end)))
+
+(with-eval-after-load "isearch"
+  (add-hook 'isearch-mode-end-hook #'ngoc/isearch-always-exits-at-start)
+  (define-key isearch-mode-map (kbd "C-<return>") #'ngoc/default-isearch-exit))
+
 
 (setq truncate-lines nil)
 
