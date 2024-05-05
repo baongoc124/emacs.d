@@ -1145,6 +1145,48 @@ Version: 2015-10-01"
           ("leetcode\\.com" . python-mode)))
   (atomic-chrome-start-server))
 
+(use-package eglot
+  :after transient
+  :init
+  ;; do not display this warning from
+  ;; jsonrpc ‘:events-buffer-scrollback-size’ deprecated. Use ‘events-buffer-config’.
+  ;; FIXME so basically hide all warnings from emacs by default...
+  (add-to-list 'warning-suppress-types '(emacs))
+  :hook
+  (prog-mode . eglot-ensure)
+  :config
+  (setq eglot-extend-to-xref t)
+  ;; python
+  (add-to-list 'eglot-server-programs
+               '(python-mode . ("pyright-langserver" "--stdio")))
+
+  (transient-define-prefix ngoc/eglot-transient ()
+    [:class transient-row "Eglot Menu"]
+
+    [["Server"
+      ("s" "Start server" eglot)
+      ("R" "Reconnect" eglot-reconnect)
+      ("S" "Shutdown" eglot-shutdown)]
+
+     ["Refactor"
+      ("r" "Rename" eglot-rename)
+      ("o" "Organize imports" eglot-code-action-organize-imports)
+      ("f" "Quick fix" eglot-code-action-quickfix)
+      ("e" "Extract" eglot-code-action-extract)
+      ("i" "Inline" eglot-code-action-inline)
+      ("w" "Rewrite" eglot-code-action-rewrite)]
+
+     ["Flymake"
+      ("b" "Buffer diagnostics" flymake-show-buffer-diagnostics)
+      ("p" "Project diagnostics" flymake-show-project-diagnostics)]
+
+     ["Other"
+      ("a" "Show actions" eglot-code-actions)
+      ("F" "Format" eglot-format)
+      ("d" "ElDoc" eldoc)
+      ("h" "Toggle Inlay hints" eglot-inlay-hints-mode)]])
+
+  (global-set-key (kbd "C-h C-e") #'ngoc/eglot-transient))
 
 ;;              _                                    _      _
 ;;   __ _ _   _| |_ ___     ___ ___  _ __ ___  _ __ | | ___| |_ ___
@@ -1348,3 +1390,28 @@ Version: 2015-10-01"
   :config
   (setq plantuml-default-exec-mode 'jar)
   (setq plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar"))
+
+;;  ____        _   _
+;; |  _ \ _   _| |_| |__   ___  _ __
+;; | |_) | | | | __| '_ \ / _ \| '_ \
+;; |  __/| |_| | |_| | | | (_) | | | |
+;; |_|    \__, |\__|_| |_|\___/|_| |_|
+;;        |___/
+
+;; need a auto completion engine as a fallback for when eglot chokes (not in a project or buffer not visiting a file)
+(use-package anaconda-mode
+  :hook
+  (python-mode . anaconda-mode)
+  (python-mode . anaconda-eldoc-mode))
+
+(use-package company-anaconda
+  :after (eglot company)
+  :config
+  (add-to-list 'company-backends '(company-anaconda :with company-capf))
+  (add-hook 'eglot-managed-mode-hook
+            '(lambda ()
+               (when (and (member major-mode '(python-mode python-ts-mode))
+                          (eglot-managed-p))
+                      (anaconda-mode -1)
+                      (anaconda-eldoc-mode -1)))))
+
