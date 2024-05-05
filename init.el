@@ -1215,6 +1215,30 @@ Version: 2015-10-01"
   :bind (:map ngoc-prefix
          ("s" . imenu-list-smart-toggle)))
 
+
+(use-package symbol-overlay
+  :config
+  (require 'transient)
+  (transient-define-prefix symbol-overlay-transient ()
+    "Symbol Overlay transient"
+    ["Symbol Overlay"
+     ["Overlays"
+      ("o" "Add/Remove at point" symbol-overlay-put)
+      ("c" "Remove All" (lambda ()
+                          (interactive)
+                          (call-interactively 'symbol-overlay-remove-all)))]
+     ["Other"
+      ("m" "Highlight symbol-at-point" symbol-overlay-mode)]])
+
+  (define-key 'ngoc-prefix (kbd "o") 'symbol-overlay-transient)
+
+  (setcdr symbol-overlay-map nil) ;; clear overlay keymap
+  (define-key symbol-overlay-map (kbd "M-n") #'symbol-overlay-jump-next)
+  (define-key symbol-overlay-map (kbd "M-p") #'symbol-overlay-jump-prev)
+  (global-set-key (kbd "M-N") 'symbol-overlay-switch-forward)
+  (global-set-key (kbd "M-P") 'symbol-overlay-switch-backward))
+
+
 ;;     _  _____ ___  __  __ ___ ____    ____ _   _ ____   ___  __  __ _____
 ;;    / \|_   _/ _ \|  \/  |_ _/ ___|  / ___| | | |  _ \ / _ \|  \/  | ____|
 ;;   / _ \ | || | | | |\/| || | |     | |   | |_| | |_) | | | | |\/| |  _|
