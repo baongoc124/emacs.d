@@ -287,12 +287,12 @@
 ;; / __| '_ \ / _ \| '__| __/ __| | | | __/ __|
 ;; \__ \ | | | (_) | |  | || (__| |_| | |_\__ \
 ;; |___/_| |_|\___/|_|   \__\___|\__,_|\__|___/
-(use-package guide-key
-  :diminish guide-key-mode
+(use-package which-key
+  :after god-mode
+  :diminish which-key-mode
   :config
-  (setq guide-key/guide-key-sequence t)
-  (setq guide-key/popup-window-position 'bottom)
-  (guide-key-mode 1))
+  (which-key-mode 1)
+  (which-key-enable-god-mode-support))
 
 (use-package free-keys)
 
