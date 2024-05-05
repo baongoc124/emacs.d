@@ -5,6 +5,8 @@
 
 (global-set-key (kbd "C-h")    nil)      ; disable C-h as early as possible to bind to other functions
 (global-set-key (kbd "C-<f1>") help-map) ; ease of calling help in god-mode
+(global-set-key (kbd "C-/")    nil)      ; don't use and easily mispress when in god-mode
+(global-set-key "\C-x\C-z" nil)          ; suspend emacs accidentally no more
 
 
 (add-to-list 'load-path "~/.emacs.d/lisp/")
@@ -43,8 +45,6 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
-
-
 (use-package auto-package-update
   :config
   (setq auto-package-update-interval 1
@@ -55,6 +55,7 @@
 ;; (use-package tex-buf)
 ;; (use-package tex :ensure auctex)
 ;; (use-package auctex-latexmk)
+(use-package diminish)
 (use-package better-shell)
 (use-package flyspell-lazy)
 (use-package flx)
@@ -128,13 +129,22 @@
   ;; Corrects (and improves) org-mode's native fontification.
   (doom-themes-org-config))
 
-(add-hook 'window-setup-hook '(lambda ()
-                                (set-cursor-color "#69E300")
-                                (set-frame-font (font-spec :family "Roboto Mono" :size 10.0 :weight 'medium))))
+(setq ngoc/interface-font-name "RobotoMono Nerd Font Mono")
+
+(add-hook 'window-setup-hook
+          '(lambda ()
+             (set-cursor-color "#69E300")
+             (when (eq system-type 'gnu/linux)
+               (set-frame-font (font-spec :family ngoc/interface-font-name
+                                          :size 10.5
+                                          :weight 'medium)))))
+
+;; mode line
+(column-number-mode 1)
+(setq mode-line-position-column-line-format '(" %l,%c"))
 
 (use-package hl-line
   :config
-  ;; (set-face-background 'hl-line "#332D00")
   (global-hl-line-mode t))
 
 (setq frame-title-format
@@ -158,9 +168,6 @@
 
 (rmrf/setup-frame)
 (add-hook 'after-make-frame-functions 'rmrf/setup-frame)
-;; (set-face-foreground 'default "#242424") ; black is too contrasty so make it a little gray
-;; (set-face-foreground 'default "#000000")
-;; (set-background-color "#F5FAF4")
 
 (setq browse-url-generic-program "google-chrome-stable")
 (setq browse-url-browser-function 'browse-url-generic)
@@ -186,8 +193,6 @@
       scroll-preserve-screen-position t)
 
 (setq truncate-lines nil)
-;; don't suspend emacs accidentally
-(global-set-key "\C-x\C-z" nil)
 
 (use-package winner
   :demand t ;; load immediately to save window configuration
@@ -226,7 +231,6 @@
 (global-set-key (kbd "C-<down>")  'shrink-window)
 (global-set-key (kbd "C-<up>")    'enlarge-window)
 (global-set-key (kbd "C-c g")     'ag-regexp) ; TODO use counsel-ag
-(global-set-key (kbd "C-x b")     'switch-to-buffer)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                              VOLATILE HIGHLIGHTS
@@ -280,6 +284,7 @@
 (global-set-key (kbd "C-x C-f") 'counsel-find-file)
 (global-set-key (kbd "C-h C-f") 'counsel-projectile-find-file)
 (global-set-key (kbd "C-S-Y") 'counsel-yank-pop)
+(global-set-key (kbd "C-x b") 'counsel-switch-buffer)
 
 
 ;;      _                _             _
@@ -297,6 +302,7 @@
 (use-package free-keys)
 
 (use-package fcitx
+  :if (eq system-type 'gnu/linux)
   :config
   (setq fcix-use-dbus 'fcitx5)
   (setq fcitx-remote-command "fcitx5-remote")
@@ -630,7 +636,7 @@
   :bind (("<escape>" . god-local-mode) ; mimic vim to exit insert mode
          :map god-local-mode-map
          ("i"        . god-local-mode) ; mimic vim to enter insert mode
-         ("."        . repeat)
+         ("`"        . repeat)
          ("<escape>" . ignore))
   
   :hook ((text-mode . god-local-mode)
@@ -683,10 +689,13 @@ Version: 2015-10-01"
   (interactive)
   (re-search-forward (regexp-opt xah-right-brackets) nil t))
 
-(global-set-key (kbd "C-8") 'xah-backward-left-bracket)
+;; use middle fingers for paragraph movements
+;; use ring fingers for bracket movements
+;; to alternating hands like Dvorak's idea
+(global-set-key (kbd "C-,") 'xah-backward-left-bracket)
 (global-set-key (kbd "C-9") 'xah-forward-right-bracket)
-(global-set-key (kbd "C-<") 'backward-paragraph)
-(global-set-key (kbd "C->") 'forward-paragraph)
+(global-set-key (kbd "C-.") 'backward-paragraph)
+(global-set-key (kbd "C-8") 'forward-paragraph)
 
 
 (require 'recentf)
@@ -1060,17 +1069,6 @@ Version: 2015-10-01"
   :hook (prog-mode . highlight-indentation-mode))
 
 
-(use-package lsp-mode
-  :init
-  ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
-  (setq lsp-keymap-prefix "C-c l")
-  :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
-         (c-mode . lsp)
-         (c++-mode . lsp)
-         ;; if you want which-key integration
-         (lsp-mode . lsp-enable-which-key-integration))
-  :commands lsp)
-
 ;;                    _             _   _
 ;;  _ __   __ ___   _(_) __ _  __ _| |_(_) ___  _ __
 ;; | '_ \ / _` \ \ / / |/ _` |/ _` | __| |/ _ \| '_ \
@@ -1125,7 +1123,9 @@ Version: 2015-10-01"
          ("M-g i"   . dumb-jump-go-prompt)
          ("M-g x"   . dumb-jump-go-prefer-external)
          ("M-g z"   . dumb-jump-go-prefer-external-other-window))
-  :config (setq dumb-jump-selector 'ivy))
+  :config
+  (setq dumb-jump-selector 'ivy)
+  (add-hook 'xref-backend-functions #'dumb-jump-xref-activate))
 
 (use-package imenu-list
   :bind ("C-h C-b" . imenu-list))
@@ -1277,17 +1277,19 @@ Version: 2015-10-01"
   (setq copilot-indent-offset-warning-disable t)
 
 
-  ;; temporary fix for tab key, sometimes overlay is visible but copilot's keymap is not active
-  (defun ngoc/copilot-compatible-tab (&optional arg)
-    (interactive "P")
-    (if (copilot--overlay-visible)
-        (copilot-accept-completion)
-      (indent-for-tab-command arg)))
+  ;; ;; temporary fix for tab key, sometimes overlay is visible but copilot's keymap is not active
+  ;; (defun ngoc/copilot-compatible-tab (&optional arg)
+  ;;   (interactive "P")
+  ;;   (if (copilot--overlay-visible)
+  ;;       (copilot-accept-completion)
+  ;;     (indent-for-tab-command arg)))
 
-  ;; don't bind this tab outside of prog-mode
-  (add-hook 'prog-mode-hook
-            (lambda ()
-              (local-set-key (kbd "<tab>") 'ngoc/copilot-compatible-tab))))
+  ;; ;; don't bind this tab outside of prog-mode
+  ;; (add-hook 'prog-mode-hook
+  ;;           (lambda ()
+  ;;             (local-set-key (kbd "<tab>") 'ngoc/copilot-compatible-tab)))
+
+  )
 
 
 
@@ -1414,4 +1416,30 @@ Version: 2015-10-01"
                           (eglot-managed-p))
                       (anaconda-mode -1)
                       (anaconda-eldoc-mode -1)))))
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-vc-selected-packages
+   '((transient-showcase :url "https://github.com/positron-solutions/transient-showcase.git")))
+ '(safe-local-variable-values
+   '((eval setq cc-search-directories
+           (list "."
+                 (expand-file-name "~/builds/comm/include")
+                 (expand-file-name "~/builds/comm/src")
+                 (expand-file-name "~/builds/comm/src/**")
+                 "/usr/include" "/usr/local/include/*"))
+     (eval setq flycheck-clang-include-path
+           (list
+            (expand-file-name "~/apps/omnetpp-5.7/include")
+            (expand-file-name "~/builds/comm/include")
+            (expand-file-name "~/builds/comm/src/message"))))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
 
