@@ -3,8 +3,13 @@
 
 (setq max-lisp-eval-depth 10000)
 
-(global-set-key (kbd "C-h")    nil)      ; disable C-h as early as possible to bind to other functions
-(global-set-key (kbd "C-<f1>") help-map) ; ease of calling help in god-mode
+;; to rebind C-h
+(define-prefix-command 'ngoc-prefix)
+(global-set-key (kbd "C-<f9>") 'ngoc-prefix)
+;; FIXME this makes me cannot access other keybindngs contains C-h
+;; but it's a good tradeoff
+(define-key key-translation-map [?\C-h] (kbd "C-<f9>"))
+
 (global-set-key (kbd "C-/")    nil)      ; don't use and easily mispress when in god-mode
 (global-set-key "\C-x\C-z" nil)          ; suspend emacs accidentally no more
 
@@ -83,7 +88,8 @@
 
 
 (use-package undo-tree
-  :bind ("C-h C-u" . undo-tree-visualize)
+  :bind (:map ngoc-prefix
+         ("u" . undo-tree-visualize))
   :diminish undo-tree-mode
   :config
   (global-undo-tree-mode))
@@ -95,9 +101,10 @@
 
 
 (use-package avy
-  :bind (("C-h C-t" . avy-goto-word-or-subword-1)
-         ("C-h C-c" . avy-goto-char-timer)
-         ("C-h C-n" . avy-goto-line))
+  :bind (:map ngoc-prefix
+         ("t" . avy-goto-word-or-subword-1)
+         ("c" . avy-goto-char-timer)
+         ("n" . avy-goto-line))
   :config
   (setq avy-all-windows t)
   (setq avy-keys-alist `((avy-goto-line . ,(append (number-sequence ?a ?z) (number-sequence ?0 ?9)))))
@@ -307,7 +314,7 @@
 (global-set-key (kbd "C-s") 'swiper)
 (global-set-key (kbd "M-x") 'counsel-M-x)
 (global-set-key (kbd "C-x C-f") 'counsel-find-file)
-(global-set-key (kbd "C-h C-f") 'counsel-projectile-find-file)
+(define-key ngoc-prefix "f" 'counsel-projectile-find-file)
 (global-set-key (kbd "C-S-Y") 'counsel-yank-pop)
 (global-set-key (kbd "C-x b") 'counsel-switch-buffer)
 
@@ -657,7 +664,9 @@
          :map god-local-mode-map
          ("i"        . god-local-mode) ; mimic vim to enter insert mode
          ("`"        . repeat)
-         ("<escape>" . ignore))
+         ("<escape>" . ignore)
+         ("h"        . ngoc-prefix)
+         ("<f1>"     . help-command))
   
   :hook ((text-mode . god-local-mode)
          (prog-mode . god-local-mode)
@@ -676,7 +685,8 @@
 (global-set-key (kbd "C-z")     'zap-up-to-char)
 (global-set-key (kbd "C-S-Z")   'zap-to-char)
 (global-set-key (kbd "M-2")     'mark-word)
-(global-set-key (kbd "C-h C-d") 'duplicate-dwim)
+;; TODO add ability to duplicate to upper or lower
+(define-key ngoc-prefix "d" 'duplicate-dwim)
 
 
 (defvar xah-brackets '("“”" "()" "[]" "{}" "<>" "＜＞" "（）" "［］" "｛｝" "⦅⦆" "〚〛" "⦃⦄" "‹›" "«»" "「」" "〈〉" "《》" "【】" "〔〕" "⦗⦘" "『』" "〖〗" "〘〙" "｢｣" "⟦⟧" "⟨⟩" "⟪⟫" "⟮⟯" "⟬⟭" "⌈⌉" "⌊⌋" "⦇⦈" "⦉⦊" "❛❜" "❝❞" "❨❩" "❪❫" "❴❵" "❬❭" "❮❯" "❰❱" "❲❳" "〈〉" "⦑⦒" "⧼⧽" "﹙﹚" "﹛﹜" "﹝﹞" "⁽⁾" "₍₎" "⦋⦌" "⦍⦎" "⦏⦐" "⁅⁆" "⸢⸣" "⸤⸥" "⟅⟆" "⦓⦔" "⦕⦖" "⸦⸧" "⸨⸩" "｟｠")
@@ -819,7 +829,7 @@ Version: 2015-10-01"
         (call-interactively 'align-entire)
       (align-current))))
 
-(global-set-key (kbd "C-h C-=") 'ngoc/align-dwim)
+(define-key ngoc-prefix "=" 'ngoc/align-dwim)
 
 
 (require 'dabbrev)
@@ -833,7 +843,8 @@ Version: 2015-10-01"
 (use-package wgrep) ;; TODO how to use this
 
 (use-package iedit
-  :bind (("C-h C-m" . iedit-mode)
+  :bind (:map ngoc-prefix
+         ("m" . iedit-mode)
          :map iedit-mode-keymap
          ("C-c C-c" . iedit-mode)))
 
@@ -846,15 +857,10 @@ Version: 2015-10-01"
 
 
 (use-package puni
-  :bind
-  ("C-h C-p C-r" . puni-squeeze)
-  ("C-h C-p C-d" . puni-splice))
-
-(use-package change-inner
-  :bind
-  ("C-h C-i" . change-inner)
-  ("C-h C-a" . change-outer))
-
+  :bind (:map ngoc-prefix
+              ("p r" . puni-squeeze)
+              ("p d" . puni-splice)))
+  
 
 ;;                                  _                      _
 ;;   _____  ___ __   __ _ _ __   __| |      _ __ ___  __ _(_) ___  _ __
@@ -862,8 +868,19 @@ Version: 2015-10-01"
 ;; |  __/>  <| |_) | (_| | | | | (_| |_____| | |  __/ (_| | | (_) | | | |
 ;;  \___/_/\_\ .__/ \__,_|_| |_|\__,_|     |_|  \___|\__, |_|\___/|_| |_|
 ;;           |_|                                     |___/
+
+;; TODO make inside/outside functions repeatable
 (use-package expand-region
-  :bind ("M-3" . er/expand-region))
+  :defer nil
+  :bind (("M-3" . er/expand-region)
+         :map ngoc-prefix
+         ("a" . er/mark-outside-pairs)
+         ("i" . er/mark-inside-pairs)
+         ("'" . er/mark-inside-quotes)
+         ("\"" . er/mark-outside-quotes))
+         
+  :config
+  (require 'er-basic-expansions))
 
 
 ;;            _                  _
@@ -1107,9 +1124,10 @@ Version: 2015-10-01"
 ;; TODO make history cyclic
 ;; TODO add messages for cases like: show history but no history, clear history
 (use-package history
-  :bind (("C-h C-h C-p" . history-goto-history) ; h p = history -> preview
-         ("C-h C-h C-a" . history-add-history)
-         ("C-h C-h C-c C-h" . history-kill-histories)) ; h c h = history -> clear history
+  :bind (:map ngoc-prefix
+         ("h p" . history-goto-history) ; h p = history -> preview
+         ("h a" . history-add-history)
+         ("h c h" . history-kill-histories)) ; h c h = history -> clear history
   :config
   (define-key history-map (kbd "d") 'ngoc/history-remove-current)
   (define-key history-map (kbd "p") 'history-preview-prev-history)
@@ -1154,7 +1172,8 @@ Version: 2015-10-01"
   (add-hook 'xref-backend-functions #'dumb-jump-xref-activate))
 
 (use-package imenu-list
-  :bind ("C-h C-b" . imenu-list))
+  :bind (:map ngoc-prefix
+         ("s" . imenu-list-smart-toggle)))
 
 ;;     _  _____ ___  __  __ ___ ____    ____ _   _ ____   ___  __  __ _____
 ;;    / \|_   _/ _ \|  \/  |_ _/ ___|  / ___| | | |  _ \ / _ \|  \/  | ____|
@@ -1212,7 +1231,8 @@ Version: 2015-10-01"
       ("d" "ElDoc" eldoc)
       ("h" "Toggle Inlay hints" eglot-inlay-hints-mode)]])
 
-  (global-set-key (kbd "C-h C-e") #'ngoc/eglot-transient))
+  (define-key ngoc-prefix "e" #'ngoc/eglot-transient))
+
 
 ;;              _                                    _      _
 ;;   __ _ _   _| |_ ___     ___ ___  _ __ ___  _ __ | | ___| |_ ___
@@ -1327,7 +1347,9 @@ Version: 2015-10-01"
 ;;  \__,_|_|  \__, |\__,_|_| |_| |_|\___|_| |_|\__| |_|_|___/\__|
 ;;            |___/
 (use-package fill-function-arguments
-  :bind ("C-h C-q" . ngoc/fill-function-arguments-dwim)
+  :bind (:map ngoc-prefix
+              ("q" . ngoc/fill-function-arguments-dwim))
+  
   :config
   (setq fill-function-arguments-fall-through-to-fill-paragraph nil)
   (setq fill-function-arguments-indent-after-fill t)
