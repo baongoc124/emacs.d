@@ -10,6 +10,7 @@
 (add-to-list 'load-path "~/.emacs.d/lisp/")
 (add-to-list 'load-path "~/.emacs.d/lisp/evil-plugins/")
 (add-to-list 'load-path "~/.emacs.d/lisp/highlight-symbol/")
+(add-to-list 'load-path "~/.emacs.d/lisp/history")
 ;; (add-to-list 'load-path "~/.emacs.d/lisp/ned-mode")
 (add-to-list 'load-path "~/.emacs.d/lisp/netlogo-mode/emacs")
 ;; (add-to-list 'load-path "~/.emacs.d/lisp/dropbox-conflicts-el")
@@ -1076,6 +1077,45 @@ Version: 2015-10-01"
 ;; | | | | (_| |\ V /| | (_| | (_| | |_| | (_) | | | |
 ;; |_| |_|\__,_| \_/ |_|\__, |\__,_|\__|_|\___/|_| |_|
 ;;                      |___/
+;; DONE add beacon blink when traverse history
+;; DONE add removal ability
+;; DONE change history faces
+;; TODO make history cyclic
+;; TODO add messages for cases like: show history but no history, clear history
+(use-package history
+  :bind (("C-h C-h C-p" . history-goto-history) ; h p = history -> preview
+         ("C-h C-h C-a" . history-add-history)
+         ("C-h C-h C-c C-h" . history-kill-histories)) ; h c h = history -> clear history
+  :config
+  (define-key history-map (kbd "d") 'ngoc/history-remove-current)
+  (define-key history-map (kbd "p") 'history-preview-prev-history)
+  (define-key history-map (kbd "n") 'history-preview-next-history)
+  (define-key history-map (kbd "C-g") 'history-preview-cancel-history)
+
+  (advice-add 'history-use-current-history :after #'beacon-blink)
+
+  (set-face-attribute 'history-current-history nil :inherit 'match :foreground nil :background (face-attribute 'default :background))
+  (set-face-attribute 'history-other-history nil :inherit 'default :foreground nil :background nil :height 1.8)
+
+  (defun ngoc/history-remove-current ()
+    (interactive)
+    (when history-stack
+      (let* ((history (nth history-index history-stack))
+             (marker (plist-get history :marker)))
+        (set-marker marker nil)
+        (history-remove-invalid-history)))
+    (cond
+     (history-stack
+      (delete-minibuffer-contents)
+      (insert (history-histories-string))
+      (re-search-backward "\\*")
+      ;; Use history.
+      (with-selected-window (history-window)
+        (history-use-current-history)))
+     (t
+      (history-preview-cancel-history)))))
+
+
 
 (use-package dumb-jump
   :bind (("M-g o"   . dumb-jump-go-other-window)
