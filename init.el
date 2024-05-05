@@ -751,6 +751,18 @@ Version: 2015-10-01"
 
 (use-package autorevert
   :diminish auto-revert-mode)
+;;  _            _              _ _ _   _
+;; | |_ _____  _| |_    ___  __| (_) |_(_)_ __   __ _
+;; | __/ _ \ \/ / __|  / _ \/ _` | | __| | '_ \ / _` |
+;; | ||  __/>  <| |_  |  __/ (_| | | |_| | | | | (_| |
+;;  \__\___/_/\_\\__|  \___|\__,_|_|\__|_|_| |_|\__, |
+;;                                              |___/
+(use-package whole-line-or-region
+  :diminish whole-line-or-region-local-mode
+  :config
+  (whole-line-or-region-global-mode 1))
+;; TODO: do similar thing to transpose-regions
+
 ;;      _ _     _                  _   _                __
 ;;   __| (_)___| |_ _ __ __ _  ___| |_(_) ___  _ __    / _|_ __ ___  ___
 ;;  / _` | / __| __| '__/ _` |/ __| __| |/ _ \| '_ \  | |_| '__/ _ \/ _ \
