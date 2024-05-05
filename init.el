@@ -741,6 +741,11 @@ Version: 2015-10-01"
   (show-paren-mode 1)
   (setq show-paren-delay 0.025))
 
+(use-package hl-todo
+  :hook
+  (prog-mode . hl-todo-mode)
+  (text-mode . hl-todo-mode))
+
 (use-package display-fill-column-indicator
   :hook
   (prog-mode . display-fill-column-indicator-mode)
