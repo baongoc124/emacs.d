@@ -576,7 +576,8 @@
 (require 'dired)
 (setq dired-listing-switches "-lah")
 (setq delete-by-moving-to-trash t)
-(setq dired-dwim-target t)
+(setq dired-dwim-target nil)
+
 
 (defun ngoc/make-line-taller ()
   (setq line-spacing 0.2))
