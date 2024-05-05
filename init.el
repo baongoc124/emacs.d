@@ -1041,6 +1041,15 @@ Version: 2015-10-01"
 ;;               (ibuffer-do-sort-by-alphabetic))))
 
 
+(use-package frog-jump-buffer
+  :bind (:map ngoc-prefix
+         ("b" . frog-jump-buffer))
+  :config
+  (setq frog-menu-avy-keys '(?o ?e ?u ?i ?d ?h ?t ?n ?k ?j ?b ?m ?c ?r))
+  (setq frog-menu-posframe-border-width 15))
+
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                              GGTAGS
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
