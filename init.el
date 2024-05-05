@@ -987,6 +987,83 @@ official one in emms.el to return filename only (no path)
 (require 'flycheck)
 ;; (global-flycheck-mode t)
 (setq flycheck-mode-line-prefix "F")
+ ;;   ____            _ _       _
+;;  / ___|___  _ __ (_) | ___ | |_
+;; | |   / _ \| '_ \| | |/ _ \| __|
+;; | |__| (_) | |_) | | | (_) | |_
+;;  \____\___/| .__/|_|_|\___/ \__|
+;;            |_|
+;;
+;; behavior: 1. if copilot shows up, cancel company, except when company is manually started.
+;;           2. don't show copilot when god-mode is activated.
+;;           3. disable copilot on Leetcode
+(use-package copilot
+  :straight (:host github :repo "copilot-emacs/copilot.el" :files ("*.el"))
+  :bind (:map copilot-completion-map
+              ("<escape>" . ngoc/copilot-clear-no-notify)
+              ("<tab>"    . copilot-accept-completion) ; don't bind "TAB" so that i can use C-i when i need to adjust indent
+              ("M-t"      . copilot-accept-completion-by-word)
+              ("M-T"      . copilot-accept-completion-by-line)
+              ("M-n"      . copilot-next-completion)
+              ("M-p"      . copilot-previous-completion)
+              ("M-c"      . ngoc/abort-copilot-start-company))
+
+  :hook
+  (prog-mode . copilot-mode)
+
+  :config
+  (defun ngoc/copilot-clear-no-notify ()
+    (interactive)
+    (copilot-clear-overlay t))
+  
+  (defun ngoc/god-mode-not-enabled ()
+    (not (bound-and-true-p god-local-mode)))
+
+  (defun ngoc/not-in-leetcode ()
+    (not (and (bound-and-true-p atomic-chrome-edit-mode)
+              (string-match-p " - LeetCode$" (buffer-name)))))
+
+  (defun ngoc/company-not-manually-started ()
+    (if (company-explicit-action-p)
+        nil
+      (company-abort)
+      t))
+
+  (defun ngoc/abort-company-when-copilot-overlay-visible (manually-started)
+    (when (and (copilot--overlay-visible)
+               (not manually-started))
+      (company-abort)))
+
+  (defun ngoc/abort-copilot-start-company ()
+    (interactive)
+    (copilot-clear-overlay t)             ; pass t to clear overlay so that it doesn't notify server about rejection
+    (company-manual-begin))
+
+  (remove-hook  'copilot-enable-predicates          'evil-insert-state-p)  ;  i  don't  use  evil  mode
+  (add-hook     'copilot-enable-predicates          'ngoc/god-mode-not-enabled)
+  (add-hook     'copilot-enable-predicates          'ngoc/not-in-leetcode)
+  (add-hook     'copilot-enable-display-predicates  'ngoc/company-not-manually-started)
+  (add-hook     'company-completion-started-hook    'ngoc/abort-company-when-copilot-overlay-visible)
+
+  ;; disable warnings
+  (add-to-list 'warning-suppress-types '(copilot copilot-exceeds-max-char))
+  (setq copilot-indent-offset-warning-disable t)
+
+
+  ;; temporary fix for tab key, sometimes overlay is visible but copilot's keymap is not active
+  (defun ngoc/copilot-compatible-tab (&optional arg)
+    (interactive "P")
+    (if (copilot--overlay-visible)
+        (copilot-accept-completion)
+      (indent-for-tab-command arg)))
+
+  ;; don't bind this tab outside of prog-mode
+  (add-hook 'prog-mode-hook
+            (lambda ()
+              (local-set-key (kbd "<tab>") 'ngoc/copilot-compatible-tab))))
+
+
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                              IMPATIENT MODE
