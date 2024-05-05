@@ -189,6 +189,7 @@
 (global-set-key "\C-x\C-z" nil)
 
 (use-package winner
+  :demand t ;; load immediately to save window configuration
   :bind (("M-N" . winner-redo)
          ("M-P" . winner-undo))
   :config
