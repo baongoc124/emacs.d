@@ -741,9 +741,13 @@ Version: 2015-10-01"
   (show-paren-mode 1)
   (setq show-paren-delay 0.025))
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; TAB AND INDENT SETUP
+(use-package display-fill-column-indicator
+  :hook
+  (prog-mode . display-fill-column-indicator-mode)
+  (text-mode . display-fill-column-indicator-mode)
+  :config
+  (setq-default fill-column 80)
+  (setq-default display-fill-column-indicator-character ?\u2591))
 
 ;; for auto detecting indentation
 (use-package dtrt-indent
