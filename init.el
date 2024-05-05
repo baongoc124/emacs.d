@@ -114,12 +114,25 @@
 (setq echo-keystrokes 0.0001)
 (setq minibuffer-prompt-properties '(readonly t point-entered minibuffer-avoid-prompt face minibuffer-prompt))
 
-(set-cursor-color "#0C2400")
 (blink-cursor-mode 0)
+
+;; original dracula theme's compatibility is not as good as doom-dracula theme
+(use-package doom-themes
+  :config
+  ;; Global settings (defaults)
+  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+        doom-themes-enable-italic t) ; if nil, italics is universally disabled
+  (load-theme 'doom-dracula t)
+
+  ;; Corrects (and improves) org-mode's native fontification.
+  (doom-themes-org-config))
+
+(add-hook 'window-setup-hook '(lambda ()
+                                (set-cursor-color "#69E300")))
 
 (use-package hl-line
   :config
-  (set-face-background 'hl-line "#FFFAE6")
+  ;; (set-face-background 'hl-line "#332D00")
   (global-hl-line-mode t))
 
 (setq frame-title-format
@@ -127,7 +140,8 @@
                                         "^ +" "" (buffer-name)))))
 (setq mouse-yank-at-point t)
 
-(set-frame-parameter nil 'alpha-background 85)
+(set-frame-parameter nil 'alpha-background 100)
+
 
 (defun rmrf/setup-frame (&optional frame)
   (tool-bar-mode -1)
@@ -142,8 +156,9 @@
 
 (rmrf/setup-frame)
 (add-hook 'after-make-frame-functions 'rmrf/setup-frame)
-(set-face-foreground 'default "#242424") ; black is too contrasty so make it a little gray
-(set-background-color "#F5FAF4")
+;; (set-face-foreground 'default "#242424") ; black is too contrasty so make it a little gray
+;; (set-face-foreground 'default "#000000")
+;; (set-background-color "#F5FAF4")
 
 (setq browse-url-generic-program "google-chrome-stable")
 (setq browse-url-browser-function 'browse-url-generic)
