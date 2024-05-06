@@ -442,33 +442,6 @@ https://groups.google.com/forum/?hl=en&fromgroups=#!topic/gnu.emacs.help/RHKP2gj
                  (tramp-file-name-host vec))))
     (concat "/sudo:root@localhost:" tempfile)))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                              EMMS
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'emms-setup)
-(emms-all)
-(emms-default-players)
-(setq emms-source-file-default-directory "~/Music/")
-
-(defun my-emms-info-track-description (track)
-  " http://bbs.chinaunix.net/thread-2007327-1-1.html
-Return a description of the current track.  Overwrite the
-official one in emms.el to return filename only (no path)
---lgfang"
-  (let ((artist (emms-track-get track 'info-artist))
-        (title (emms-track-get track 'info-title)))
-    (if (and artist title)
-        (format "%s - %s" artist title)
-      (if (eq 'file (emms-track-type track))
-          (file-name-nondirectory (emms-track-name track))
-        (concat (symbol-name (emms-track-type track))
-                ": " (emms-track-name track)))
-      )))
-
-(setq emms-track-description-function 'my-emms-info-track-description)
-
-(require 'emms-history)
-(emms-history-load)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                              ORGMODE
