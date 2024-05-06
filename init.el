@@ -1,11 +1,16 @@
 (setq gc-cons-threshold 50000000
       garbage-collection-messages t)
 
+(setq max-lisp-eval-depth 10000)
+
+(global-set-key (kbd "C-h")    nil)      ; disable C-h as early as possible to bind to other functions
+(global-set-key (kbd "C-<f1>") help-map) ; ease of calling help in god-mode
+
+
 (add-to-list 'load-path "~/.emacs.d/lisp/")
 (add-to-list 'load-path "~/.emacs.d/lisp/evil-plugins/")
 (add-to-list 'load-path "~/.emacs.d/lisp/highlight-symbol/")
-(add-to-list 'load-path "~/.emacs.d/lisp/dpaste.el")
-(add-to-list 'load-path "~/.emacs.d/lisp/ned-mode")
+;; (add-to-list 'load-path "~/.emacs.d/lisp/ned-mode")
 (add-to-list 'load-path "~/.emacs.d/lisp/netlogo-mode/emacs")
 ;; (add-to-list 'load-path "~/.emacs.d/lisp/dropbox-conflicts-el")
 ;;(add-to-list 'load-path "~/.emacs.d/lisp/elim/elisp")
@@ -38,118 +43,60 @@
   (load bootstrap-file nil 'nomessage))
 
 
-(use-package ag)
-(use-package aggressive-indent)
-(use-package tex :ensure auctex)
-(use-package auctex-latexmk)
-(use-package bfbuilder)
+
+(use-package auto-package-update
+  :config
+  (setq auto-package-update-interval 1
+        auto-package-update-promp-before-update t)
+  (auto-package-update-maybe))
+
+;; (use-package aggressive-indent)
+;; (use-package tex-buf)
+;; (use-package tex :ensure auctex)
+;; (use-package auctex-latexmk)
 (use-package better-shell)
-(use-package counsel-projectile)
-(use-package diminish)
-(use-package dtrt-indent)
-(use-package evil)
-(use-package expand-region)
-(use-package fancy-battery)
-(use-package flycheck)
 (use-package flyspell-lazy)
 (use-package flx)
-(use-package guide-key)
-(use-package ggtags)
 (use-package ivy)
 (use-package impatient-mode)
 (use-package isend-mode)
-(use-package js2-mode)
 (use-package key-chord)
 (use-package langtool)
 (use-package latex-preview-pane)
 (use-package less-css-mode)
-(use-package linum-relative)
-;; (use-package lua-mode)
-(use-package magit)
-(load-library "ned-mode")
-(use-package ox-reveal)
-(use-package php-mode)
-(use-package powerline)
-(use-package projectile)
-;; (use-package quasi-monochrome-theme)
-(use-package spaceline)
+;; (load-library "ned-mode")
 (use-package shell-switcher)
-(use-package sublimity)
-;; (use-package tao-theme)
-(use-package use-package)
-(use-package volatile-highlights)
-(use-package web-mode)
 (use-package xcscope)
-(use-package yaml-mode
+
+
 (use-package undo-tree
   :bind ("C-h C-u" . undo-tree-visualize)
   :diminish undo-tree-mode
   :config
-  (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode)))
-(use-package yasnippet)
-
-
-(defun replace-hook (hook fun)
-  (remove-hook hook fun)
-  (add-hook hook fun))
-
-
-;; (require 'framemove)
-;; (setq framemove-hook-into-windmove t)
-(require 'ace-link)
-(ace-link-setup-default)
-
-(require 'elec-pair)
-(electric-pair-mode t)
-(show-paren-mode 1)
-(setq show-paren-delay 0)
-
-;; (require 'linum-relative)
-;; (global-linum-mode t)
-;; (linum-relative-on)
-;; (setq linum-relative-current-symbol "")
-
-(require 'nlinum-relative)
-(nlinum-relative-setup-evil)                    ;; setup for evil
-;; (global-nlinum-relative-mode t)
-(setq nlinum-relative-redisplay-delay 0.2)      ;; delay
-(setq nlinum-relative-current-symbol "")      ;; or "" for display current line number
-(setq nlinum-relative-offset 0)                 ;; 1 if you want 0, 2, 3...
-(add-hook 'prog-mode-hook
-          (lambda () (nlinum-mode t)
-            (nlinum-relative-on)))
-(add-hook 'text-mode-hook
-          (lambda () (nlinum-mode t)
-            (nlinum-relative-on)))
   (global-undo-tree-mode))
 
-(blink-cursor-mode 0)
+
+(use-package ace-link
+  :config
+  (ace-link-setup-default))
 
 
-(require 'avy)
-(setq avy-all-windows t)
-(setq avy-keys-alist `((avy-goto-line . ,(append (number-sequence ?a ?z) (number-sequence ?0 ?9)))))
-(setq avy-keys '(?a ?o ?e ?u ?h ?t ?n ?s ?c ?r ?j ?m))
-  "List of left bracket chars.")
-(defvar xah-right-brackets '(")" "]" "}" ">" "\"" "'")
-  "list of right bracket chars.")
+(use-package avy
+  :bind (("C-h C-t" . avy-goto-word-or-subword-1)
+         ("C-h C-c" . avy-goto-char-timer)
+         ("C-h C-n" . avy-goto-line))
+  :config
+  (setq avy-all-windows t)
+  (setq avy-keys-alist `((avy-goto-line . ,(append (number-sequence ?a ?z) (number-sequence ?0 ?9)))))
+  (setq avy-keys '(?a ?o ?e ?u ?h ?t ?n ?s ?c ?r ?j ?m)))
 
-(defun xah-backward-left-bracket ()
-  "Move cursor to the previous occurrence of left bracket.
-The list of brackets to jump to is defined by `xah-left-brackets'.
-URL `http://ergoemacs.org/emacs/emacs_navigating_keys_for_brackets.html'
-Version 2015-10-01"
-  (interactive)
-  (message "%s" (regexp-opt xah-left-brackets))
-  (search-backward-regexp (regexp-opt xah-left-brackets) nil t))
 
-(defun xah-forward-right-bracket ()
-  "Move cursor to the next occurrence of right bracket.
-The list of brackets to jump to is defined by `xah-right-brackets'.
-URL `http://ergoemacs.org/emacs/emacs_navigating_keys_for_brackets.html'
-Version 2015-10-01"
-  (interactive)
-  (search-forward-regexp (regexp-opt xah-right-brackets) nil t))
+(use-package ace-window
+  :bind ("M-o" . ace-window)
+  :config
+  (setq aw-keys '(?h ?t ?n ?s ?a ?o ?e ?u)
+        aw-scope 'frame))
+
 
 ;; (require 'key-chord)
 ;; (key-chord-mode t)
@@ -158,28 +105,17 @@ Version 2015-10-01"
 ;; (key-chord-define evil-insert-state-map "tj" 'yas-expand) ; tj tk are also good key-chord
 
 
-;; disable zap-to-char key
-(global-set-key (kbd "M-z") nil)
+;;   ____ _   _ ___   _                      _
+;;  / ___| | | |_ _| | |___      _____  __ _| | _____
+;; | |  _| | | || |  | __\ \ /\ / / _ \/ _` | |/ / __|
+;; | |_| | |_| || |  | |_ \ V  V /  __/ (_| |   <\__ \
+;;  \____|\___/|___|  \__| \_/\_/ \___|\__,_|_|\_\___/
 
-(require 'god-mode)
-(global-set-key (kbd "<escape>") #'god-local-mode)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                              COMPANY
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package company
-  :config
-  (add-hook 'after-init-hook 'global-company-mode)
-  (global-set-key (kbd "M-t") 'company-yasnippet)
-  (setq company-dabbrev-downcase nil)
-  (setq company-minimum-prefix-length 2)
-  (setq company-idle-delay 0.05)
-  )
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; GUI tweaks
 (setq echo-keystrokes 0.0001)
 (setq minibuffer-prompt-properties '(readonly t point-entered minibuffer-avoid-prompt face minibuffer-prompt))
+
+(set-cursor-color "#0C2400")
+(blink-cursor-mode 0)
 
 (use-package hl-line
   :config
@@ -191,6 +127,8 @@ Version 2015-10-01"
                                         "^ +" "" (buffer-name)))))
 (setq mouse-yank-at-point t)
 
+(set-frame-parameter nil 'alpha-background 85)
+
 (defun rmrf/setup-frame (&optional frame)
   (tool-bar-mode -1)
   (toggle-scroll-bar -1)
@@ -200,12 +138,10 @@ Version 2015-10-01"
                              (horizontal-scroll-bars . nil)))
   (set-frame-font (font-spec :family "DejaVu Sans Mono" :size 10.0) 1 frame t)
   (setq frame-resize-pixelwise t)
-  ;; (set-background-color "gainsboro")
-  )
+  (setq frame-inhibit-implied-resize t))
 
-;; (set-frame-font (font-spec :family "DejaVu Sans Mono" :size 10.0))
 (rmrf/setup-frame)
-(replace-hook 'after-make-frame-functions 'rmrf/setup-frame)
+(add-hook 'after-make-frame-functions 'rmrf/setup-frame)
 (set-face-foreground 'default "#242424") ; black is too contrasty so make it a little gray
 (set-background-color "#F5FAF4")
 
@@ -220,45 +156,28 @@ Version 2015-10-01"
   (save-place-mode t)
   (setq save-place-forget-unreadable-files nil))
 
+;; buffer naming
 (setq uniquify-buffer-name-style 'post-forward)
 (setq uniquify-separator "/")
 (setq uniquify-after-kill-buffer-p t)    ; rename after killing uniquified
 (setq uniquify-ignore-buffers-re "^\\*") ; don't muck with special buffers
 (require 'uniquify)
 
-;; highlight cursor when jump
-;; (beacon-mode t)
-;; (setq beacon-color "#666600")
 
 (setq scroll-margin 3
-      scroll-conservatively 9999 ;; seems to be not working with sublimity
+      scroll-conservatively 9999
       scroll-preserve-screen-position t)
 
 (setq truncate-lines nil)
 ;; don't suspend emacs accidentally
 (global-set-key "\C-x\C-z" nil)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; TAB AND INDENT SETUP
-(setq-default indent-tabs-mode nil)
-;; set default tab char's display width to 4 spaces
-(setq-default tab-width 4) ; emacs 23.1, 24.2, default to 8
-(setq backward-delete-char-untabify-method 'hungry)
-(defvaralias 'c-basic-offset 'tab-width)
-(defvaralias 'cperl-indent-level 'tab-width)
-
-;; for auto detecting indentation
-(require 'dtrt-indent)
-(dtrt-indent-mode t)
-
-;; make tab key call indent command or insert tab character, depending on cursor position
-(setq-default tab-always-indent nil)
-
-(when (fboundp 'winner-mode)
+(use-package winner
+  :bind (("M-N" . winner-redo)
+         ("M-P" . winner-undo))
+  :config
   (winner-mode 1))
 
-(global-set-key (kbd "M-N") 'winner-redo)
-(global-set-key (kbd "M-P") 'winner-undo)
 
 (require 'repeat)
 (defun make-repeatable-command (cmd)
@@ -297,32 +216,34 @@ https://groups.google.com/forum/?hl=en&fromgroups=#!topic/gnu.emacs.help/RHKP2gj
   (switch-to-next-buffer)
   (other-window -1 nil))
 
-(global-set-key (kbd "C-x o") (make-repeatable-command 'other-window))
-;; (global-set-key (kbd "C-<tab>") 'other-window)
-;; (global-set-key (kbd "C-'") 'other-window)
-;; (global-set-key (kbd "C-q") 'quoted-insert)
+(defun switch-to-last-buffer ()
+  (interactive)
+  (switch-to-buffer nil))
+
+(global-set-key (kbd "C-x C-o") (make-repeatable-command 'other-window))
 (global-set-key (kbd "C-x k") 'kill-this-buffer)
 (global-set-key (kbd "C-1") 'delete-other-windows)
 (global-set-key (kbd "C-2") 'split-window-below)
 (global-set-key (kbd "C-3") 'hsplit-last-buffer)
+(global-set-key (kbd "C-TAB") 'switch-to-last-buffer)
 (global-set-key (kbd "C-0") 'delete-window)
 (global-set-key (kbd "C-=") 'balance-windows)
 (global-set-key (kbd "C-<left>") 'shrink-window-horizontally)
 (global-set-key (kbd "C-<right>") 'enlarge-window-horizontally)
 (global-set-key (kbd "C-<down>") 'shrink-window)
 (global-set-key (kbd "C-<up>") 'enlarge-window)
-(global-set-key (kbd "C-c g") 'ag-regexp)
-(global-set-key (kbd "C-x C-b") 'ibuffer)
+(global-set-key (kbd "C-c g") 'ag-regexp) ; TODO use counsel-ag
+(global-set-key (kbd "C-x b") 'switch-to-buffer)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; IBUFFER
+;;                              VOLATILE HIGHLIGHTS
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package ibuffer-tramp
+(use-package volatile-highlights
+  :diminish volatile-highlights-mode
   :config
-  (add-hook 'ibuffer-hook
-            (lambda ()
-              (ibuffer-tramp-set-filter-groups-by-tramp-connection)
-              (ibuffer-do-sort-by-alphabetic))))
+  (setq Vhl/highlight-zero-width-ranges t)
+  (volatile-highlights-mode t))
+
 
 ;; (setq grep-highlight-matches 'auto-detect)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -345,14 +266,7 @@ https://groups.google.com/forum/?hl=en&fromgroups=#!topic/gnu.emacs.help/RHKP2gj
   :init
   (setq eyebrowse-keymap-prefix (kbd "C-'"))
   :config
-  ;; (setq eyebrowse-keymap-prefix [?\C-;])
   (eyebrowse-mode t))
-
-;; (require 'helm-config)
-;; (helm-mode 1)
-;; (global-set-key (kbd "M-x") 'helm-M-x)
-;; (global-set-key (kbd "C-x C-f") 'helm-find-files)
-;; (setq helm-M-x-fuzzy-match 't)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                              IVY COUNSEL SWIPER
@@ -360,6 +274,7 @@ https://groups.google.com/forum/?hl=en&fromgroups=#!topic/gnu.emacs.help/RHKP2gj
 (require 'ivy)
 (require 'counsel)
 (ivy-mode t)
+(diminish 'ivy-mode)
 
 ;; on emacs 25 maybe should change this to string-collate-lessp
 (add-to-list 'ivy-sort-functions-alist '(read-file-name-internal . string-lessp))
@@ -367,61 +282,39 @@ https://groups.google.com/forum/?hl=en&fromgroups=#!topic/gnu.emacs.help/RHKP2gj
 (setq ivy-re-builders-alist
       '((t . ivy--regex-plus)))
 
+(global-set-key (kbd "C-s") 'swiper)
 (global-set-key (kbd "M-x") 'counsel-M-x)
 (global-set-key (kbd "C-x C-f") 'counsel-find-file)
+(global-set-key (kbd "C-h C-f") 'counsel-projectile-find-file)
+(global-set-key (kbd "C-S-Y") 'counsel-yank-pop)
 
-(use-package js2-mode
+
+;;      _                _             _
+;;  ___| |__   ___  _ __| |_ ___ _   _| |_ ___
+;; / __| '_ \ / _ \| '__| __/ __| | | | __/ __|
+;; \__ \ | | | (_) | |  | || (__| |_| | |_\__ \
+;; |___/_| |_|\___/|_|   \__\___|\__,_|\__|___/
+(use-package guide-key
+  :diminish guide-key-mode
   :config
-  (add-hook 'js-mode-hook 'js2-minor-mode)
-)
+  (setq guide-key/guide-key-sequence t)
+  (setq guide-key/popup-window-position 'bottom)
+  (guide-key-mode 1))
 
-(require 'txl-mode)
-(add-to-list 'auto-mode-alist '("\\.\\([tT]xl\\|[gG]rm\\|[gG]rammar\\|[rR]ul\\(es\\)?\\|[mM]od\\(ule\\)?\\)$" . txl-mode))
-(define-key txl-mode-map (kbd "<backspace>") 'backward-delete-char-untabify)
-(define-key txl-mode-map (kbd "C-c r") nil)
-(define-key txl-mode-map (kbd "C-c c") nil)
+(use-package free-keys)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                              AUTO COMPLETE
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; (require 'ac-dabbrev)
-(require 'dabbrev)
-(setq dabbrev-abbrev-char-regexp "\\sw\\|\\s_\\|\\s.")
-(setq dabbrev-case-fold-search nil)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                              GUIDE KEY
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'guide-key)
-(setq guide-key/guide-key-sequence t)
-(setq guide-key/popup-window-position 'bottom)
-(guide-key-mode 1)  ; Enable guide-key-mode
-
-(add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
-
-(require 'fcitx)
-(fcitx-default-setup)
-(setq fcitx-use-dbus t)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                              PYTHON
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package anaconda-mode
 (use-package fcitx
   :init
   (setq fcitx-use-dbus t)
   :config
-  (add-hook 'python-mode-hook 'anaconda-mode)
-  (add-hook 'python-mode-hook 'anaconda-eldoc-mode))
   (fcitx-default-setup))
 
+;;  _____ ____      _    __  __ ____
+;; |_   _|  _ \    / \  |  \/  |  _ \
+;;   | | | |_) |  / _ \ | |\/| | |_) |
+;;   | | |  _ <  / ___ \| |  | |  __/
+;;   |_| |_| \_\/_/   \_\_|  |_|_|
 
-(use-package company-anaconda
-  :config
-  (add-to-list 'company-backends 'company-anaconda))
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                              TRAMP
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'tramp)
 (setq tramp-default-method "scp")
 
@@ -453,13 +346,16 @@ https://groups.google.com/forum/?hl=en&fromgroups=#!topic/gnu.emacs.help/RHKP2gj
     (concat "/sudo:root@localhost:" tempfile)))
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                              ORGMODE
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;   ___                                      _
+;;  / _ \ _ __ __ _       _ __ ___   ___   __| | ___
+;; | | | | '__/ _` |_____| '_ ` _ \ / _ \ / _` |/ _ \
+;; | |_| | | | (_| |_____| | | | | | (_) | (_| |  __/
+;;  \___/|_|  \__, |     |_| |_| |_|\___/ \__,_|\___|
+;;            |___/
+
 (use-package cdlatex)
 (require 'org)
 (require 'org-agenda)
-(require 'ox-reveal)
 (global-set-key "\C-cl" 'org-store-link)
 (global-set-key "\C-ca" 'org-agenda)
 (global-set-key "\C-cr" 'org-capture)
@@ -529,41 +425,6 @@ https://groups.google.com/forum/?hl=en&fromgroups=#!topic/gnu.emacs.help/RHKP2gj
                      ((org-agenda-todo-ignore-with-date t)))))
 
 
-;; PDFs visited in Org-mode are opened in Okular (and not in the default choice) http://stackoverflow.com/a/8836108/789593
-(defun rmrf/org-mode-hook ()
-  (delete '("\\.pdf\\'" . default) org-file-apps)
-  (add-to-list 'org-file-apps '("\\.pdf\\'" . "okular %s"))
-  (setq word-wrap t)
-  (turn-on-org-cdlatex)
-  (setq org-format-latex-options (plist-put org-format-latex-options :scale 2.0)))
-
-(replace-hook 'org-mode-hook 'rmrf/org-mode-hook)
-
-(require 'ob-latex)
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((org . t)
-   (latex . t)))
-;; (org-babel-do-load-languages
-;;  'org-babel-load-languages
-;;  '((emacs-lisp . t)
-;;    (python . t)
-;;    (ditaa . t)
-;;    (dot . t)
-;;    (plantuml . t)
-;;    (gnuplot . t)
-;;    (sh . t)
-;;    (org . t)
-;;    (latex . t)))
-;; use imagemagick to preview latex
-(setq org-latex-create-formula-image-program 'imagemagick)
-;; set up tikz as one of the default packages for LaTeX
-(setq org-latex-packages-alist
-      (quote (("" "color" t)
-              ("" "minted" t)
-              ("" "parskip" t)
-              ("" "tikz" t))))
-(require 'ox-md)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                      VIETNAMESE LUNAR CALENDAR
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -681,11 +542,6 @@ https://groups.google.com/forum/?hl=en&fromgroups=#!topic/gnu.emacs.help/RHKP2gj
 (unless (server-running-p)
   (server-start))
 
-(require 'cl)
-(require 'cl-macs)
-(require 'dwim-compile)
-(global-set-key [(control ?c) ?c] 'dwim-c/compile)
-(setq compilation-finish-functions nil)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                              DIRED
@@ -707,63 +563,309 @@ https://groups.google.com/forum/?hl=en&fromgroups=#!topic/gnu.emacs.help/RHKP2gj
   (progn
     (setq terminal-here-terminal-command '("gnome-terminal")
           terminal-here-command-flag "--")
-    (global-set-key (kbd "C-;") 'terminal-here-launch)))
+    (global-set-key (kbd "C-!") 'terminal-here-launch)))
 
 (use-package stripe-buffer
+  :hook
+    (dired-mode . turn-on-stripe-buffer-mode))
+
+(use-package all-the-icons
+  :if (display-graphic-p))
+
+(use-package all-the-icons-dired
+  :diminish all-the-icons-dired-mode
+  :hook
+    (dired-mode . all-the-icons-dired-mode))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                              FREE-KEYS
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package free-keys)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                              IMPATIENT MODE
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(require 'impatient-mode)
+
+;; ugly with fixed backend
+(defun my-imp-filter (buffer)
+  (let ((m (with-current-buffer buffer major-mode)))
+    (case m
+      (org-mode
+       (insert-buffer-substring (htmlize-buffer
+                                 (with-current-buffer buffer
+                                   (org-export-as 'reveal)))))
+      (t
+       (let ((html-buffer (save-match-data (htmlize-buffer buffer))))
+         (insert-buffer-substring html-buffer)
+         (kill-buffer html-buffer))))))
+
+(setq-default imp-user-filter 'my-imp-filter)
+
+(defun chrome-reload ()
+  (interactive)
+  (shell-command "chromereload.py"))
+
+(defun save-and-refresh ()
+  (interactive)
+  (save-buffer)
+  (chrome-reload))
+
+(use-package zeal-at-point)
+(global-set-key "\C-cd" 'zeal-at-point)
+(add-hook 'projectile-rails-mode-hook
+          (lambda () (setq zeal-at-point-docset "ruby,rails")))
+(add-to-list 'zeal-at-point-mode-alist '(c++-mode . ""))
+
+
+;; (use-package keyfreq
+;;   :init
+;;   (keyfreq-mode 1)
+;;   (keyfreq-autosave-mode 1))
+
+
+(use-package dockerfile-mode)
+
+(use-package pdf-tools
   :config
-  (add-hook 'dired-mode-hook 'turn-on-stripe-buffer-mode))
+  (pdf-tools-install)
+  (setq pdf-view-midnight-colors '("black" . "wheat"))
+  (defun rmrf/pdf-view-setup ()
+    (pdf-view-midnight-minor-mode t))
+  (add-hook 'pdf-view-mode-hook 'rmrf/pdf-view-setup))
+
+(add-hook 'TeX-after-compilation-finished-functions #'TeX-revert-document-buffer)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                              YASNIPPET
+;;                              LATEX AUCTEX
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'yasnippet)
+(add-hook 'LaTeX-mode-hook 'TeX-source-correlate-mode)
 
-(yas-global-mode 1)
-(define-key yas-minor-mode-map (kbd "<tab>") nil)
-(define-key yas-minor-mode-map (kbd "TAB") nil)
-;; https://emacs.stackexchange.com/questions/38242/problem-redoing-with-yasnippet
-(setq yas-snippet-revival nil)
-;; (define-key yas-minor-mode-map (kbd "C-/") 'yas-expand)
-;; (define-key ac-completing-map "\t" 'yas-expand)
-;; (define-key ac-completing-map [tab] 'yas-expand)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                              POPWIN
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package popwin
+  :config
+  (popwin-mode 1)
+  (setq popwin:popup-window-height 0.35)
+  ;; (setq display-buffer-function 'popwin:display-buffer)
+  (push '("^CAPTURE-.+\*.org$" :regexp t) popwin:special-display-config)
+  (push '("*Org Select*") popwin:special-display-config)
+  (push '(" *undo-tree*" :height 0.3 :position bottom) popwin:special-display-config)
+  (push '(imenu-list-major-mode :width 60 :position right) popwin:special-display-config))
 
-;; (defun my-smart-fallback ()
-;;   (interactive)
-;;   (message "hohoho")
-;;   (print ac-menu)
-;;   (print ac-candidate-menu-min)
-;;   (if t
-;;       (progn (call-interactively 'ac-complete)
-;;              (message "hahaha"))
-;;     (progn
-;;       (setq yas-fallback-behavior 'call-other-command)
-;;       (yas--fallback)
-;;       (setq yas-fallback-behavior '(apply my-smart-fallback)))))
 
-;; (setq yas-fallback-behavior '(apply my-smart-fallback))
 
-(use-package yasnippet-snippets)
 
-(require 'php-mode)
-;; (add-hook 'php-mode-hook
-;;           '(lambda ()
-;;              (auto-complete-mode t)
-;;              (require 'ac-php)
-;;              (setq ac-sources  '(ac-source-words-in-buffer ac-source-php))) )
+;; (require 'netlogo-mode)
 
-;; (define-key php-mode-map  (kbd "C-]") 'ac-php-find-symbol-at-point)   ;goto define
-;; (define-key php-mode-map  (kbd "C-t") 'ac-php-location-stack-back   ) ;go back
+;; ; a way to find out what packages are using cl
+;; (require 'loadhist)
+;; (file-dependents (feature-file 'cl))
 
-(require 'web-mode)
-(add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
+(setq sentence-end-double-space nil) ; disable archaic double space after sentence
+
+(use-package god-mode
+  :bind (("<escape>" . god-local-mode) ; mimic vim to exit insert mode
+         :map god-local-mode-map
+         ("i"        . god-local-mode) ; mimic vim to enter insert mode
+         ("."        . repeat)
+         ("<escape>" . ignore))
+  
+  :hook ((text-mode . god-local-mode)
+         (prog-mode . god-local-mode)
+         (conf-mode . god-local-mode))
+  
+  :diminish god-local-mode
+  
+  :config
+  (defun my-god-mode-update-cursor-type ()
+    (setq cursor-type (if god-local-mode 'box 'bar)))
+
+  (add-hook 'post-command-hook #'my-god-mode-update-cursor-type))
+
+
+;; editing
+(global-set-key (kbd "C-z")     'zap-up-to-char)
+(global-set-key (kbd "C-S-Z")   'zap-to-char)
+(global-set-key (kbd "M-2")     'mark-word)
+(global-set-key (kbd "C-h C-d") 'duplicate-dwim)
+
+
+(defvar xah-brackets '("“”" "()" "[]" "{}" "<>" "＜＞" "（）" "［］" "｛｝" "⦅⦆" "〚〛" "⦃⦄" "‹›" "«»" "「」" "〈〉" "《》" "【】" "〔〕" "⦗⦘" "『』" "〖〗" "〘〙" "｢｣" "⟦⟧" "⟨⟩" "⟪⟫" "⟮⟯" "⟬⟭" "⌈⌉" "⌊⌋" "⦇⦈" "⦉⦊" "❛❜" "❝❞" "❨❩" "❪❫" "❴❵" "❬❭" "❮❯" "❰❱" "❲❳" "〈〉" "⦑⦒" "⧼⧽" "﹙﹚" "﹛﹜" "﹝﹞" "⁽⁾" "₍₎" "⦋⦌" "⦍⦎" "⦏⦐" "⁅⁆" "⸢⸣" "⸤⸥" "⟅⟆" "⦓⦔" "⦕⦖" "⸦⸧" "⸨⸩" "｟｠")
+ "A list of strings, each element is a string of 2 chars, the left bracket and a matching right bracket.
+Used by `xah-select-text-in-quote' and others.")
+
+(defconst xah-left-brackets
+  (mapcar (lambda (x) (substring x 0 1)) xah-brackets)
+  "List of left bracket chars. Each element is a string.")
+
+(defconst xah-right-brackets
+  (mapcar (lambda (x) (substring x 1 2)) xah-brackets)
+  "List of right bracket chars. Each element is a string.")
+
+(defun xah-backward-left-bracket ()
+  "Move cursor to the previous occurrence of left bracket.
+The list of brackets to jump to is defined by `xah-left-brackets'.
+
+URL `http://xahlee.info/emacs/emacs/emacs_navigating_keys_for_brackets.html'
+Version: 2015-10-01"
+  (interactive)
+  (re-search-backward (regexp-opt xah-left-brackets) nil t))
+
+(defun xah-forward-right-bracket ()
+  "Move cursor to the next occurrence of right bracket.
+The list of brackets to jump to is defined by `xah-right-brackets'.
+
+URL `http://xahlee.info/emacs/emacs/emacs_navigating_keys_for_brackets.html'
+Version: 2015-10-01"
+  (interactive)
+  (re-search-forward (regexp-opt xah-right-brackets) nil t))
+
+(global-set-key (kbd "C-8") 'xah-backward-left-bracket)
+(global-set-key (kbd "C-9") 'xah-forward-right-bracket)
+(global-set-key (kbd "C-<") 'backward-paragraph)
+(global-set-key (kbd "C->") 'forward-paragraph)
+
+
+(require 'recentf)
+(setq recentf-auto-cleanup 'never) ;; disable before we start recentf!
+(setq recentf-max-menu-items 200)
+(setq recentf-save-file (concat recentf-save-file "-" (system-name)))
+(recentf-mode 1)
+(global-set-key "\C-x\ \C-r" 'counsel-recentf)
+
+
+(use-package figlet
+  :config
+  (setq figlet-default-font "standard"))
+
+(use-package beacon
+  :diminish beacon-mode
+  :config
+  (setq beacon-blink-when-focused t)
+  (setq beacon-color "#579E33")
+  (beacon-mode 1))
+
+(use-package autorevert
+  :diminish auto-revert-mode)
+;;      _ _     _                  _   _                __
+;;   __| (_)___| |_ _ __ __ _  ___| |_(_) ___  _ __    / _|_ __ ___  ___
+;;  / _` | / __| __| '__/ _` |/ __| __| |/ _ \| '_ \  | |_| '__/ _ \/ _ \
+;; | (_| | \__ \ |_| | | (_| | (__| |_| | (_) | | | | |  _| | |  __/  __/
+;;  \__,_|_|___/\__|_|  \__,_|\___|\__|_|\___/|_| |_| |_| |_|  \___|\___|
+
+(use-package writeroom-mode
+  :config
+  (remove-hook 'writeroom-global-effects 'writeroom-set-fullscreen)
+  (add-hook 'writeroom-global-effects 'writeroom-set-internal-border-width))
+
+
+(global-display-line-numbers-mode)
+
+(use-package elec-pair
+  :config
+  (electric-pair-mode 1)
+  (show-paren-mode 1)
+  (setq show-paren-delay 0.025))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; TAB AND INDENT SETUP
+
+;; for auto detecting indentation
+(use-package dtrt-indent
+  :diminish dtrt-indent-mode
+  :hook
+  (prog-mode . dtrt-indent-mode))
+
+(setq-default indent-tabs-mode nil)
+;; set default tab char's display width to 4 spaces
+(setq-default tab-width 4) ; emacs 23.1, 24.2, default to 8
+(setq backward-delete-char-untabify-method 'hungry)
+(defvaralias 'c-basic-offset 'tab-width)
+(defvaralias 'cperl-indent-level 'tab-width)
+
+;; make tab key call indent command or insert tab character, depending on cursor position
+;; default is t and it will always indent
+;; (setq-default tab-always-indent nil)
+
+(require 'dabbrev)
+(setq dabbrev-abbrev-char-regexp "\\sw\\|\\s_\\|\\s.")
+(setq dabbrev-case-fold-search nil)
+
+;; COMMENT
+(use-package comment-dwim-2
+  :bind ("C-;" . comment-dwim-2))
+
+(use-package wgrep) ;; TODO how to use this
+
+(use-package iedit
+  :bind (("C-h C-m" . iedit-mode)
+         :map iedit-mode-keymap
+         ("C-c C-c" . iedit-mode)))
+
+
+;; (require 'cl)
+;; (require 'cl-macs)
+;; (require 'dwim-compile)
+;; (global-set-key [(control ?c) ?c] 'dwim-c/compile)
+;; (setq compilation-finish-functions nil)
+
+
+(use-package puni
+  :bind
+  ("C-h C-p C-r" . puni-squeeze)
+  ("C-h C-p C-d" . puni-splice))
+
+(use-package change-inner
+  :bind
+  ("C-h C-i" . change-inner)
+  ("C-h C-a" . change-outer))
+
+
+;;                                  _                      _
+;;   _____  ___ __   __ _ _ __   __| |      _ __ ___  __ _(_) ___  _ __
+;;  / _ \ \/ / '_ \ / _` | '_ \ / _` |_____| '__/ _ \/ _` | |/ _ \| '_ \
+;; |  __/>  <| |_) | (_| | | | | (_| |_____| | |  __/ (_| | | (_) | | | |
+;;  \___/_/\_\ .__/ \__,_|_| |_|\__,_|     |_|  \___|\__, |_|\___/|_| |_|
+;;           |_|                                     |___/
+(use-package expand-region
+  :bind ("M-3" . er/expand-region))
+
+
+;;            _                  _
+;;  ___ _ __ (_)_ __  _ __   ___| |_ ___
+;; / __| '_ \| | '_ \| '_ \ / _ \ __/ __|
+;; \__ \ | | | | |_) | |_) |  __/ |_\__ \
+;; |___/_| |_|_| .__/| .__/ \___|\__|___/
+;;             |_|   |_|
+(use-package yasnippet
+  :diminish yas-minor-mode
+  :bind (:map yas-minor-mode-map
+              ("<tab>" . nil)
+              ("TAB" . nil))
+  :hook
+  (prog-mode . yas-minor-mode)
+  (text-mode . yas-minor-mode)
+  :config
+  ;; https://emacs.stackexchange.com/questions/38242/problem-redoing-with-yasnippet
+  (setq yas-snippet-revival nil))
+
+(use-package php-mode)
+
+(use-package web-mode)
+(add-to-list 'auto-mode-alist '("\\.[agj]sp\\'"   . web-mode))
+(add-to-list 'auto-mode-alist '("\\.as[cp]x\\'"   . web-mode))
+(add-to-list 'auto-mode-alist '("\\.djhtml\\'"    . web-mode))
+(add-to-list 'auto-mode-alist '("\\.erb\\'"       . web-mode))
+(add-to-list 'auto-mode-alist '("\\.html?\\'"     . web-mode))
+(add-to-list 'auto-mode-alist '("\\.mustache\\'"  . web-mode))
+(add-to-list 'auto-mode-alist '("\\.phtml\\'"     . web-mode))
+(add-to-list 'auto-mode-alist '("\\.tpl\\'"       . web-mode))
 (add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.tpl\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 
 (add-hook 'web-mode-before-auto-complete-hooks
           '(lambda ()
@@ -791,61 +893,35 @@ https://groups.google.com/forum/?hl=en&fromgroups=#!topic/gnu.emacs.help/RHKP2gj
 (setq-default web-mode-sql-indent-offset tab-width)
 (setq web-mode-enable-control-block-indentation nil)
 
+(use-package skewer-mode
+  :hook
+  (js2-mode . skewer-mode)
+  (css-mode . skewer-css-mode)
+  :config
+  (setq httpd-port 8089))
 
-(require 'skewer-mode)
-(add-hook 'js2-mode-hook 'skewer-mode)
-(add-hook 'css-mode-hook 'skewer-css-mode)
-(setq httpd-port 8089)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                              FREE-KEYS
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package free-keys)
+;;  ____            _           _   _ _
+;; |  _ \ _ __ ___ (_) ___  ___| |_(_) | ___
+;; | |_) | '__/ _ \| |/ _ \/ __| __| | |/ _ \
+;; |  __/| | | (_) | |  __/ (__| |_| | |  __/
+;; |_|   |_|  \___// |\___|\___|\__|_|_|\___|
+;;               |__/
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                              LUA
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; (require 'lua-mode)
+(use-package ag)
+(use-package projectile
+  :hook
+  (prog-mode . projectile-mode)
+  (text-mode . projectile-mode)
+  :config
+  (setq projectile-enable-caching t)
+  (setq projectile-mode-line-function #'(lambda ()
+                                          (if
+                                              (file-remote-p default-directory)
+                                              " Proj"
+                                            (format " P[%s]" (projectile-project-name))))))
 
-;; (defvar love2d-program "love")
+;; TODO: reorder minor mode name on modeline, projectile first seems better
 
-;; (defun love2d-launch-current ()
-;;   (interactive)
-;;   (let ((app-root (locate-dominating-file (buffer-file-name) "main.lua")))
-;;     (if app-root
-;;         (shell-command (format "%s %s &" love2d-program app-root))
-;;       (error "main.lua not found"))))
-
-;; (defun get-love2d-approot ()
-;;   (locate-dominating-file (buffer-file-name) "main.lua"))
-
-;;                                         ;(remove-hook 'lua-mode-hook (car lua-mode-hook))
-;; (add-hook 'lua-mode-hook
-;;           (lambda ()
-;;             (let ((approot (get-love2d-approot)))
-;;               (if approot
-;;                   (progn
-;;                     (set (make-local-variable 'compile-command) (format "%s %s" love2d-program approot))
-;;                     (add-to-list 'compilation-error-regexp-alist 'love t)
-;;                     (add-to-list 'compilation-error-regexp-alist-alist
-;;                                  '(love "^Error: Syntax error: \\(.*?\\):\\([0-9]+\\):.*$" 1 2) t))
-;;                 (set (make-local-variable 'compile-command)
-;;                      (concat "lua " (file-name-nondirectory buffer-file-name)))))))
-
-;; (setq shell-switcher-mode t)
-;; (require 'shell-switcher)
-;; (shell-switcher-mode t)
-;; (require 'better-shell)
-;; (global-set-key (kbd "C-;") 'better-shell-shell)
-
-(require 'bfbuilder)
-(add-to-list 'auto-mode-alist '("\\.bf$" . bfbuilder-mode))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                              PROJECTILE
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'ag)
-(require 'projectile)
-(require 'counsel-projectile)
 (setq projectile-mode-line
       '(:eval
         (if
@@ -853,26 +929,48 @@ https://groups.google.com/forum/?hl=en&fromgroups=#!topic/gnu.emacs.help/RHKP2gj
             " Projectile"
           (format " P[%s]"
                   (projectile-project-name)))))
-;; https://github.com/bbatsov/projectile/issues/835
-;;(projectile-global-mode t)
-(add-hook 'text-mode-hook 'projectile-mode)
-(counsel-projectile-mode)
-(setq projectile-enable-caching t)
 
 
-(require 'recentf)
-(setq recentf-auto-cleanup 'never) ;; disable before we start recentf!
-(setq recentf-max-menu-items 200)
-(setq recentf-save-file (concat recentf-save-file "-" (system-name)))
-(recentf-mode 1)
-(global-set-key "\C-x\ \C-r" 'counsel-recentf)
+(use-package counsel-projectile
+  :after (counsel projectile)
+  :config
+  (counsel-projectile-mode))
+
+
+(use-package ibuffer
+  :bind ("C-x C-b" . ibuffer))
+
+(use-package ibuffer-projectile
+  :after (ibuffer)
+
+  :hook
+  (ibuffer . ngoc/ibuffer-setup)
+  
+  :config
+  (defun ngoc/ibuffer-setup ()
+    (ibuffer-projectile-set-filter-groups)
+    (unless (eq ibuffer-sorting-mode 'filename/process)
+      (ibuffer-do-sort-by-filename/process))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; IBUFFER
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; (use-package ibuffer-tramp
+;;   :config
+;;   (add-hook 'ibuffer-hook
+;;             (lambda ()
+;;               (ibuffer-tramp-set-filter-groups-by-tramp-connection)
+;;               (ibuffer-do-sort-by-alphabetic))))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                              GGTAGS
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'ggtags)
-(define-key evil-normal-state-map (kbd "C-]") 'ggtags-find-tag-dwim)
-(setq ggtags-global-abbreviate-filename nil)
+(use-package ggtags
+  :config
+  (setq ggtags-global-abbreviate-filename nil))
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                              EDIFF
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -887,14 +985,17 @@ https://groups.google.com/forum/?hl=en&fromgroups=#!topic/gnu.emacs.help/RHKP2gj
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                              MAGIT
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(global-set-key (kbd "C-x g") 'magit-status)
+(use-package magit
+  :bind (("C-x g" . magit-status)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                              DIFF HL
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'diff-hl)
-(global-diff-hl-mode t)
-(diff-hl-flydiff-mode t)
+(use-package diff-hl
+  :config
+  (global-diff-hl-mode t)
+  (diff-hl-flydiff-mode t))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                              PRETTIFY SYMBOL
@@ -954,9 +1055,89 @@ https://groups.google.com/forum/?hl=en&fromgroups=#!topic/gnu.emacs.help/RHKP2gj
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                              FLYCHECK
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'flycheck)
-;; (global-flycheck-mode t)
-(setq flycheck-mode-line-prefix "F")
+(use-package flycheck
+  :config
+  (setq flycheck-mode-line-prefix "F"))
+
+
+(use-package highlight-indentation
+  :diminish highlight-indentation-mode
+  :hook (prog-mode . highlight-indentation-mode))
+
+
+(use-package lsp-mode
+  :init
+  ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
+  (setq lsp-keymap-prefix "C-c l")
+  :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
+         (c-mode . lsp)
+         (c++-mode . lsp)
+         ;; if you want which-key integration
+         (lsp-mode . lsp-enable-which-key-integration))
+  :commands lsp)
+
+;;                    _             _   _
+;;  _ __   __ ___   _(_) __ _  __ _| |_(_) ___  _ __
+;; | '_ \ / _` \ \ / / |/ _` |/ _` | __| |/ _ \| '_ \
+;; | | | | (_| |\ V /| | (_| | (_| | |_| | (_) | | | |
+;; |_| |_|\__,_| \_/ |_|\__, |\__,_|\__|_|\___/|_| |_|
+;;                      |___/
+
+(use-package dumb-jump
+  :bind (("M-g o"   . dumb-jump-go-other-window)
+         ("M-g j"   . dumb-jump-go)
+         ("M-g M-g" . dumb-jump-go)
+         ("M-g b"   . dumb-jump-back)
+         ("M-g i"   . dumb-jump-go-prompt)
+         ("M-g x"   . dumb-jump-go-prefer-external)
+         ("M-g z"   . dumb-jump-go-prefer-external-other-window))
+  :config (setq dumb-jump-selector 'ivy))
+
+(use-package imenu-list
+  :bind ("C-h C-b" . imenu-list))
+
+;;     _  _____ ___  __  __ ___ ____    ____ _   _ ____   ___  __  __ _____
+;;    / \|_   _/ _ \|  \/  |_ _/ ___|  / ___| | | |  _ \ / _ \|  \/  | ____|
+;;   / _ \ | || | | | |\/| || | |     | |   | |_| | |_) | | | | |\/| |  _|
+;;  / ___ \| || |_| | |  | || | |___  | |___|  _  |  _ <| |_| | |  | | |___
+;; /_/   \_\_| \___/|_|  |_|___\____|  \____|_| |_|_| \_\\___/|_|  |_|_____|
+(use-package atomic-chrome
+  :bind (:map atomic-chrome-edit-mode-map
+              ("C-c C-c" . nil))
+  :config
+  (setq atomic-chrome-buffer-open-style 'full)
+  (setq atomic-chrome-url-major-mode-alist
+        '((".*\\.wix\\.com" . js-mode)
+          ("leetcode\\.com" . python-mode)))
+  (atomic-chrome-start-server))
+
+
+;;              _                                    _      _
+;;   __ _ _   _| |_ ___     ___ ___  _ __ ___  _ __ | | ___| |_ ___
+;;  / _` | | | | __/ _ \   / __/ _ \| '_ ` _ \| '_ \| |/ _ \ __/ _ \
+;; | (_| | |_| | || (_) | | (_| (_) | | | | | | |_) | |  __/ ||  __/
+;;  \__,_|\__,_|\__\___/   \___\___/|_| |_| |_| .__/|_|\___|\__\___|
+;;                                            |_|
+(use-package company
+  :diminish company-mode
+  :hook
+  (prog-mode . company-mode)
+  (text-mode . company-mode)
+  
+  :bind (("M-8"      . company-yasnippet)
+         :map company-active-map
+         ("<escape>" . company-abort)
+         ("M-n"      . company-select-next-or-abort)
+         ("M-p"      . company-select-previous-or-abort)
+         :map company-search-map
+         ("<escape>" . company-abort)
+         ("M-n"      . company-select-next-or-abort)
+         ("M-p"      . company-select-previous-or-abort))
+  :config
+  (setq company-dabbrev-downcase nil)
+  (setq company-minimum-prefix-length 2)
+  (setq company-idle-delay 0.05))
+
  ;;   ____            _ _       _
 ;;  / ___|___  _ __ (_) | ___ | |_
 ;; | |   / _ \| '_ \| | |/ _ \| __|
@@ -1092,339 +1273,44 @@ https://groups.google.com/forum/?hl=en&fromgroups=#!topic/gnu.emacs.help/RHKP2gj
   (save-buffer)
   (chrome-reload))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                              VOLATILE HIGHLIGHTS
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; (volatile-highlights-mode t)
-;; (vhl/define-extension 'evil 'evil-paste-after 'evil-paste-before 'evil-yank
-;;                       'evil-paste-pop 'evil-move)
-;; (vhl/install-extension 'evil)
-
-
-(require 'zeal-at-point)
+(use-package zeal-at-point)
 (global-set-key "\C-cd" 'zeal-at-point)
 (add-hook 'projectile-rails-mode-hook
           (lambda () (setq zeal-at-point-docset "ruby,rails")))
 (add-to-list 'zeal-at-point-mode-alist '(c++-mode . ""))
+;;   ____
+;;  / ___| _     _
+;; | |   _| |_ _| |_
+;; | |__|_   _|_   _|
+;;  \____||_|   |_|
 
-(require 'projectile-rails)
-;; (projectile-rails-global-mode t)
-
-
-;; ;; NOTE issue with broken char display
-;; (use-package highlight-indent-guides
-;;   :config
-;;   (setq highlight-indent-guides-method 'character)
-;;   (setq highlight-indent-guides-auto-character-face-perc 9)
-
-;;   (defun hide-first-level-highlighter (level responsive display)
-;;     (if (> 1 level) ; replace `1' with the number of guides you want to hide
-;;         nil
-;;         (highlight-indent-guides--highlighter-default level responsive display)))
-
-;;   (setq highlight-indent-guides-highlighter-function 'hide-first-level-highlighter)
-
-;;   (add-hook 'prog-mode-hook 'highlight-indent-guides-mode))
-
-;; (use-package keyfreq
-;;   :init
-;;   (keyfreq-mode 1)
-;;   (keyfreq-autosave-mode 1))
-
-(use-package highlight-indentation
-  :config
-  (add-hook 'prog-mode-hook 'highlight-indentation-mode))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                              ROTATE TEXT
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defvar rotate-text-rotations
-  '(("true" "false")
-    ("True" "False")
-    ("0" "1")
-    ("yes" "no")
-    ("On" "Off"))
-  "List of text rotation sets.")
-
-(defun rotate-region (beg end)
-  "Rotate all matches in `rotate-text-rotations' between point and mark."
-  (interactive "r")
-  (let ((regexp (rotate-convert-rotations-to-regexp
-                 rotate-text-rotations))
-        (end-mark (copy-marker end)))
-    (save-excursion
-      (goto-char beg)
-      (while (re-search-forward regexp (marker-position end-mark) t)
-        (let* ((found (match-string 0))
-               (replace (rotate-next found)))
-          (replace-match replace))))))
-
-(defun rotate-string (string &optional rotations)
-  "Rotate all matches in STRING using associations in ROTATIONS.
-If ROTATIONS are not given it defaults to `rotate-text-rotations'."
-  (let ((regexp (rotate-convert-rotations-to-regexp
-                 (or rotations rotate-text-rotations)))
-        (start 0))
-    (while (string-match regexp string start)
-      (let* ((found (match-string 0 string))
-             (replace (rotate-next
-                       found
-                       (or rotations rotate-text-rotations))))
-        (setq start (+ (match-end 0)
-                       (- (length replace) (length found))))
-        (setq string (replace-match replace nil t string))))
-    string))
-
-(defun rotate-next (string &optional rotations)
-  "Return the next element after STRING in ROTATIONS."
-  (let ((rots (rotate-get-rotations-for
-               string
-               (or rotations rotate-text-rotations))))
-    (if (> (length rots) 1)
-        (error (format "Ambiguous rotation for %s" string))
-      (if (< (length rots) 1)
-          ;; If we get this far, this should not occur:
-          (error (format "Unknown rotation for %s" string))
-        (let ((occurs-in-rots (member string (car rots))))
-          (if (null occurs-in-rots)
-              ;; If we get this far, this should *never* occur:
-              (error (format "Unknown rotation for %s" string))
-            (if (null (cdr occurs-in-rots))
-                (caar rots)
-              (cadr occurs-in-rots))))))))
-
-(defun rotate-get-rotations-for (string &optional rotations)
-  "Return the string rotations for STRING in ROTATIONS."
-  (remq nil (mapcar (lambda (rot) (if (member string rot) rot))
-                    (or rotations rotate-text-rotations))))
-
-(defun rotate-convert-rotations-to-regexp (rotations)
-  (regexp-opt (rotate-flatten-list rotations)))
-
-(defun rotate-flatten-list (list-of-lists)
-  "Flatten LIST-OF-LISTS to a single list.
-Example:
-  (rotate-flatten-list '((a b c) (1 ((2 3)))))
-    => (a b c 1 2 3)"
-  (if (null list-of-lists)
-      list-of-lists
-    (if (listp list-of-lists)
-        (append (rotate-flatten-list (car list-of-lists))
-                (rotate-flatten-list (cdr list-of-lists)))
-      (list list-of-lists))))
-
-(defun rotate-word-at-point ()
-  "Rotate word at point based on sets in `rotate-text-rotations'."
-  (interactive)
-  (let ((bounds (bounds-of-thing-at-point 'word))
-        (opoint (point)))
-    (when (consp bounds)
-      (let ((beg (car bounds))
-            (end (copy-marker (cdr bounds))))
-        (rotate-region beg end)
-        (goto-char (if (> opoint end) end opoint))))))
-
-(defun indent-or-rotate ()
-  "If point is at end of a word, then else indent the line."
-  (interactive)
-  (if (looking-at "\\>")
-      (rotate-region (save-excursion (forward-word -1) (point))
-                     (point))
-    (indent-for-tab-command)))
-
-;; (local-set-key [tab] 'indent-or-rotate)
-
-(require 'dockerfile-mode)
-
-;; (require 'bgex)
-;; ;; color
-;; (when (boundp 'bgex-exist-p)
-;;   (bgex-set-image-default "/home/rmrf/Pictures/tiledbackground.jpg"))
-
-(use-package pdf-tools
-  :config
-  (pdf-tools-install)
-  (setq pdf-view-midnight-colors '("black" . "wheat"))
-  (defun rmrf/pdf-view-setup ()
-    (pdf-view-midnight-minor-mode t))
-  (replace-hook 'pdf-view-mode-hook 'rmrf/pdf-view-setup))
-
-(add-hook 'TeX-after-compilation-finished-functions #'TeX-revert-document-buffer)
-
-(use-package interleave
-  :config
-  (setq interleave-disable-narrowing t))
-
-(use-package ace-window
-  :config
-  (global-set-key (kbd "M-o") 'ace-window)
-  (setq aw-keys '(?h ?t ?n ?s ?a ?o ?e ?u)
-        aw-scope 'frame))
-
-
-(use-package lsp-mode
-  :init
-  ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
-  (setq lsp-keymap-prefix "C-c l")
-  :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
-         (c-mode . lsp)
-         (c++-mode . lsp)
-         ;; if you want which-key integration
-         (lsp-mode . lsp-enable-which-key-integration))
-  :commands lsp)
-
-
-(use-package dumb-jump
-  :bind (("M-g o" . dumb-jump-go-other-window)
-         ("M-g j" . dumb-jump-go)
-         ("M-g M-g" . dumb-jump-go)
-         ("M-g b" . dumb-jump-back)
-         ("M-g i" . dumb-jump-go-prompt)
-         ("M-g x" . dumb-jump-go-prefer-external)
-         ("M-g z" . dumb-jump-go-prefer-external-other-window))
-  :config (setq dumb-jump-selector 'ivy) ;; (setq dumb-jump-selector 'helm)
-  :ensure)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                              ATOMIC CHROME
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; (use-package atomic-chrome
-;;   :demand t
-;;   :straight (atomic-chrome
-;;              :repo "KarimAziev/atomic-chrome"
-;;              :type git
-;;              :host github)
-;;   :commands (atomic-chrome-start-server)
-;;   :config
-;;   (setq-default atomic-chrome-extension-type-list '(atomic-chrome))
-;;   (atomic-chrome-start-server))
-(use-package atomic-chrome
-  :config
-  (setq atomic-chrome-buffer-open-style 'full)
-  (setq atomic-chrome-url-major-mode-alist
-        '((".*\\.wix\\.com" . js-mode)
-          ("leetcode\\.com" . python-mode)))
-  (atomic-chrome-start-server))
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                              LATEX AUCTEX
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(add-hook 'LaTeX-mode-hook 'TeX-source-correlate-mode)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                              POPWIN
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; (use-package popwin
-;;   :config
-;;   (popwin-mode 1)
-;;   (setq display-buffer-function 'popwin:display-buffer)
-;;   (push '("^CAPTURE-.+\*.org$" :regexp t) popwin:special-display-config)
-;;   (push '("*Org Select*") popwin:special-display-config)
-
-;;   ;; undo-tree
-;;   (push '(" *undo-tree*" :width 0.3 :position right) popwin:special-display-config)
-;;   )
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                              OMNET++
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;   ___  __  __ _   _     _____
+;;  / _ \|  \/  | \ | | __|_   _|_     _
+;; | | | | |\/| |  \| |/ _ \| |_| |_ _| |_
+;; | |_| | |  | | |\  |  __/| |_   _|_   _|
+;;  \___/|_|  |_|_| \_|\___||_| |_|   |_|
 (setenv "PATH" (concat (expand-file-name "~/apps/omnetpp-5.7/bin:") (getenv "PATH")))
+;;      _                                _       _
+;;     | | __ ___   ____ _ ___  ___ _ __(_)_ __ | |_
+;;  _  | |/ _` \ \ / / _` / __|/ __| '__| | '_ \| __|
+;; | |_| | (_| |\ V / (_| \__ \ (__| |  | | |_) | |_
+;;  \___/ \__,_| \_/ \__,_|___/\___|_|  |_| .__/ \__|
+;;                                        |_|
+(use-package js2-mode
+  :hook
+  (js-mode . js2-minor-mode))
 
 
-;; C++
-(require 'member-functions)
+(use-package yaml-mode
+  :defer t
+  :init
+  (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode)))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                              PlantUML
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (use-package plantuml-mode
+  :defer t
+  :init
+  (add-to-list 'auto-mode-alist '("\\.plantuml\\'" . plantuml-mode))
   :config
   (setq plantuml-default-exec-mode 'jar)
-  (setq plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar")
-  (add-to-list 'auto-mode-alist '("\\.plantuml\\'" . plantuml-mode)))
-
-
-(require 'netlogo-mode)
-
-(require 'diminish)
-(diminish 'evil-snipe-local-mode)
-(diminish 'guide-key-mode)
-(diminish 'ivy-mode)
-(diminish 'auto-revert-mode)
-(diminish 'abbrev-mode)
-(diminish 'dtrt-indent-mode)
-(diminish 'beacon-mode)
-(diminish 'volatile-highlights-mode)
-(diminish 'flycheck-mode)
-(diminish 'evil-goggles-mode)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   '("99c86852decaeb0c6f51ce8bd46e4906a4f28ab4c5b201bdc3fdf85b24f88518" default))
- '(package-selected-packages
-   '(highlight-indentation-ome company-anaconda anaconda-mode anaconda evil-args lsp-mode netlogo-mode ned-mode gradle-mode meghanada monokai-theme pdf-tools ensime terminal-here shackle dired-efap smooth-scroll cdlatex imenu-list ace-window interleave ztree zenburn-theme zeal-at-point yasnippet-snippets yard-mode yaml-mode web-mode volatile-highlights use-package tao-theme tango-plus-theme sublimity start-menu spacemacs-theme spaceline skewer-mode shell-switcher robe rainbow-mode quasi-monochrome-theme psysh projectile-rails powerline-evil plan9-theme parent-mode ox-reveal openwith nlinum-relative multi-term moe-theme minimap minimal-theme markdown-mode magit linum-relative leuven-theme less-css-mode ldap-mode latex-preview-pane langtool kite-mini key-chord json-mode jedi isend-mode impatient-mode ibuffer-tramp highlight-tail guide-key graphviz-dot-mode glsl-mode git-gutter ggtags geben fuzzy free-keys frames-only-mode framemove flyspell-lazy flymake-php flymake-lua flycheck flx flatui-theme fcitx fancy-battery eyebrowse exwm-x expand-region exec-path-from-shell evil-visualstar evil-surround evil-snipe evil-smartparens evil-numbers evil-nerd-commenter evil-multiedit evil-mc evil-matchit evil-leader evil-goggles evil-god-state evil-easymotion evil-commentary evil-avy evil-anzu enh-ruby-mode emojify emms elfeed dumb-jump dtrt-indent dockerfile-mode dmenu dired-open diminish diff-hl counsel-projectile color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized bfbuilder better-shell beacon base16-theme auto-complete-pcmp auto-complete-exuberant-ctags auto-complete-auctex auctex-lua auctex-latexmk anti-zenburn-theme ample-zen-theme ample-theme airline-themes aggressive-indent ag ace-link ace-jump-mode ac-php ac-inf-ruby ac-html-csswatcher ac-html-bootstrap ac-html ac-emmet ac-dabbrev 0blayout))
- '(safe-local-variable-values
-   '((eval setenv "PATH"
-           (concat ":"
-                   (expand-file-name "~/apps/omnetpp-5.7/bin")
-                   (getenv "PATH")))
-     (eval setenv "PATH"
-           (concat
-            (expand-file-name ":~/apps/omnetpp-5.7/bin")
-            (getenv "PATH")))
-     (eval setenv "PATH"
-           (concat
-            (expand-file-name "~/apps/omnetpp-5.7/bin")
-            (getenv "PATH")))
-     (eval setq flycheck-clang-include-path
-           (list
-            (expand-file-name "~/apps/omnetpp-5.7/include")
-            (expand-file-name "~/builds/comm/include")
-            (expand-file-name "~/builds/comm/src/message")))
-     (eval setq cc-search-directories
-           (list "."
-                 (expand-file-name "~/builds/comm/include")
-                 (expand-file-name "~/builds/comm/src")
-                 (expand-file-name "~/builds/comm/src/**")
-                 "/usr/include" "/usr/local/include/*"))
-     (eval setq flycheck-clang-include-path
-           (list
-            (expand-file-name "~/apps/omnetpp-5.6.2/include")
-            (expand-file-name "~/builds/comm/include")
-            (expand-file-name "~/builds/comm/src/message")))
-     (eval setq flycheck-clang-include-path
-           (list
-            (expand-file-name "~/apps/omnetpp-5.6.2/include")
-            (expand-file-name "~/builds/comm/include")
-            "../src/message"))
-     (eval setq flycheck-clang-include-path
-           (list
-            (expand-file-name "~/apps/omnetpp-5.6.2/include")
-            "../src/message"))
-     (eval setq flycheck-clang-include-path
-           (list
-            (expand-file-name "~/apps/omnetpp-5.6.2/include")
-            "../message"))
-     (eval setq flycheck-clang-include-path
-           (list
-            (expand-file-name "~/apps/omnetpp-5.6.2/include")))
-     (cc-search-directories "." "/home/rmrf/builds/comm/include" "/home/rmrf/builds/comm/src" "/home/rmrf/builds/comm/src/**" "/usr/include" "/usr/local/include/*")
-     (cc-search-directories "." "/home/rmrf/builds/comm/include" "/usr/include" "/usr/local/include/*")
-     (eval setq flycheck-clang-include-path
-           (list
-            (expand-file-name "/home/rmrf/apps/omnetpp-5.6.2/include")))
-     (eval setq flycheck-clang-include-path
-           (list
-            (expand-file-name "/home/rmrf/apps/omnetpp-5.6.2")))
-     (eval setq flycheck-clang-include-path
-           (list
-            (expand-file-name "/opt/omnetpp/include/"))))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
-(put 'narrow-to-region 'disabled nil)
+  (setq plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar"))
