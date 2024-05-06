@@ -1263,17 +1263,6 @@ Example:
          (lsp-mode . lsp-enable-which-key-integration))
   :commands lsp)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                              PASTE
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'dpaste)
-(setq dpaste-poster "Bao Ngoc")
-(setq dpaste-expiry-days 1)
-
-(defun paste ()
-  "Simple function to skip typing dpaste title every time."
-  (interactive)
-  (dpaste-region-or-buffer "Undefined"))
 
 (use-package dumb-jump
   :bind (("M-g o" . dumb-jump-go-other-window)
