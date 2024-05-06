@@ -76,12 +76,14 @@
 (use-package shell-switcher)
 (use-package sublimity)
 ;; (use-package tao-theme)
-(use-package undo-tree)
 (use-package use-package)
 (use-package volatile-highlights)
 (use-package web-mode)
 (use-package xcscope)
 (use-package yaml-mode
+(use-package undo-tree
+  :bind ("C-h C-u" . undo-tree-visualize)
+  :diminish undo-tree-mode
   :config
   (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode)))
 (use-package yasnippet)
@@ -91,7 +93,6 @@
   (remove-hook hook fun)
   (add-hook hook fun))
 
-(global-undo-tree-mode)
 
 ;; (require 'framemove)
 ;; (setq framemove-hook-into-windmove t)
@@ -120,6 +121,7 @@
 (add-hook 'text-mode-hook
           (lambda () (nlinum-mode t)
             (nlinum-relative-on)))
+  (global-undo-tree-mode))
 
 (blink-cursor-mode 0)
 
@@ -1347,7 +1349,6 @@ Example:
 (diminish 'evil-snipe-local-mode)
 (diminish 'guide-key-mode)
 (diminish 'ivy-mode)
-(diminish 'undo-tree-mode)
 (diminish 'auto-revert-mode)
 (diminish 'abbrev-mode)
 (diminish 'dtrt-indent-mode)
