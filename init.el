@@ -405,9 +405,14 @@ https://groups.google.com/forum/?hl=en&fromgroups=#!topic/gnu.emacs.help/RHKP2gj
 ;;                              PYTHON
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package anaconda-mode
+(use-package fcitx
+  :init
+  (setq fcitx-use-dbus t)
   :config
   (add-hook 'python-mode-hook 'anaconda-mode)
   (add-hook 'python-mode-hook 'anaconda-eldoc-mode))
+  (fcitx-default-setup))
+
 
 (use-package company-anaconda
   :config
