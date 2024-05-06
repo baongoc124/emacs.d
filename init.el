@@ -719,8 +719,8 @@
 
 
 ;; editing
+;; don't need zap-to-char because zap-up-to-char + d = zap-to-char (in god-mode)
 (global-set-key (kbd "C-z")     'zap-up-to-char)
-(global-set-key (kbd "C-S-Z")   'zap-to-char)
 (global-set-key (kbd "M-2")     'mark-word)
 ;; TODO add ability to duplicate to upper or lower
 (define-key ngoc-prefix "d" 'duplicate-dwim)
