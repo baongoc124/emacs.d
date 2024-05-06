@@ -213,9 +213,10 @@ Version 2015-10-01"
 (add-to-list 'display-buffer-alist (cons "\\*Async Shell Command\\*.*" (cons #'display-buffer-no-window nil)))
 
 ;; save last edit position
-(require 'saveplace)
-(save-place-mode t)
-(setq save-place-forget-unreadable-files nil)
+(use-package saveplace
+  :config
+  (save-place-mode t)
+  (setq save-place-forget-unreadable-files nil))
 
 (setq uniquify-buffer-name-style 'post-forward)
 (setq uniquify-separator "/")
