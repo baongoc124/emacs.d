@@ -662,20 +662,7 @@ https://groups.google.com/forum/?hl=en&fromgroups=#!topic/gnu.emacs.help/RHKP2gj
 ;;                         (inhibit-same-window . t)
 ;;                         (window-height . 0.4)))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                              ANSI-TERM
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'term)
-(defun expose-global-binding-in-term (binding)
-  (define-key term-raw-map binding
-    (lookup-key (current-global-map) binding)))
 
-;; expose WindowsMode binding
-(expose-global-binding-in-term (kbd "M-o"))
-
-(add-hook 'term-mode-hook
-          (lambda ()
-            (term-pager-enable)))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; EMACS DAEMON
 ;; Allow access from emacsclient
