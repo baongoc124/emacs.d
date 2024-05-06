@@ -122,9 +122,6 @@
             (nlinum-relative-on)))
 
 (blink-cursor-mode 0)
-(require 'hl-line+)
-(set-face-background 'hl-line "#FFFAE6")
-(global-hl-line-mode t)
 
 
 (require 'avy)
@@ -181,6 +178,11 @@ Version 2015-10-01"
 ;; GUI tweaks
 (setq echo-keystrokes 0.0001)
 (setq minibuffer-prompt-properties '(readonly t point-entered minibuffer-avoid-prompt face minibuffer-prompt))
+
+(use-package hl-line
+  :config
+  (set-face-background 'hl-line "#FFFAE6")
+  (global-hl-line-mode t))
 
 (setq frame-title-format
       '("" invocation-name ": " (:eval (replace-regexp-in-string
