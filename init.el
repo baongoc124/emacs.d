@@ -161,15 +161,21 @@
   ;; Corrects (and improves) org-mode's native fontification.
   (doom-themes-org-config))
 
-(setq ngoc/interface-font-name "RobotoMono Nerd Font Mono")
+(setq ngoc/interface-font-name
+      (cond
+       ((eq system-type 'gnu/linux)
+        "Hack")
+       ((eq system-type 'darwin)
+        "Menlo")
+       (t
+        "Monospace")))
 
 (add-hook 'window-setup-hook
-          '(lambda ()
-             (set-cursor-color "#69E300")
-             (when (eq system-type 'gnu/linux)
-               (set-frame-font (font-spec :family ngoc/interface-font-name
-                                          :size 10.5
-                                          :weight 'medium)))))
+          #'(lambda ()
+              (set-cursor-color "#69E300")
+              (when (eq system-type 'gnu/linux)
+                (set-frame-font (font-spec :family ngoc/interface-font-name
+                                           :size 10.5)))))
 
 ;; mode line
 (column-number-mode 1)
