@@ -1063,15 +1063,21 @@ Version: 2015-10-01"
   (setq ggtags-global-abbreviate-filename nil))
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                              EDIFF
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; This is what you probably want if you are using a tiling window
-;; manager under X, such as ratpoison.
-(setq ediff-window-setup-function 'ediff-setup-windows-plain)
-(setq ediff-split-window-function 'split-window-horizontally)
-(setq ediff-diff-options "-w")
-(setq ediff-merge-filename-prefix "")
+;;                     _                               _             _
+;; __   _____ _ __ ___(_) ___  _ __     ___ ___  _ __ | |_ _ __ ___ | |
+;; \ \ / / _ \ '__/ __| |/ _ \| '_ \   / __/ _ \| '_ \| __| '__/ _ \| |
+;;  \ V /  __/ |  \__ \ | (_) | | | | | (_| (_) | | | | |_| | | (_) | |
+;;   \_/ \___|_|  |___/_|\___/|_| |_|  \___\___/|_| |_|\__|_|  \___/|_|
+
+(use-package ediff
+  :ensure nil
+  :config
+  ;; This is what you probably want if you are using a tiling window
+  ;; manager under X, such as ratpoison.
+  (setq ediff-window-setup-function 'ediff-setup-windows-plain)
+  (setq ediff-split-window-function 'split-window-horizontally)
+  (setq ediff-diff-options "-w")
+  (setq ediff-merge-filename-prefix ""))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
