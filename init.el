@@ -704,7 +704,7 @@
   :bind (("<escape>" . god-local-mode) ; mimic vim to exit insert mode
          :map god-local-mode-map
          ("i"        . god-local-mode) ; mimic vim to enter insert mode
-         ("`"        . repeat)
+         ("."        . repeat)
          ("<escape>" . ignore)
          ("h"        . ngoc-prefix)
          ("<f1>"     . help-command))
@@ -763,9 +763,9 @@ Version: 2015-10-01"
 ;; use middle fingers for paragraph movements
 ;; use ring fingers for bracket movements
 ;; to alternating hands like Dvorak's idea
-(global-set-key (kbd "C-,") 'xah-backward-left-bracket)
+(global-set-key (kbd "C-2") 'xah-backward-left-bracket)
 (global-set-key (kbd "C-9") 'xah-forward-right-bracket)
-(global-set-key (kbd "C-.") 'backward-paragraph)
+(global-set-key (kbd "C-3") 'backward-paragraph)
 (global-set-key (kbd "C-8") 'forward-paragraph)
 
 
