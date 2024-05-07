@@ -892,13 +892,6 @@ Version: 2015-10-01"
 ;; (global-set-key [(control ?c) ?c] 'dwim-c/compile)
 ;; (setq compilation-finish-functions nil)
 
-
-(use-package puni
-  :bind (:map ngoc-prefix
-              ("p r" . puni-squeeze)
-              ("p d" . puni-splice)))
-  
-
 ;;                                  _                      _
 ;;   _____  ___ __   __ _ _ __   __| |      _ __ ___  __ _(_) ___  _ __
 ;;  / _ \ \/ / '_ \ / _` | '_ \ / _` |_____| '__/ _ \/ _` | |/ _ \| '_ \
