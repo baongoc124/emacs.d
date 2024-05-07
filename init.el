@@ -374,6 +374,12 @@
 
 (use-package free-keys)
 
+;; easy exit from transient menu using ESC
+(use-package transient
+  :config
+  (define-key transient-base-map (kbd "<escape>") #'transient-quit-one))
+
+
 (use-package fcitx
   :if (eq system-type 'gnu/linux)
   :config
@@ -914,6 +920,7 @@ Version: 2015-10-01"
          ("\"" . er/mark-outside-quotes))
          
   :config
+  (setq expand-region-reset-fast-key "<escape>")
   (require 'er-basic-expansions))
 
 
