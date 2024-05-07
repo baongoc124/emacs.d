@@ -265,19 +265,20 @@
 
 (use-package winner
   :demand t ;; load immediately to save window configuration
-  :bind (("M-N" . winner-redo)
-         ("M-P" . winner-undo))
+  :bind (("M-F" . winner-redo)
+         ("M-B" . winner-undo))
   :config
   (winner-mode 1))
 
-(defun vsplit-last-buffer ()
+;; weird naming of horizontal & vertical split -> I swapped them
+(defun hsplit-last-buffer ()
   (interactive)
   (split-window-vertically)
   (other-window 1 nil)
   (switch-to-next-buffer)
   (other-window -1 nil))
 
-(defun hsplit-last-buffer ()
+(defun vsplit-last-buffer ()
   (interactive)
   (split-window-horizontally)
   (other-window 1 nil)
@@ -290,16 +291,19 @@
 
 (global-set-key (kbd "C-x k")     'kill-this-buffer)
 (global-set-key (kbd "C-1")       'delete-other-windows)
-(global-set-key (kbd "C-2")       'split-window-below)
-(global-set-key (kbd "C-3")       'hsplit-last-buffer)
-;; (global-set-key (kbd "C-TAB")     'switch-to-last-buffer) ;; conflicts with magit binding
-(global-set-key (kbd "C-0")       'delete-window)
-(global-set-key (kbd "C-=")       'balance-windows)
 (global-set-key (kbd "C-<left>")  'shrink-window-horizontally)
 (global-set-key (kbd "C-<right>") 'enlarge-window-horizontally)
 (global-set-key (kbd "C-<down>")  'shrink-window)
 (global-set-key (kbd "C-<up>")    'enlarge-window)
 (global-set-key (kbd "C-c g")     'ag-regexp) ; TODO use counsel-ag
+
+(define-prefix-command 'ngoc/window-prefix)
+(define-key ngoc-prefix "w" 'ngoc/window-prefix)
+(define-key ngoc/window-prefix "d" #'delete-window)
+(define-key ngoc/window-prefix "e" #'balance-windows)
+(define-key ngoc/window-prefix "w" #'delete-other-windows)
+(define-key ngoc/window-prefix "v" #'vsplit-last-buffer)
+(define-key ngoc/window-prefix "h" #'hsplit-last-buffer)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                              VOLATILE HIGHLIGHTS
