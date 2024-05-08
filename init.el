@@ -3,9 +3,11 @@
 
 (setq max-lisp-eval-depth 10000)
 
-;; to rebind C-h
+;; to rebind C-h and M-h to personal prefix map
 (define-prefix-command 'ngoc-prefix)
-(global-set-key (kbd "C-<f9>") 'ngoc-prefix)
+(global-set-key (kbd "C-<f9>") #'ngoc-prefix)
+(global-set-key (kbd "M-h") #'ngoc-prefix)
+(define-key ngoc-prefix "h" #'mark-paragraph)
 ;; FIXME this makes me cannot access other keybindngs contains C-h
 ;; but it's a good tradeoff
 (define-key key-translation-map [?\C-h] (kbd "C-<f9>"))
