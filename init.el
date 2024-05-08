@@ -1,7 +1,33 @@
+;; TODO checkout org-roam
+;; TODO checkout gumshoe
+;; FIXME magit not always ask password using same interface
+;; TODO visual-mark
+;; TODO check out real-save-mode
+;; TODO check out git-timemachine
+;; TODO add hideshow mode
+;; TODO how to use occur to edit in multiple files
+;; TODO find good functions for M-n and M-p keys
+;; TODO put custom settings in a separated file
+;; TODO checkout project instead of projectile
+;; TODO checkout lsp-booster
+;; TODO learn how to use straight.el
+;; TODO checkout jinx.el spell checker
+;; TODO change copilot cache directory to cache instead of .cache
+;; FIXME faces of history mode
+;; TODO make undo-tree history (and other) save to a unique directory for each machine
+;; DONE use symbol overlay
+;; DONE persistent undo-tree
+
 (setq gc-cons-threshold 50000000
       garbage-collection-messages t)
 
-(setq max-lisp-eval-depth 10000)
+(setq max-lisp-eval-depth 6400)
+
+;; generate an uuid for this machine and save it to a file
+(defun ngoc/generate-machine-uuid ()
+  (interactive)
+  (let ((uuid (shell-command-to-string "uuidgen")))
+    (write-region uuid nil "~/.emacs.d/machine-uuid" nil 0)))
 
 ;; to rebind C-h and M-h to personal prefix map
 (define-prefix-command 'ngoc-prefix)
@@ -17,13 +43,13 @@
 
 
 (add-to-list 'load-path "~/.emacs.d/lisp/")
-(add-to-list 'load-path "~/.emacs.d/lisp/evil-plugins/")
 (add-to-list 'load-path "~/.emacs.d/lisp/highlight-symbol/")
 (add-to-list 'load-path "~/.emacs.d/lisp/history")
 ;; (add-to-list 'load-path "~/.emacs.d/lisp/ned-mode")
 (add-to-list 'load-path "~/.emacs.d/lisp/netlogo-mode/emacs")
 ;; (add-to-list 'load-path "~/.emacs.d/lisp/dropbox-conflicts-el")
 ;;(add-to-list 'load-path "~/.emacs.d/lisp/elim/elisp")
+
 (defun display-startup-echo-area-message ()
   (message "Knowledge is power!"))
 
@@ -73,15 +99,12 @@
 ;; (use-package tex-buf)
 ;; (use-package tex :ensure auctex)
 ;; (use-package auctex-latexmk)
-(use-package diminish)
 (use-package better-shell)
 (use-package flyspell-lazy)
 (use-package flx)
-(use-package ivy)
 (use-package impatient-mode)
 (use-package isend-mode)
 (use-package key-chord)
-(use-package langtool)
 (use-package latex-preview-pane)
 (use-package less-css-mode)
 ;; (load-library "ned-mode")
@@ -145,23 +168,28 @@
 
 (blink-cursor-mode 0)
 
-;; original dracula theme's compatibility is not as good as doom-dracula theme
 (use-package doom-themes
   :config
-  ;; Global settings (defaults)
-  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-        doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  (load-theme 'doom-dracula t)
-  
-  ;; Enable flashing mode-line on errors
+;;   ;; Enable flashing mode-line on errors
   (doom-themes-visual-bell-config)
-  ;; Enable custom neotree theme (all-the-icons must be installed!)
-  (doom-themes-neotree-config)
-  ;; or for treemacs users
-  (setq doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
-  (doom-themes-treemacs-config)
-  ;; Corrects (and improves) org-mode's native fontification.
-  (doom-themes-org-config))
+;;   ;; Enable custom neotree theme (all-the-icons must be installed!)
+;;   (doom-themes-neotree-config)
+;;   ;; or for treemacs users
+;;   (setq doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
+;;   (doom-themes-treemacs-config)
+;;   ;; Corrects (and improves) org-mode's native fontification.
+;;   (doom-themes-org-config))
+)
+
+(defun ngoc/load-nord-lightt ()
+  (interactive)
+  (save-buffer)
+  (load-theme 'nord-lightt t))
+
+(load-theme 'nord-lightt t)
+
+
+;; (global-set-key (kbd "C-<f9> C-<return>") 'ngoc/load-nord-lightt)
 
 (setq ngoc/interface-font-name
       (cond
@@ -179,13 +207,70 @@
                 (set-frame-font (font-spec :family ngoc/interface-font-name
                                            :size 10.5)))))
 
-;; mode line
+;;                      _        _ _
+;;  _ __ ___   ___   __| | ___  | (_)_ __   ___
+;; | '_ ` _ \ / _ \ / _` |/ _ \ | | | '_ \ / _ \
+;; | | | | | | (_) | (_| |  __/ | | | | | |  __/
+;; |_| |_| |_|\___/ \__,_|\___| |_|_|_| |_|\___|
 (column-number-mode 1)
 (setq mode-line-position-column-line-format '(" %l,%c"))
 
+;; remove parentheses wrapping around major, minor modes
+;; copied from original source code with minor edit
+(let ((recursive-edit-help-echo
+       "Recursive edit, type M-C-c to get out"))
+  (setq mode-line-modes
+        (list (propertize "%[" 'help-echo recursive-edit-help-echo)
+	          `(:propertize ("" mode-name)
+			                help-echo "Major mode\n\
+mouse-1: Display major mode menu\n\
+mouse-2: Show help for major mode\n\
+mouse-3: Toggle minor modes"
+			                mouse-face mode-line-highlight
+			                local-map ,mode-line-major-mode-keymap)
+	          '("" mode-line-process)
+	          `(:propertize ("" minor-mode-alist)
+			                mouse-face mode-line-highlight
+			                help-echo "Minor mode\n\
+mouse-1: Display minor mode menu\n\
+mouse-2: Show help for minor mode\n\
+mouse-3: Toggle minor modes"
+			                local-map ,mode-line-minor-mode-keymap)
+	          (propertize "%n" 'help-echo "mouse-2: Remove narrowing from buffer"
+		                  'mouse-face 'mode-line-highlight
+		                  'local-map (make-mode-line-mouse-map
+				                      'mouse-2 #'mode-line-widen))
+	          (propertize "%]" 'help-echo recursive-edit-help-echo)
+	          " ")))
+
+
+(setq ngoc/minor-mode-order-alist '(projectile-mode flymake-mode))
+(defun ngoc/sort-minor-modes (&rest args)
+  "Sort minor modes by order in `ngoc/minor-mode-order-alist'."
+  (let* ((table-size (length ngoc/minor-mode-order-alist))
+         (order-table (make-hash-table :test 'equal
+                                       :size table-size)))
+    (cl-loop for index from 0
+             for item in ngoc/minor-mode-order-alist
+             do (puthash item index order-table))
+    (setq minor-mode-alist (sort minor-mode-alist
+                                 (lambda (a b)
+                                   (let ((a-index (gethash (car a) order-table table-size))
+                                         (b-index (gethash (car b) order-table table-size)))
+                                     (< a-index b-index)))))))
+
+;; DONE order all minor modes in modeline
+;; FIXME find a better way to reorder minor mode name on modeline
+(add-hook 'after-load-functions 'ngoc/sort-minor-modes)
+
+
+;; hl-line overrides face of match -> don't use it globally
 (use-package hl-line
-  :config
-  (global-hl-line-mode t))
+  :hook
+  (prog-mode . hl-line-mode)
+  (text-mode . hl-line-mode)
+  (conf-mode . hl-line-mode))
+
 
 (setq frame-title-format
       '("" invocation-name ": " (:eval (replace-regexp-in-string
@@ -343,10 +428,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                              IVY COUNSEL SWIPER
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'ivy)
-(require 'counsel)
-(ivy-mode t)
-(diminish 'ivy-mode)
+;; DONE make ivy face easier to read
+(use-package ivy
+  :config
+  (ivy-mode 1))
+(use-package counsel)
 
 ;; on emacs 25 maybe should change this to string-collate-lessp
 (add-to-list 'ivy-sort-functions-alist '(read-file-name-internal . string-lessp))
@@ -354,12 +440,17 @@
 (setq ivy-re-builders-alist
       '((t . ivy--regex-plus)))
 
-(global-set-key (kbd "C-s") 'swiper)
+
+(use-package swiper
+  :config
+  (global-set-key (kbd "M-S") 'swiper-from-isearch))
+
+
 (global-set-key (kbd "M-x") 'counsel-M-x)
 (global-set-key (kbd "C-x C-f") 'counsel-find-file)
 (define-key ngoc-prefix "f" 'counsel-projectile-find-file)
 (global-set-key (kbd "C-S-Y") 'counsel-yank-pop)
-(global-set-key (kbd "C-x b") 'counsel-switch-buffer)
+(define-key ngoc-prefix "b" 'counsel-switch-buffer)
 
 
 ;;      _                _             _
@@ -383,11 +474,20 @@
 
 
 (use-package fcitx
+  :after god-mode
   :if (eq system-type 'gnu/linux)
   :config
   (setq fcix-use-dbus 'fcitx5)
   (setq fcitx-remote-command "fcitx5-remote")
-  (fcitx-default-setup))
+  (fcitx-default-setup)
+
+  (fcitx--defun-maybe "god")
+
+  (add-hook 'god-local-mode-hook
+            #'(lambda ()
+                (if god-local-mode
+                    (fcitx--god-maybe-deactivate)
+                  (fcitx--god-maybe-activate)))))
 ;; TODO atm, fcix doesn't work
 
 ;;  _____ ____      _    __  __ ____
@@ -435,6 +535,9 @@
 ;;            |___/
 
 (use-package cdlatex)
+(use-package org
+  :hook
+  (org-mode . ngoc/ensure-prefix-binding))
 (require 'org)
 (require 'org-agenda)
 (global-set-key "\C-cl" 'org-store-link)
@@ -504,6 +607,48 @@
 (add-to-list 'org-agenda-custom-commands
              (quote ("d" "Undated tasks" alltodo ""
                      ((org-agenda-todo-ignore-with-date t)))))
+
+;; FIXME M-h was originally binded to org-mark-element
+;; but it conflicts with my personal prefix binding
+;; (define-key org-mode-map (kbd "M-h") nil)
+
+
+(defun ngoc/ensure-prefix-binding ()
+  "If a major mode binds M-h, then bind it to ngoc-prefix instead,
+ and bind M-h h to the original function."
+  (interactive)
+  (make-local-variable 'ngoc-prefix)
+  (let* ((local-map (current-local-map))
+         (original-function (lookup-key local-map (kbd "M-h"))))
+    (when (and local-map
+               original-function
+               (not (equal original-function 'ngoc-prefix)))
+      (define-key local-map (kbd "M-h") 'ngoc-prefix)
+      (define-key ngoc-prefix (kbd "h") original-function))))
+
+
+;; FIXME org-roam-node-find doesn't work with ivy-occur
+;; https://github.com/org-roam/org-roam/issues/1684
+(use-package org-roam
+  :custom
+  (org-roam-directory (file-truename "~/Dropbox/org-roam/"))
+  :bind (:map ngoc-prefix
+         ("r" . ngoc/org-roam-prefix)
+         :map ngoc/org-roam-prefix
+         ("l" . org-roam-buffer-toggle)
+         ("f" . org-roam-node-find)
+         ("g" . org-roam-graph)
+         ("i" . org-roam-node-insert)
+         ("c" . org-roam-capture)
+         ;; Dailies
+         ("j" . org-roam-dailies-capture-today))
+  :config
+  (define-prefix-command 'ngoc/org-roam-prefix)
+  ;; If you're using a vertical completion framework, you might want a more informative completion interface
+  (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+  (org-roam-db-autosync-mode)
+  ;; If using org-roam-protocol
+  (require 'org-roam-protocol))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -589,7 +734,7 @@
 ;; (ispell-change-dictionary "american")
 (setq ispell-dictionary "american")
 
-(require 'langtool)
+(use-package langtool)
 (setq langtool-language-tool-jar "~/builds/LanguageTool-3.4/languagetool-commandline.jar")
 (defun langtool-autoshow-detail-popup (overlays)
   (when (require 'popup nil t)
@@ -601,18 +746,6 @@
         (popup-tip msg)))))
 (setq langtool-autoshow-message-function
       'langtool-autoshow-detail-popup)
-
-;;(setq-default display-buffer-alist nil)
-;;(add-to-list 'display-buffer-alist
-;;                    `(,(rx bos "*helm" (* not-newline) "*" eos)
-;;                         (display-buffer-in-side-window)
-;;                         (inhibit-same-window . t)
-;;                         (window-height . 0.4)))
-;;(add-to-list 'display-buffer-alist
-;;                    `(,(rx bos "*Completions*" eos)
-;;                         (display-buffer-in-side-window)
-;;                         (inhibit-same-window . t)
-;;                         (window-height . 0.4)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -805,6 +938,23 @@ Version: 2015-10-01"
   (whole-line-or-region-global-mode 1))
 ;; TODO: do similar thing to transpose-regions
 
+
+
+(setq hs-set-up-overlay
+      (defun my-display-code-line-counts (ov)
+        (when (eq 'code (overlay-get ov 'hs))
+          (overlay-put ov
+                       'display (propertize
+                                 (format " < ...%d > "
+                                         (count-lines (overlay-start ov)
+                                                      (overlay-end ov)))
+                        'face 'shadow))
+          (overlay-put ov
+                       'keymap (define-keymap
+                                 "<return>" #'hs-show-block
+                                 "g" #'hs-show-block)))))
+
+
 ;;      _ _     _                  _   _                __
 ;;   __| (_)___| |_ _ __ __ _  ___| |_(_) ___  _ __    / _|_ __ ___  ___
 ;;  / _` | / __| __| '__/ _` |/ __| __| |/ _ \| '_ \  | |_| '__/ _ \/ _ \
@@ -884,7 +1034,9 @@ Version: 2015-10-01"
 (use-package comment-dwim-2
   :bind ("C-;" . comment-dwim-2))
 
-(use-package wgrep) ;; TODO how to use this
+(use-package wgrep
+  :config
+  (setq wgrep-too-many-file-length 20)) ;; TODO how to use this
 
 (use-package iedit
   :bind (:map ngoc-prefix
@@ -909,7 +1061,7 @@ Version: 2015-10-01"
 ;; TODO make inside/outside functions repeatable
 (use-package expand-region
   :defer nil
-  :bind (("M-3" . er/expand-region)
+  :bind (("M-3" . er/mark-symbol)
          :map ngoc-prefix
          ("a" . er/mark-outside-pairs)
          ("i" . er/mark-inside-pairs)
@@ -927,7 +1079,10 @@ Version: 2015-10-01"
 ;; \__ \ | | | | |_) | |_) |  __/ |_\__ \
 ;; |___/_| |_|_| .__/| .__/ \___|\__|___/
 ;;             |_|   |_|
+
+;; FIXME yasnippet doesn't work when first open a buffer
 (use-package yasnippet
+  :demand t
   :diminish yas-minor-mode
   :bind (:map yas-minor-mode-map
               ("<tab>" . nil)
@@ -953,24 +1108,24 @@ Version: 2015-10-01"
 (add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
 
 (add-hook 'web-mode-before-auto-complete-hooks
-          '(lambda ()
-             (let ((web-mode-cur-language
-                    (web-mode-language-at-pos)))
-               (if (string= web-mode-cur-language "php")
-                   (yas-activate-extra-mode 'php-mode)
-                 (yas-deactivate-extra-mode 'php-mode))
-               (if (string= web-mode-cur-language "css")
-                   (setq emmet-use-css-transform t)
-                 (setq emmet-use-css-transform nil)))))
+          #'(lambda ()
+              (let ((web-mode-cur-language
+                     (web-mode-language-at-pos)))
+                (if (string= web-mode-cur-language "php")
+                    (yas-activate-extra-mode 'php-mode)
+                  (yas-deactivate-extra-mode 'php-mode))
+                (if (string= web-mode-cur-language "css")
+                    (setq emmet-use-css-transform t)
+                  (setq emmet-use-css-transform nil)))))
 (setq web-mode-ac-sources-alist
       '(("php" . (ac-source-php ac-source-words-in-same-mode-buffers))
         ("css" . (ac-source-css-property))
         ("html" . (ac-source-words-in-same-mode-buffers ac-source-abbrev))))
 
 (add-hook 'web-mode-hook
-          '(lambda ()
-             (emmet-mode t)
-             (yas-activate-extra-mode 'html-mode)))
+          #'(lambda ()
+              (emmet-mode t)
+              (yas-activate-extra-mode 'html-mode)))
 
 (setq-default web-mode-markup-indent-offset tab-width)
 (setq-default web-mode-css-indent-offset tab-width)
@@ -1000,20 +1155,9 @@ Version: 2015-10-01"
   :config
   (setq projectile-enable-caching t)
   (setq projectile-mode-line-function #'(lambda ()
-                                          (if
-                                              (file-remote-p default-directory)
+                                          (if (file-remote-p default-directory)
                                               " Proj"
                                             (format " P[%s]" (projectile-project-name))))))
-
-;; TODO: reorder minor mode name on modeline, projectile first seems better
-
-(setq projectile-mode-line
-      '(:eval
-        (if
-            (file-remote-p default-directory)
-            " Projectile"
-          (format " P[%s]"
-                  (projectile-project-name)))))
 
 
 (use-package counsel-projectile
@@ -1023,7 +1167,8 @@ Version: 2015-10-01"
 
 
 (use-package ibuffer
-  :bind ("C-x C-b" . ibuffer))
+  :bind (:map ngoc-prefix
+              ("M-b" . ibuffer)))
 
 (use-package ibuffer-projectile
   :after (ibuffer)
@@ -1048,12 +1193,12 @@ Version: 2015-10-01"
 ;;               (ibuffer-do-sort-by-alphabetic))))
 
 
-(use-package frog-jump-buffer
-  :bind (:map ngoc-prefix
-         ("b" . frog-jump-buffer))
-  :config
-  (setq frog-menu-avy-keys '(?o ?e ?u ?i ?d ?h ?t ?n ?k ?j ?b ?m ?c ?r))
-  (setq frog-menu-posframe-border-width 15))
+;; (use-package frog-jump-buffer
+;;   :bind (:map ngoc-prefix
+;;          ("b" . frog-jump-buffer))
+;;   :config
+;;   (setq frog-menu-avy-keys '(?o ?e ?u ?i ?d ?h ?t ?n ?k ?j ?b ?m ?c ?r))
+;;   (setq frog-menu-posframe-border-width 15))
 
 
 
@@ -1082,15 +1227,12 @@ Version: 2015-10-01"
   (setq ediff-merge-filename-prefix ""))
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                              MAGIT
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package magit
-  :bind (("C-x g" . magit-status)))
+  :bind (("C-x g" . magit-status))
+  :config
+  (setq magit-diff-refine-hunk t))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                              DIFF HL
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (use-package diff-hl
   :config
   (global-diff-hl-mode t)
@@ -1137,7 +1279,7 @@ Version: 2015-10-01"
       (add-hook 'transient-exit-hook #'ngoc/maybe-disable-git-gutter)
       (transient-setup 'ngoc/git-transient))))
 
-  (define-key ngoc-prefix "g" #'ngoc/git-transient))
+  (define-key ngoc-prefix "v" #'ngoc/git-transient)) ;; v = version control
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1160,16 +1302,16 @@ Version: 2015-10-01"
                 ("<="       . ?≤)
                 (">="       . ?≥)))
 
-(defvar python-prettify-symbols-alist
-  '(("self"   . ?自)
-    ("or"     . ?⋁)
-    ("and"    . ?⋀)
-    ("not"    . #x2757)
-    ;; ("not in" . ?∉)
-    ;; ("in"     . ?∈)
-    ;; ("is not" . ?≢)
-    ;; ("is"     . ?≡)
-    ))
+;; (defvar python-prettify-symbols-alist
+;;   '(("self"   . ?自)
+;;     ("or"     . ?⋁)
+;;     ("and"    . ?⋀)
+;;     ("not"    . #x2757)
+;;     ;; ("not in" . ?∉)
+;;     ;; ("in"     . ?∈)
+;;     ;; ("is not" . ?≢)
+;;     ;; ("is"     . ?≡)
+;;     ))
 
 (add-hook 'php-mode-hook
           (lambda ()
@@ -1203,9 +1345,9 @@ Version: 2015-10-01"
   (setq flycheck-mode-line-prefix "F"))
 
 
-(use-package highlight-indentation
-  :diminish highlight-indentation-mode
-  :hook (prog-mode . highlight-indentation-mode))
+;; (use-package highlight-indentation
+;;   :diminish highlight-indentation-mode
+;;   :hook (prog-mode . highlight-indentation-mode))
 
 
 ;;                    _             _   _
@@ -1220,39 +1362,13 @@ Version: 2015-10-01"
 ;; TODO make history cyclic
 ;; TODO add messages for cases like: show history but no history, clear history
 (use-package history
+  :ensure nil ;; use local version provided from load-path
   :bind (:map ngoc-prefix
-         ("h p" . history-goto-history) ; h p = history -> preview
-         ("h a" . history-add-history)
-         ("h c h" . history-kill-histories)) ; h c h = history -> clear history
+         ("g p" . history-goto-history) ;; g p = go previous
+         ("g a" . history-add-history)
+         ("g c h" . history-kill-histories))
   :config
-  (define-key history-map (kbd "d") 'ngoc/history-remove-current)
-  (define-key history-map (kbd "p") 'history-preview-prev-history)
-  (define-key history-map (kbd "n") 'history-preview-next-history)
-  (define-key history-map (kbd "C-g") 'history-preview-cancel-history)
-
-  (advice-add 'history-use-current-history :after #'beacon-blink)
-
-  (set-face-attribute 'history-current-history nil :inherit 'match :foreground nil :background (face-attribute 'default :background))
-  (set-face-attribute 'history-other-history nil :inherit 'default :foreground nil :background nil :height 1.8)
-
-  (defun ngoc/history-remove-current ()
-    (interactive)
-    (when history-stack
-      (let* ((history (nth history-index history-stack))
-             (marker (plist-get history :marker)))
-        (set-marker marker nil)
-        (history-remove-invalid-history)))
-    (cond
-     (history-stack
-      (delete-minibuffer-contents)
-      (insert (history-histories-string))
-      (re-search-backward "\\*")
-      ;; Use history.
-      (with-selected-window (history-window)
-        (history-use-current-history)))
-     (t
-      (history-preview-cancel-history)))))
-
+  (advice-add 'history-use-current-history :after #'beacon-blink))
 
 
 (use-package dumb-jump
@@ -1406,6 +1522,9 @@ Version: 2015-10-01"
   (prog-mode . copilot-mode)
 
   :config
+  (setq copilot-install-dir (expand-file-name
+                             (locate-user-emacs-file (f-join "cache" "copilot"))))
+
   (defun ngoc/copilot-clear-no-notify ()
     (interactive)
     (copilot-clear-overlay t))
@@ -1445,6 +1564,7 @@ Version: 2015-10-01"
 
 
   ;; ;; temporary fix for tab key, sometimes overlay is visible but copilot's keymap is not active
+  ;; ;; FIXME need to add support for yasnippet, company
   ;; (defun ngoc/copilot-compatible-tab (&optional arg)
   ;;   (interactive "P")
   ;;   (if (copilot--overlay-visible)
@@ -1626,6 +1746,8 @@ Version: 2015-10-01"
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   '("5e1777af6af8bdf6376b4d7b17a91a8057063ca60f4d8ed7b547d06fd02277d1" "81179c35607016fd92ed2751068a14438ef847c4db82dabcf74b2ff94be4eabc" "be51dc2e9c578c884b442d3bf46555454e095785b8223e8530bd1e949d7ebcb7" "c3b359e781e5418343a9a0e4f9a6d8f1b57ea4be4c020fe329b60bad12c6fb6e" "6c685287c7234f04cc1beedf2920dbfff8193dec34266ac22fa55dbaa047b39e" "733a3296be05c918fb3ee4f83dd8d7725014c0dff1b22265b44391e247f7d8c7" "dda894ceb5ad3685778c84596014de3bf60bd31107f16b2a38d71e3707a4793a" "571661a9d205cb32dfed5566019ad54f5bb3415d2d88f7ea1d00c7c794e70a36" default))
  '(package-vc-selected-packages
    '((transient-showcase :url "https://github.com/positron-solutions/transient-showcase.git")))
  '(safe-local-variable-values
@@ -1640,10 +1762,4 @@ Version: 2015-10-01"
             (expand-file-name "~/apps/omnetpp-5.7/include")
             (expand-file-name "~/builds/comm/include")
             (expand-file-name "~/builds/comm/src/message"))))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
 
