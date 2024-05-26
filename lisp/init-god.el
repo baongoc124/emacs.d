@@ -15,9 +15,13 @@
   :config
   (define-key god-local-mode-map (kbd "h") ngoc-prefix-map)
 
-  (defun my-god-mode-update-cursor-type ()
-    (setq cursor-type (if god-local-mode 'box 'bar)))
+  (defun my-god-mode-update-cursor-type (&rest args)
+    (setq cursor-type 'box)
+    (set-face-attribute 'cursor nil :background (if god-local-mode "springgreen3" "coral")))
 
-  (add-hook 'post-command-hook #'my-god-mode-update-cursor-type))
+  (add-hook 'god-mode-enabled-hook #'my-god-mode-update-cursor-type)
+  (add-hook 'god-mode-disabled-hook #'my-god-mode-update-cursor-type)
+  (add-hook 'window-buffer-change-functions #'my-god-mode-update-cursor-type)
+  (add-hook 'window-selection-change-functions #'my-god-mode-update-cursor-type))
 
 (provide 'init-god)
