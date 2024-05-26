@@ -29,6 +29,7 @@
 
 (global-set-key (kbd "C-/")    nil)      ; don't use and easily mispress when in god-mode
 (global-set-key "\C-x\C-z" nil)          ; suspend emacs accidentally no more
+(global-set-key "\C-x\C-c" nil)          ; exit emacs accidentally no more
 
 ;;   ____ _   _ ___   _                      _
 ;;  / ___| | | |_ _| | |___      _____  __ _| | _____
