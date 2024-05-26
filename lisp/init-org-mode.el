@@ -144,7 +144,7 @@
 ;; attempt to use org-refile instead of org-archive
 (defun ngoc/get-archive-file-name (org-file)
   (let* ((relative-file (file-relative-name org-file org-directory))
-         (archive-file (f-join org-directory ".." "archive" relative-file)))
+         (archive-file (file-name-concat org-directory ".." "archive" relative-file)))
     archive-file))
 
 ;; ;; attempt to use org-refile instead of org-archive

@@ -17,7 +17,8 @@
 
   :config
   (setq copilot-install-dir (expand-file-name
-                             (locate-user-emacs-file (f-join "cache" "copilot"))))
+                             (locate-user-emacs-file (file-name-concat "cache"
+                                                                       "copilot"))))
 
   (defun ngoc/copilot-clear-no-notify ()
     (interactive)
