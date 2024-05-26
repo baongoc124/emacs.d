@@ -50,4 +50,18 @@
   :hook
   (dired-mode . nerd-icons-dired-mode))
 
+;; FIXME this is currently working GLOBALLY!
+;; https://emacs.stackexchange.com/a/51614 with modification
+(define-minor-mode ngoc/dired-follow-mode
+  "Diplay file at point in dired after a move / delete."
+  :lighter " dired-f"
+  :global t
+  (cond
+   (ngoc/dired-follow-mode
+    (advice-add 'dired-next-line :after (lambda (&rest arg) (dired-display-file)))
+    (advice-add 'dired-internal-do-deletions :after (lambda (&rest arg) (dired-display-file))))
+   (t
+    (advice-remove 'dired-next-line (lambda (&rest arg) (dired-display-file)))
+    (advice-remove 'dired-internal-do-deletions (lambda (&rest arg) (dired-display-file))))))
+
 (provide 'init-dired)
