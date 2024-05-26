@@ -57,9 +57,28 @@
 (use-package key-chord)
 (use-package latex-preview-pane)
 (use-package less-css-mode)
-;; (load-library "ned-mode")
 (use-package shell-switcher)
 (use-package xcscope)
+
+(use-package ned-mode
+  :vc (:fetcher github :repo "dalwadani/ned-mode"))
+
+(use-package envrc
+  :hook (after-init . envrc-global-mode))
+
+
+(use-package jq-mode)
+
+;; https://news.ycombinator.com/item?id=22131815
+(defun ngoc/arrayify (start end quote)
+  "Turn strings on newlines into a QUOTEd, comma-separated one-liner."
+  (interactive "r\nMQuote: ")
+  (let ((insertion
+         (mapconcat
+          (lambda (x) (format "%s%s%s" quote x quote))
+          (split-string (buffer-substring start end)) ", ")))
+    (delete-region start end)
+    (insert insertion)))
 
 
 (provide 'init-misc)
