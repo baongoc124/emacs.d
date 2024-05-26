@@ -218,4 +218,8 @@
   ;; If using org-roam-protocol
   (require 'org-roam-protocol))
 
+(use-package org-cliplink
+  :bind (("C-<f12>" . org-cliplink)
+         ("<f12>" . org-cliplink)))
+
 (provide 'init-org-mode)
