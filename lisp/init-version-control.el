@@ -12,7 +12,9 @@
 (use-package magit
   :bind (("C-x g" . magit-status))
   :config
-  (setq magit-diff-refine-hunk t))
+  (setq magit-diff-refine-hunk t)
+  (add-hook 'magit-pre-refresh-hook #'diff-hl-magit-pre-refresh)
+  (add-hook 'magit-post-refresh-hook #'diff-hl-magit-post-refresh))
 
 
 (use-package diff-hl
