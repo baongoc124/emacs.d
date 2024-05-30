@@ -15,4 +15,20 @@
 ;;   :config
 ;;   (counsel-projectile-mode))
 
+(use-package project
+  :config
+
+  (defvar ngoc/project-marker ".ngoc-project"
+    "Project marker file name.")
+
+  (defun ngoc/project-find-root (dir)
+    "Find the root directory of the current project."
+    (let ((root (locate-dominating-file dir ngoc/project-marker)))
+      (if root
+          (list 'vc nil root)
+        nil)))
+
+  (add-hook 'project-find-functions #'ngoc/project-find-root))
+
+
 (provide 'init-project)
