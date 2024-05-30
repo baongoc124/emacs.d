@@ -1,13 +1,66 @@
+(defun ngoc/pop-mark ()
+  "Jump back to the  mark. If point is at the mark, pop the mark first."
+  (interactive)
+  (let ((current-prefix-arg 4))
+    (when (eq (mark) (point))
+        (pop-mark))
+    (call-interactively #'set-mark-command)))
+
+(keymap-global-set "C-S-SPC" #'ngoc/pop-mark)
+
 (use-package ace-link
   :config
   (ace-link-setup-default))
 
-
+;; https://karthinks.com/software/avy-can-do-anything/
+;; supplementary code https://gist.github.com/karthink/af013ffd77fe09e67360f040b57b4c7b
 (use-package avy
   :config
   (setq avy-all-windows t)
   (setq avy-keys-alist `((avy-goto-line . ,(append (number-sequence ?a ?z) (number-sequence ?0 ?9)))))
-  (setq avy-keys '(?a ?o ?e ?u ?h ?t ?n ?s ?c ?r ?j ?m)))
+  (setq avy-keys '(?a ?o ?e ?u ?h ?t ?n ?s ?c ?j ?q ?m))
+
+  ;; Copy text
+  (defun avy-action-copy-whole-line (pt)
+    (save-excursion
+      (goto-char pt)
+      (cl-destructuring-bind (start . end)
+          (bounds-of-thing-at-point 'line)
+        (copy-region-as-kill start end)))
+    (select-window
+     (cdr
+      (ring-ref avy-ring 0)))
+    t)
+
+  (setf (alist-get ?w avy-dispatch-alist) 'avy-action-copy
+        (alist-get ?W avy-dispatch-alist) 'avy-action-copy-whole-line)
+
+  ;; Yank text
+  (defun avy-action-yank-whole-line (pt)
+    (avy-action-copy-whole-line pt)
+    (save-excursion (yank))
+    t)
+
+  (setf (alist-get ?y avy-dispatch-alist) 'avy-action-yank
+        (alist-get ?Y avy-dispatch-alist) 'avy-action-yank-whole-line)
+
+
+  ;; Mark text
+  (defun avy-action-mark-to-char (pt)
+    (activate-mark)
+    (goto-char pt))
+
+  (setf (alist-get ?  avy-dispatch-alist) 'avy-action-mark-to-char)
+
+  (defun avy-action-copy-region (pt)
+    (save-excursion
+      (let* ((end (save-excursion
+                    (avy-goto-char-timer)
+                    (point))))
+        (copy-region-as-kill pt end)
+        (yank))))
+
+  (setf (alist-get ?r  avy-dispatch-alist) 'avy-action-copy-region))
 
 
 ;; save last edit position

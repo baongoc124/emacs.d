@@ -5,7 +5,8 @@
          :map god-local-mode-map
          ("i"        . god-local-mode) ; mimic vim to enter insert mode
          ("."        . repeat)
-         ("<escape>" . ignore))
+         ("<escape>" . ignore)
+         ("S-SPC"    . ngoc/pop-mark))
 
   :hook ((text-mode . god-local-mode)
          (prog-mode . god-local-mode)
