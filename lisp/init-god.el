@@ -1,10 +1,11 @@
 (use-package god-mode
+  :init
+  (setq god-mode-enable-function-key-translation nil)
   :bind (("<escape>" . god-local-mode) ; mimic vim to exit insert mode
          :map god-local-mode-map
          ("i"        . god-local-mode) ; mimic vim to enter insert mode
          ("."        . repeat)
-         ("<escape>" . ignore)
-         ("<f1>"     . help-command))
+         ("<escape>" . ignore))
 
   :hook ((text-mode . god-local-mode)
          (prog-mode . god-local-mode)
