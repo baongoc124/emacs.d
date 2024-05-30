@@ -15,6 +15,23 @@
 ;;   :config
 ;;   (counsel-projectile-mode))
 
+(use-package compile
+  :config
+  (setq compilation-scroll-output t)
+  (setq compilation-always-kill t)
+  (setq compilation-ask-about-save t)
+
+  ;; color for compilation buffer
+  (add-hook 'compilation-filter-hook #'ansi-color-compilation-filter)
+
+  (defun ngoc/auto-save-recompile ()
+    "Recompile no question asked."
+    (interactive)
+    (let ((compilation-ask-about-save nil))
+      (recompile)))
+
+  (global-set-key (kbd "<f5>") #'ngoc/auto-save-recompile))
+
 (use-package project
   :config
 
