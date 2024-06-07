@@ -1,5 +1,7 @@
 (require 'dired)
-(setq dired-listing-switches "-lah")
+(if (eq system-type 'gnu/linux)
+    (setq dired-listing-switches "-lah --group-directories-first")
+  (setq dired-listing-switches "-lah"))
 (setq delete-by-moving-to-trash t)
 (setq dired-dwim-target nil)
 
