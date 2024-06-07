@@ -10,7 +10,7 @@
 
 (use-package ace-link
   :config
-  (ace-link-setup-default))
+  (ace-link-setup-default "t"))
 
 ;; https://karthinks.com/software/avy-can-do-anything/
 ;; supplementary code https://gist.github.com/karthink/af013ffd77fe09e67360f040b57b4c7b
