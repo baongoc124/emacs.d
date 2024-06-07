@@ -1,6 +1,8 @@
 (require 'init-calendar)
 (require 'org)
 (require 'org-agenda)
+
+(keymap-unset org-mode-map "C-'") ; unbind because I use this for quote
 (global-set-key "\C-cl" 'org-store-link)
 (global-set-key "\C-ca" 'org-agenda)
 (global-set-key "\C-cr" 'org-capture)

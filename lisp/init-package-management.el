@@ -1,5 +1,6 @@
 (add-to-list 'load-path "~/.emacs.d/lisp/highlight-symbol/")
 (add-to-list 'load-path "~/.emacs.d/lisp/history")
+(add-to-list 'load-path "~/.emacs.d/lisp/quickselect")
 (add-to-list 'load-path "~/.emacs.d/lisp/netlogo-mode/emacs")
 
 
@@ -33,5 +34,7 @@
 
   ;; first attempt 1 min after startup. After that, attempt every 3 hours.
   (run-at-time "1 min" (* 3 3600) #'ngoc/attempt-auto-update-on-weekend))
+
+(use-package pacdiff)
 
 (provide 'init-package-management)

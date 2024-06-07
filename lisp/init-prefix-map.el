@@ -5,11 +5,8 @@
 (global-set-key (kbd "M-h") ngoc-prefix-map)
 
 (setq ngoc/prefix-keymap-alist
-      '(("'" . er/mark-inside-quotes)
-        ("=" . ngoc/align-dwim)
+      '(("=" . ngoc/align-dwim)
         ("M-b" . ibuffer)
-        ("\"" . er/mark-outside-quotes)
-        ("a" . er/mark-outside-pairs)
         ("b" . counsel-switch-buffer)
         ("c" . avy-goto-char-timer)
         ("d" . duplicate-dwim)
@@ -17,7 +14,6 @@
         ;; ("f" . counsel-projectile-find-file)
         ("g" . ngoc/history-prefix)
         ("h" . mark-paragraph)
-        ("i" . er/mark-inside-pairs)
         ("m" . iedit-mode)
         ("n" . avy-goto-line)
         ("o" . symbol-overlay-transient)

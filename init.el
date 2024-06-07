@@ -42,6 +42,7 @@
 (require 'init-org-mode)
 (require 'init-plantuml)
 (require 'init-project)
+(require 'init-programming)
 (require 'init-python)
 (require 'init-search)
 (require 'init-shortcuts)

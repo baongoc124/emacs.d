@@ -32,11 +32,11 @@
 ;;(define-key win:switch-map "n" 'win-switch-to-window)
 ;;(define-key win:switch-map "p" 'win-switch-to-window)
 
-(use-package eyebrowse
-  :init
-  (setq eyebrowse-keymap-prefix (kbd "C-'"))
-  :config
-  (eyebrowse-mode t))
+;; (use-package eyebrowse
+;;   :init
+;;   (setq eyebrowse-keymap-prefix (kbd "C-'"))
+;;   :config
+;;   (eyebrowse-mode t))
 
 
 (provide 'init-window-management)
