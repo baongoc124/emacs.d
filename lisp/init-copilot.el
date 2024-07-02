@@ -47,7 +47,12 @@
     (copilot-clear-overlay t)             ; pass t to clear overlay so that it doesn't notify server about rejection
     (company-manual-begin))
 
+  (defun ngoc/remote-buffer-p ()
+    (interactive)
+    (file-remote-p default-directory))
+
   (remove-hook  'copilot-enable-predicates          'evil-insert-state-p)  ;  i  don't  use  evil  mode
+  (add-hook     'copilot-disable-predicates         'ngoc/remote-buffer-p)
   (add-hook     'copilot-enable-predicates          'ngoc/god-mode-not-enabled)
   (add-hook     'copilot-enable-predicates          'ngoc/not-in-leetcode)
   (add-hook     'copilot-enable-display-predicates  'ngoc/company-not-manually-started)
