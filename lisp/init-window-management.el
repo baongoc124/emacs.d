@@ -2,8 +2,10 @@
 (define-key ngoc/window-prefix "d" #'delete-window)
 (define-key ngoc/window-prefix "e" #'balance-windows)
 (define-key ngoc/window-prefix "w" #'delete-other-windows)
-(define-key ngoc/window-prefix "v" #'vsplit-last-buffer)
 (define-key ngoc/window-prefix "h" #'hsplit-last-buffer)
+(define-key ngoc/window-prefix "v" #'vsplit-last-buffer)
+(define-key ngoc/window-prefix "t" #'transpose-frame)
+(define-key ngoc/window-prefix "x" #'ace-swap-window)
 
 (use-package ace-window
   :bind ("M-o" . ace-window)
@@ -38,5 +40,6 @@
 ;;   :config
 ;;   (eyebrowse-mode t))
 
+(use-package transpose-frame)
 
 (provide 'init-window-management)
