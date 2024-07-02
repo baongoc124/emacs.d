@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: echo heredoc
+# key: eh
+# --
+echo <<<HEREDOX
+$1
+HEREDOX;

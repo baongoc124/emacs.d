@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: for range
+# key: fr
+# --
+for ${1:i} in range(${2:len(${3})}):$0
