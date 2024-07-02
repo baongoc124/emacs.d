@@ -32,6 +32,7 @@
 (require 'init-auto-completion)
 (require 'init-buffer)
 (require 'init-calendar)
+(require 'init-cheatsheet)
 (require 'init-copilot)
 (require 'init-dired)
 (require 'init-eglot)
