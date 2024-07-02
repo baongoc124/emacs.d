@@ -48,6 +48,7 @@
 (require 'init-python)
 (require 'init-search)
 (require 'init-shortcuts)
+(require 'init-ssh)
 (require 'init-treesit)
 (require 'init-undo-tree)
 (require 'init-version-control)
