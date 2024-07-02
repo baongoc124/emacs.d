@@ -20,4 +20,11 @@
   (setq company-idle-delay 0.05)
   (setq company-format-margin-function 'company-text-icons-margin))
 
+(use-package company-quickhelp
+  :after company
+  :config
+  (company-quickhelp-mode 1)
+  (setq company-quickhelp-delay 0.35))
+
+
 (provide 'init-auto-completion)
