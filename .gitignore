@@ -22,3 +22,10 @@
 /.lsp-session-v1
 /emojis/
 /tree-sitter/
+/eln-cache/
+/eshell/
+/session.*
+/kkcrc
+/org-roam.db
+/url/
+/cache/
