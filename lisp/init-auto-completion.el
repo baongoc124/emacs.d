@@ -20,7 +20,7 @@
   (keymap-unset company-active-map "RET" t)
   (keymap-unset company-active-map "<return>" t)
   (setq company-dabbrev-downcase nil)
-  (setq company-minimum-prefix-length 2)
+  (setq company-minimum-prefix-length 1)
   (setq company-idle-delay 0.05)
   (setq company-format-margin-function 'company-text-icons-margin)
 
