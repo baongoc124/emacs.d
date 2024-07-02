@@ -48,4 +48,86 @@
   ;; https://emacs.stackexchange.com/questions/38242/problem-redoing-with-yasnippet
   (setq yas-snippet-revival nil))
 
+;; don't bind any key because i use counsel-dash for searching/filtering
+(use-package zeal-at-point
+  :config
+  (setq zeal-at-point-mode-alist
+        '((actionscript-mode    . "actionscript")
+          (arduino-mode         . "arduino")
+          (c++-mode             . "cpp")
+          (c++-ts-mode          . "cpp")
+          (c-mode               . "c")
+          (clojure-mode         . "clojure")
+          (coffee-mode          . "coffee")
+          (lisp-mode            . "lisp")
+          (cperl-mode           . "perl")
+          (css-mode             . "css")
+          (elixir-mode          . "elixir")
+          (emacs-lisp-mode      . "elisp")
+          (enh-ruby-mode        . "ruby")
+          (erlang-mode          . "erlang")
+          (gfm-mode             . "markdown")
+          (go-mode              . "go")
+          (groovy-mode          . "groovy")
+          (haskell-mode         . "haskell")
+          (html-mode            . "html")
+          (java-mode            . "java20")
+          (java-ts-mode         . "java20")
+          (js2-mode             . "javascript")
+          (js3-mode             . "nodejs")
+          (less-css-mode        . "less")
+          (lua-mode             . "lua")
+          (markdown-mode        . "markdown")
+          (objc-mode            . "iphoneos")
+          (perl-mode            . "perl")
+          (php-mode             . ("php" "wordpress"))
+          (processing-mode      . "processing")
+          (puppet-mode          . "puppet")
+          (python-mode          . "python3")
+          (python-ts-mode       . "python3")
+          (ruby-mode            . "ruby")
+          (rust-mode            . "rust")
+          (sass-mode            . "sass")
+          (scala-mode           . "scala")
+          (tcl-mode             . "tcl")
+          (vim-mode             . "vim"))))
+
+(use-package counsel-dash
+  :after dash-docs
+  :bind (:map ngoc-prefix-map
+              ("," . counsel-dash)
+              ("." . counsel-dash-at-point))
+  :config
+  (setq counsel-dash-min-length 2)
+  (setq counsel-dash-enable-debugging nil)
+  (setq counsel-dash-browser-func 'browse-url)
+
+  (setq ngoc/counsel-dash-mode-alist
+        '((c++-ts-mode          . ("C++"))
+          (c-mode               . ("c"))
+          (emacs-lisp-mode      . ("elisp"))
+          (go-mode              . ("go"))
+          (html-mode            . ("html"))
+          (java-ts-mode         . ("Java_SE20"))
+          (js2-mode             . ("javascript"))
+          (js3-mode             . ("nodejs"))
+          (php-mode             . ("PHP" "WordPress"))
+          (python-ts-mode       . ("Python_3"))))
+
+  (defun ngoc/counsel-dash-set-docset ()
+    (interactive)
+    (let ((docset (cdr (assoc major-mode ngoc/counsel-dash-mode-alist))))
+      (if docset
+          (setq-local counsel-dash-docsets docset)
+        (message "No docset found for %s" major-mode))))
+
+  (add-hook 'prog-mode-hook #'ngoc/counsel-dash-set-docset)
+
+  (defun dash-docs-browse-url (search-result)
+    "Hacky workaround to browse dash docs with counsel-dash but show
+results in Zeal."
+    (let ((docset-name (car search-result))
+          (match (nth 1 (cadr search-result))))
+      (zeal-at-point-run-search (zeal-at-point-maybe-add-docset match)))))
+
 (provide 'init-programming)

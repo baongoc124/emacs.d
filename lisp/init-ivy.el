@@ -28,15 +28,5 @@
 (global-set-key (kbd "M-x") 'counsel-M-x)
 (global-set-key (kbd "C-x C-f") 'counsel-find-file)
 (global-set-key (kbd "C-S-Y") 'counsel-yank-pop)
-(use-package counsel-dash)
-
-(use-package counsel-dash
-  :bind (:map ngoc-prefix-map
-              ("," . counsel-dash)
-              ("." . counsel-dash-at-point))
-  :config
-  (setq counsel-dash-min-length 2)
-  (setq counsel-dash-enable-debugging nil)
-  (setq counsel-dash-browser-func 'browse-url))
 
 (provide 'init-ivy)
