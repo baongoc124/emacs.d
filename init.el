@@ -133,15 +133,6 @@
 (global-set-key (kbd "C-<down>")  'shrink-window)
 (global-set-key (kbd "C-<up>")    'enlarge-window)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                              VOLATILE HIGHLIGHTS
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package volatile-highlights
-  :diminish volatile-highlights-mode
-  :config
-  (setq Vhl/highlight-zero-width-ranges t)
-  (volatile-highlights-mode t))
-
 
 ;; (setq grep-highlight-matches 'auto-detect)
 
