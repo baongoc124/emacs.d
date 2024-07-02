@@ -68,22 +68,10 @@
 
 (define-key ngoc-prefix-map (kbd "C-<return>") 'ngoc/load-nord-lightt)
 
-(setq ngoc/interface-font-name
-      (cond
-       ((eq system-type 'gnu/linux)
-        "JetBrainsMono Nerd Font Mono")
-       ((eq system-type 'darwin)
-        "Menlo")
-       (t
-        "Monospace")))
 
 (add-hook 'window-setup-hook
           #'(lambda ()
-              (set-cursor-color "#69E300")
-              (when (eq system-type 'gnu/linux)
-                (set-frame-font (font-spec :family ngoc/interface-font-name
-                                           :weight 'bold
-                                           :size 10.5)))))
+              (set-cursor-color "#69E300")))
 
 (setq text-scale-mode-step 1.1)
 

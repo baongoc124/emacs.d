@@ -25,6 +25,7 @@
 (add-to-list 'load-path "~/.emacs.d/lisp/")
 
 (require 'init-package-management)
+(require 'init-font)
 (require 'init-prefix-map)
 (require 'init-god)
 (require 'init-core)
