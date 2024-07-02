@@ -9,6 +9,9 @@
   (prog-mode . eglot-ensure)
   :config
   (setq eglot-extend-to-xref t)
+  (setq eglot-autoshutdown t)
+  (setq eglot-report-progress t)
+
   ;; python
   (add-to-list 'eglot-server-programs
                '(python-mode . ("pyright-langserver" "--stdio")))
