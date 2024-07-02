@@ -11,6 +11,7 @@
   :config
   (setq ivy-rich-parse-remote-buffer nil)
   (ivy-rich-mode 1)
+  (ivy-rich-project-root-cache-mode 1)
   (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line))
 
 ;; on emacs 25 maybe should change this to string-collate-lessp
