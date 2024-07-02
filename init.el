@@ -273,33 +273,6 @@ Version: 2015-10-01"
 
 (use-package autorevert
   :diminish auto-revert-mode)
-;;  _            _              _ _ _   _
-;; | |_ _____  _| |_    ___  __| (_) |_(_)_ __   __ _
-;; | __/ _ \ \/ / __|  / _ \/ _` | | __| | '_ \ / _` |
-;; | ||  __/>  <| |_  |  __/ (_| | | |_| | | | | (_| |
-;;  \__\___/_/\_\\__|  \___|\__,_|_|\__|_|_| |_|\__, |
-;;                                              |___/
-(use-package whole-line-or-region
-  :diminish whole-line-or-region-local-mode
-  :config
-  (whole-line-or-region-global-mode 1))
-;; TODO: do similar thing to transpose-regions
-
-
-
-(setq hs-set-up-overlay
-      (defun my-display-code-line-counts (ov)
-        (when (eq 'code (overlay-get ov 'hs))
-          (overlay-put ov
-                       'display (propertize
-                                 (format " < ...%d > "
-                                         (count-lines (overlay-start ov)
-                                                      (overlay-end ov)))
-                        'face 'shadow))
-          (overlay-put ov
-                       'keymap (define-keymap
-                                 "<return>" #'hs-show-block
-                                 "g" #'hs-show-block)))))
 
 
 (require 'display-line-numbers)
