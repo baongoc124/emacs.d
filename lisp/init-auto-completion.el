@@ -5,8 +5,8 @@
   (text-mode . company-mode)
 
   :bind (("M-<space>" . company-complete)
-         ("M-8"       . company-yasnippet)
          :map company-active-map
+         ("M-8"       . yas-expand)
          ("TAB"       . ngoc/company-complete-common-or-selection)
          ("<tab>"     . ngoc/company-complete-common-or-selection)
          ("<escape>"  . company-abort)
