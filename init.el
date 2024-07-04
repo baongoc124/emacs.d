@@ -126,8 +126,10 @@
 (setq truncate-lines nil)
 
 (global-set-key (kbd "C-x k")     'kill-current-buffer)
-(global-set-key (kbd "C-1")       'delete-other-windows)
 (global-set-key (kbd "C-0")       'delete-window)
+(global-set-key (kbd "C-1")       'delete-other-windows)
+(global-set-key (kbd "C-4")       'ctl-x-4-prefix)
+(global-set-key (kbd "C-5")       'ctl-x-5-prefix)
 (global-set-key (kbd "C-<left>")  'shrink-window-horizontally)
 (global-set-key (kbd "C-<right>") 'enlarge-window-horizontally)
 (global-set-key (kbd "C-<down>")  'shrink-window)
