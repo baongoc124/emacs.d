@@ -8,6 +8,21 @@
 
 (keymap-global-set "C-S-SPC" #'ngoc/pop-mark)
 
+(defvar ngoc/last-avy-position nil
+  "Last position of avy jump")
+
+(defun ngoc/save-avy-position (&rest _)
+  (setq ngoc/last-avy-position (point-marker)))
+
+(defun ngoc/avy-back-to-future ()
+  "Jump to last target of an avy jump."
+  (interactive)
+  (when ngoc/last-avy-position
+    (push-mark (point) t)
+    (goto-char ngoc/last-avy-position)))
+
+(advice-add #'avy-action-goto :after #'ngoc/save-avy-position)
+
 (use-package ace-link
   :config
   (ace-link-setup-default "t"))

@@ -15,7 +15,7 @@
         ("g" . ngoc/history-prefix)
         ("h" . mark-paragraph)
         ("m" . iedit-mode)
-        ("n" . avy-goto-line)
+        ("n" . ngoc/avy-back-to-future)
         ("o" . symbol-overlay-transient)
         ("q" . ngoc/fill-function-arguments-dwim)
         ("r" . ngoc/org-roam-prefix)
