@@ -338,4 +338,12 @@
 (org-link-set-parameters "http" :face 'org-external-link)
 (org-link-set-parameters "https" :face 'org-external-link)
 
+(use-package org-noter)
+(use-package org-fragtog
+  :hook
+  (org-mode . org-fragtog-mode))
+
+;; change scale of org-format-latex-options
+(setq org-format-latex-options (plist-put org-format-latex-options :scale 2))
+
 (provide 'init-org-mode)
