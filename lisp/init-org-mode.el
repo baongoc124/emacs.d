@@ -43,13 +43,9 @@
   ;; Dim lines that are in `event' category in the agenda.
   (highlight-lines-matching-regexp "^[[:space:]]*event\\b" 'font-lock-comment-face)
   ;; Dim D-priority tasks
-  (highlight-regexp "\\[#C\\].*$" 'font-lock-comment-face)
+  (highlight-regexp "\\[#C\\]\\([[:space:]]?[^[:space:]]\\)*" 'font-lock-comment-face)
   ;; Dim prewarning deadlines
-  (highlight-regexp "[[:space:]]+[[:digit:]]+ >>[[:space:]]+[A-Z]+ \\(.*$\\)" 'font-lock-comment-face 1)
-  ;; Hide label for habits
-  (highlight-regexp "[[:space:]]+habits\\b" 'ngoc/invisible-face))
-
-
+  (highlight-regexp "[[:space:]]+[[:digit:]]+ >>[[:space:]]+[A-Z]+ \\(.*$\\)" 'font-lock-comment-face 1))
 
 (add-hook 'org-agenda-finalize-hook #'ngoc/org-agenda-dim-event-lines)
 
