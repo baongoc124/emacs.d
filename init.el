@@ -1,22 +1,12 @@
-;; TODO checkout org-roam
 ;; TODO checkout gumshoe
 ;; FIXME magit not always ask password using same interface
-;; TODO visual-mark
 ;; TODO check out real-save-mode
 ;; TODO check out git-timemachine
-;; TODO add hideshow mode
-;; TODO how to use occur to edit in multiple files
-;; TODO find good functions for M-n and M-p keys
 ;; TODO put custom settings in a separated file
-;; TODO checkout project instead of projectile
 ;; TODO checkout lsp-booster
-;; TODO learn how to use straight.el
 ;; TODO checkout jinx.el spell checker
-;; TODO change copilot cache directory to cache instead of .cache
 ;; FIXME faces of history mode
 ;; TODO make undo-tree history (and other) save to a unique directory for each machine
-;; DONE use symbol overlay
-;; DONE persistent undo-tree
 
 
 (setq garbage-collection-messages t)
