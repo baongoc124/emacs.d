@@ -85,7 +85,9 @@
   :hook
   (prog-mode . hl-line-mode)
   (text-mode . hl-line-mode)
-  (conf-mode . hl-line-mode))
+  (conf-mode . hl-line-mode)
+  (org-agenda-mode . hl-line-mode)
+  (package-menu-mode . hl-line-mode))
 
 
 (setq frame-title-format
