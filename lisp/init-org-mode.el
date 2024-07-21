@@ -162,6 +162,10 @@
          checkitem
          (file "toread.org"))
 
+        ("m" "Movies"
+         checkitem
+         (file "movies.org"))
+
         ("t" "Todo"
          entry
          (file "inbox.org")
