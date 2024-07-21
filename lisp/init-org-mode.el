@@ -74,8 +74,23 @@
 
 (setq org-agenda-format-date " %^a      %e %b")
 
+
+;; sort habits by priority
+;; https://emacs.stackexchange.com/questions/32430/how-to-sort-habits-by-priority-in-the-org-agenda-view
+(defun hw-org-agenda-sort-habits (a b)
+  "Sort habits first by user priority, then by schedule+deadline+consistency."
+  (let ((ha (get-text-property 1 'org-habit-p a))
+        (hb (get-text-property 1 'org-habit-p b)))
+    (when (and ha hb)
+      (let ((pa (org-get-priority a))
+            (pb (org-get-priority b)))
+        (cond ((> pa pb) +1)
+              ((< pa pb) -1)
+              ((= pa pb) (org-cmp-values a b 'priority)))))))
+
+(setq org-agenda-cmp-user-defined 'hw-org-agenda-sort-habits)
 (setq org-agenda-sorting-strategy
-      '(time-up todo-state-down habit-down timestamp-up
+      '(time-up todo-state-down user-defined-down habit-down timestamp-up
                 priority-down category-keep))
 
 (setq org-agenda-time-grid
