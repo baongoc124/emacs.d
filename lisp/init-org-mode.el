@@ -87,23 +87,22 @@
 (setq org-agenda-custom-commands nil)
 (setq org-agenda-custom-commands
       '(("d" . "Personal prefix")
-        ("dd" "" ((agenda "" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
-                             (org-agenda-skip-deadline-prewarning-if-scheduled 'pre-scheduled)))
-                 (agenda "" ((org-agenda-overriding-header "")
-                             (org-agenda-format-date "Yay!!!")
-                             (org-agenda-span 'day)
-                             (org-habit-show-habits nil)
-                             (org-agenda-use-time-grid nil)
-                             (org-agenda-show-log t)
-                             (org-agenda-log-mode-items '(closed clock state))
-                             (org-agenda-skip-function '(org-agenda-skip-entry-if
-                                                         'notregexp "State[[:space:]]+\"DONE\""))))
-                 (tags "+TODO=\"ONGO\""
-                       ((org-agenda-overriding-header "On Going")))
-                 (tags "+TODO=\"WAIT\""
-                       ((org-agenda-overriding-header "Waiting")))
-                 (tags-todo "CATEGORY=\"inbox\""
-                            ((org-agenda-overriding-header "Fresh off the boat")))))
+        ("dd" "My agenda" ((agenda "" ((org-agenda-skip-deadline-prewarning-if-scheduled 'pre-scheduled)
+                                       (org-habit-show-habits nil)
+                                       (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))))
+                           (agenda ""
+                                   ((org-agenda-overriding-header "Habits")
+                                    (org-agenda-format-date "")
+                                    (org-agenda-span 'day)
+                                    (org-agenda-prefix-format '((agenda . " %i %-12c")))
+                                    (org-agenda-skip-function
+                                     '(org-agenda-skip-entry-if 'notregexp ":STYLE:[[:space:]]*habit"))))
+                           (tags "+TODO=\"ONGO\""
+                                 ((org-agenda-overriding-header "On Going")))
+                           (tags "+TODO=\"WAIT\""
+                                 ((org-agenda-overriding-header "Waiting")))
+                           (tags-todo "CATEGORY=\"inbox\""
+                                      ((org-agenda-overriding-header "Fresh off the boat")))))
         ("du" "Undated tasks" tags-todo "-PRIORITY=\"D\""
          ((org-agenda-todo-ignore-with-date t)
           (org-agenda-tags-todo-honor-ignore-options t)))
