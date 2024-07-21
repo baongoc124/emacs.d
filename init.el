@@ -77,8 +77,6 @@
 
 (global-set-key (kbd "C-o") #'open-line-keep-indent)
 
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
-
 
 ;; hl-line overrides face of match -> don't use it globally
 (use-package hl-line
