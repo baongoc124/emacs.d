@@ -459,12 +459,6 @@ Version: 2015-10-01"
   (chrome-reload))
 
 
-;;   ___  __  __ _   _     _____
-;;  / _ \|  \/  | \ | | __|_   _|_     _
-;; | | | | |\/| |  \| |/ _ \| |_| |_ _| |_
-;; | |_| | |  | | |\  |  __/| |_   _|_   _|
-;;  \___/|_|  |_|_| \_|\___||_| |_|   |_|
-(setenv "PATH" (concat (expand-file-name "~/apps/omnetpp-5.7/bin:") (getenv "PATH")))
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
