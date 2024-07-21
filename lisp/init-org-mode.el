@@ -329,4 +329,13 @@
               (insert reference))))))))
 
 (add-hook 'org-export-before-processing-hook 'collect-backlinks-string)
+
+;; highlight external http, https links
+(defface org-external-link
+  '((t :inherit org-link))
+  "Face for external links.")
+
+(org-link-set-parameters "http" :face 'org-external-link)
+(org-link-set-parameters "https" :face 'org-external-link)
+
 (provide 'init-org-mode)
