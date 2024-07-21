@@ -182,6 +182,7 @@
 (setq org-habit-completed-glyph ?V) ;; V for Vegeta, no, for Victory
 (setq org-habit-show-all-today t)
 (setq org-habit-following-days 1)
+(setq org-habit-show-done-always-green t)
 
 (require 'org-protocol)
 
