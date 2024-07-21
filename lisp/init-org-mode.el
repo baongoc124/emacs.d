@@ -84,13 +84,6 @@
         ""
         "----------------"))
 
-;; autosave
-(add-hook 'auto-save-hook 'org-save-all-org-buffers)
-(add-hook 'org-agenda-mode-hook #'auto-save-mode)
-(setq auto-save-interval 3000)
-(setq auto-save-timeout 11)
-
-
 (setq org-agenda-custom-commands nil)
 (setq org-agenda-custom-commands
       '(("d" . "Personal prefix")
