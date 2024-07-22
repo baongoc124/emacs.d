@@ -24,9 +24,6 @@
     (interactive)
     (copilot-clear-overlay t))
 
-  (defun ngoc/god-mode-not-enabled ()
-    (not (bound-and-true-p god-local-mode)))
-
   (defun ngoc/not-in-leetcode ()
     (not (and (bound-and-true-p atomic-chrome-edit-mode)
               (string-match-p " - LeetCode$" (buffer-name)))))
@@ -51,9 +48,7 @@
     (interactive)
     (file-remote-p default-directory))
 
-  (remove-hook  'copilot-enable-predicates          'evil-insert-state-p)  ;  i  don't  use  evil  mode
   (add-hook     'copilot-disable-predicates         'ngoc/remote-buffer-p)
-  (add-hook     'copilot-enable-predicates          'ngoc/god-mode-not-enabled)
   (add-hook     'copilot-enable-predicates          'ngoc/not-in-leetcode)
   (add-hook     'copilot-enable-display-predicates  'ngoc/company-not-manually-started)
   (add-hook     'company-completion-started-hook    'ngoc/abort-company-when-copilot-overlay-visible)

@@ -66,9 +66,6 @@
   (save-buffer)
   (load-theme 'nord-lightt t))
 
-(define-key ngoc-prefix-map (kbd "C-<return>") 'ngoc/load-nord-lightt)
-
-
 (add-hook 'window-setup-hook
           #'(lambda ()
               (set-cursor-color "#69E300")))

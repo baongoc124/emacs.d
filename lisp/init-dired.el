@@ -13,9 +13,6 @@
   (beginning-of-buffer)
   (dired-goto-next-nontrivial-file))
 
-(require 'init-prefix-map)
-(keymap-set ngoc-prefix-map "j" 'ngoc/dired-open-last-downloaded)
-
 (defun ngoc/make-line-taller ()
   (setq line-spacing 0.2))
 

@@ -20,6 +20,4 @@
                                    ngoc/cheatsheet-file-name))
     (message "No cheatsheet file found")))
 
-(keymap-set ngoc-prefix-map "3" #'ngoc/cheatsheet)
-
 (provide 'init-cheatsheet)
