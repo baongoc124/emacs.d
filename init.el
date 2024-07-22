@@ -306,8 +306,8 @@ Version: 2015-10-01"
 ;; set default tab char's display width to 4 spaces
 (setq-default tab-width 4) ; emacs 23.1, 24.2, default to 8
 (setq backward-delete-char-untabify-method 'hungry)
-(defvaralias 'c-basic-offset 'tab-width)
-(defvaralias 'cperl-indent-level 'tab-width)
+(setq-default c-basic-offset 4)
+(setq-default cperl-indent-level 4)
 
 ;; make tab key call indent command or insert tab character, depending on cursor position
 ;; default is t and it will always indent
