@@ -1,12 +1,3 @@
-(use-package quickselect
-  :ensure nil
-  :demand t
-  :config
-  (quickselect-mode 1)
-  (global-set-key (kbd "C-q") #'quickselect-mark)
-  (global-set-key (kbd "C-'") #'quoted-insert))
-
-
 (use-package flymake)
 (use-package flymake-diagnostic-at-point
   :after flymake
