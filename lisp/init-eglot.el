@@ -14,7 +14,9 @@
 
   ;; python
   (add-to-list 'eglot-server-programs
-               '(python-mode . ("pyright-langserver" "--stdio")))
+               '(python-mode . ("basedpyright-langserver" "--stdio")))
+  (add-to-list 'eglot-server-programs
+               '(python-ts-mode . ("basedpyright-langserver" "--stdio")))
 
   (transient-define-prefix ngoc/eglot-transient ()
     [:class transient-row "Eglot Menu"]

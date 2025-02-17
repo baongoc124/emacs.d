@@ -29,5 +29,10 @@
 ;;     ;; ("is"     . ?≡)
 ;;     ))
 
+(use-package python
+  :config
+  (setq python-shell-interpreter "ipython"
+        python-shell-interpreter-args "-i --simple-prompt"))
+
 
 (provide 'init-python)
