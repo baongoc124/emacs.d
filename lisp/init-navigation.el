@@ -84,6 +84,7 @@
          ("M-g z"   . dumb-jump-go-prefer-external-other-window))
   :config
   (setq dumb-jump-selector 'ivy)
+  (setq dumb-jump-force-searcher 'rg)
   (add-hook 'xref-backend-functions #'dumb-jump-xref-activate))
 
 (use-package imenu-list)
