@@ -147,5 +147,7 @@ mouse-3: Toggle minor modes"
 (add-hook 'after-make-frame-functions 'rmrf/setup-frame)
 
 
+(use-package diminish)
+
 
 (provide 'init-core)
