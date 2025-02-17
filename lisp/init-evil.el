@@ -5,6 +5,7 @@
   :config
   (evil-mode 1)
   (setq evil-want-fine-undo t)
+  (setq evil-undo-system 'undo-tree)
   (setq evil-emacs-state-cursor '("pink" box))
   (setq evil-normal-state-cursor '("#00B400" box))
   (setq evil-visual-state-cursor '("orange" box))
@@ -27,6 +28,9 @@
   (evil-set-initial-state 'elfeed-show-mode 'emacs)
   (evil-set-initial-state 'elfeed-search-mode 'emacs)
   (evil-set-initial-state 'exwm-mode 'emacs)
+  (evil-set-initial-state 'xref--xref-buffer-mode 'emacs)
+  (evil-set-initial-state 'inferior-python-mode 'emacs)
+  (evil-set-initial-state 'special-mode 'emacs)
 
   (evil-set-leader nil (kbd "M-m"))
   (evil-set-leader 'normal (kbd "<SPC>"))
@@ -35,34 +39,35 @@
   (evil-set-leader 'motion (kbd "<SPC>"))
 
   (setq ngoc/prefix-keymap-alist
-        '(("=" . ngoc/align-dwim)
+        '(("`" . evil-goto-mark)
+          ("=" . ngoc/align-dwim)
           ("3" . ngoc/cheatsheet)
           ("M-b" . ibuffer)
           ("b" . counsel-switch-buffer)
           ("c" . evilnc-comment-operator)
           ("d" . duplicate-dwim)
           ("e" . ngoc/eglot-transient)
-          ;; ("f" . counsel-projectile-find-file)
+          ("f" . project-find-file)
           ("g" . ngoc/history-prefix)
           ("h" . mark-paragraph)
           ("m" . iedit-mode)
+          ("M-m" . yas-expand)
           ("n" . ngoc/avy-back-to-future)
           ("o" . symbol-overlay-transient)
           ("q" . ngoc/fill-function-arguments-dwim)
           ("r" . ngoc/org-roam-prefix)
           ("s" . imenu-list-smart-toggle)
-          ("t" . avy-goto-word-or-subword-1)
+          ("t" . avy-goto-char-timer)
           ("u" . undo-tree-visualize)
           ("v" . ngoc/git-transient)
-          ("w" . ngoc/window-prefix)
-          ("x" . avy-goto-char-timer)))
+          ("w" . ngoc/window-prefix)))
 
   (defun ngoc/bind-leader-map (key-function-pair-alist)
     "Convenient function to bind my evil leader keymap."
     (dolist (pair ngoc/prefix-keymap-alist)
       (let ((key (car pair))
             (function (cdr pair)))
-        (evil-define-key 'normal 'global (kbd (concat "<leader>" key)) function))))
+        (evil-define-key nil 'global (kbd (concat "<leader>" key)) function))))
 
   (ngoc/bind-leader-map ngoc/prefix-keymap-alist))
 
@@ -71,5 +76,18 @@
 (use-package evil-visualstar
   :config
   (global-evil-visualstar-mode 1))
+
+(use-package evil-goggles
+  :ensure t
+  :diminish evil-goggles-mode
+  :config
+  (evil-goggles-mode)
+  (setq evil-goggles-duration 0.3))
+
+  ;; optionally use diff-mode's faces; as a result, deleted text
+  ;; will be highlighed with `diff-removed` face which is typically
+  ;; some red color (as defined by the color theme)
+  ;; other faces such as `diff-added` will be used for other actions
+  ;; (evil-goggles-use-diff-faces))
 
 (provide 'init-evil)
