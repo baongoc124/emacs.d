@@ -15,6 +15,7 @@
 (add-to-list 'load-path "~/.emacs.d/lisp/")
 
 (require 'init-package-management)
+(require 'init-exec-path)
 (require 'init-font)
 (require 'init-evil)
 (require 'init-core)
