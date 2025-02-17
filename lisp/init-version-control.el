@@ -10,11 +10,40 @@
 
 
 (use-package magit
-  :bind (("C-x g" . magit-status))
+  :bind (("C-x g" . magit-status)
+         ("C-c g" . magit-file-dispatch))
   :config
   (setq magit-diff-refine-hunk t)
   (add-hook 'magit-pre-refresh-hook #'diff-hl-magit-pre-refresh)
-  (add-hook 'magit-post-refresh-hook #'diff-hl-magit-post-refresh))
+  (add-hook 'magit-post-refresh-hook #'diff-hl-magit-post-refresh)
+  (add-hook 'magit-status-headers-hook #'magit-insert-user-header)
+
+  (defun ngoc/disable-evil-on-magit-blame ()
+    (if (bound-and-true-p magit-blame-mode)
+        (evil-emacs-state)
+      (evil-normal-state)))
+
+  (add-hook 'magit-blame-mode-hook #'ngoc/disable-evil-on-magit-blame)
+
+  ;; https://mbork.pl/2022-11-19_Streamlining_my_workflow_with_Magit_and_BitBucket
+  (defun magit-open-pull-request-pr ()
+    "Open the pull request URL if applicable."
+    (interactive)
+    (save-excursion
+      (set-buffer (magit-process-buffer t))
+      (goto-char (point-max))
+      (magit-section-backward)
+      (when
+          (search-backward-regexp "remote: \\(To create a merge\\|Create pull\\) request" nil t)
+        (forward-line 1)
+        (re-search-forward "remote: +" (line-end-position) t)
+        (browse-url-at-point))))
+  )
+
+(use-package forge
+  :after magit
+  :config
+  )
 
 
 (use-package diff-hl

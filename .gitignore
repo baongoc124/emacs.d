@@ -26,6 +26,7 @@
 /eshell/
 /session.*
 /kkcrc
-/org-roam.db
+/org-roam*.db
 /url/
 /cache/
+/forge-database*.sqlite
