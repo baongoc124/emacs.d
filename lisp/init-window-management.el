@@ -36,9 +36,50 @@
 
 ;; (use-package eyebrowse
 ;;   :init
-;;   (setq eyebrowse-keymap-prefix (kbd "C-'"))
+;;   (setq eyebrowse-keymap-prefix (kbd "<f8>"))
 ;;   :config
-;;   (eyebrowse-mode t))
+;;   (eyebrowse-mode t)
+;;   (define-key eyebrowse-mode-map (kbd "<f8> <f8>") 'eyebrowse-last-window-config)
+;;   (setq eyebrowse-mode-line-style 'always)
+;;   (setq eyebrowse-mode-line-left-delimiter "《 ")
+;;   (setq eyebrowse-mode-line-right-delimiter " 》")
+;;   (setq eyebrowse-mode-line-separator "  ")
+;;   )
+
+
+(use-package modern-tab-bar
+  :vc (:fetcher github :repo aaronjensen/emacs-modern-tab-bar)
+  :init
+  (setq tab-bar-show t
+        tab-bar-close-button-show t
+        tab-bar-tab-hints t)
+
+  (modern-tab-bar-mode))
+
+
+(defun n/tab-switch (num)
+  "Switch to tab based on number input."
+  (interactive "c")
+    (when (and (>= num ?0) (<= num ?9))
+      (tab-bar-select-tab (- num ?0))))
+
+(dotimes (i 10)
+  (global-set-key (kbd (format "<f8>%d" i))
+                  `(lambda () (interactive) (n/tab-switch ,(string-to-char (number-to-string i))))))
+
+; duplicate tab and set name
+(defun n/tab-duplicate-and-rename ()
+  "Duplicate current tab and set name."
+  (interactive)
+  (tab-duplicate)
+  (call-interactively 'tab-rename))
+
+(global-set-key (kbd "<f8><f8>") 'tab-bar-switch-to-recent-tab)
+(global-set-key (kbd "<f8>c") #'n/tab-duplicate-and-rename)
+(global-set-key (kbd "<f8>r") 'tab-rename)
+(global-set-key (kbd "<f8>k") 'tab-bar-close-tab)
+(global-set-key (kbd "<f8>u") 'tab-undo)
+
 
 (use-package transpose-frame)
 
