@@ -131,4 +131,12 @@ results in Zeal."
           (match (nth 1 (cadr search-result))))
       (zeal-at-point-run-search (zeal-at-point-maybe-add-docset match)))))
 
+
+(defun my-show-trailing-whitespace ()
+  (setq show-trailing-whitespace t))
+
+(add-hook 'prog-mode-hook #'my-show-trailing-whitespace)
+(defalias 'dtw #'delete-trailing-whitespace)
+(defalias 'dts #'delete-trailing-whitespace)
+
 (provide 'init-programming)
