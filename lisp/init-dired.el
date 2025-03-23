@@ -63,4 +63,15 @@
     (advice-remove 'dired-next-line (lambda (&rest arg) (dired-display-file)))
     (advice-remove 'dired-internal-do-deletions (lambda (&rest arg) (dired-display-file))))))
 
+; alias for quick invoke
+(defalias 'fnd 'find-name-dired)
+
+(defun m/find-name-project ()
+  "Find files in project by name."
+  (interactive)
+  (let ((default-directory (project-root (project-current))))
+    (call-interactively 'find-name-dired)))
+
+(defalias 'fnp #'m/find-name-project)
+
 (provide 'init-dired)
