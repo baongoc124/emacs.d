@@ -1,13 +1,3 @@
-(defun ngoc/pop-mark ()
-  "Jump back to the  mark. If point is at the mark, pop the mark first."
-  (interactive)
-  (let ((current-prefix-arg 4))
-    (when (eq (mark) (point))
-        (pop-mark))
-    (call-interactively #'set-mark-command)))
-
-(keymap-global-set "C-S-SPC" #'ngoc/pop-mark)
-
 (defvar ngoc/last-avy-position nil
   "Last position of avy jump")
 

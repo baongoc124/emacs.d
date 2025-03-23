@@ -54,20 +54,6 @@
 
 
 
-;; FIXME sometimes it's weird
-(defun open-line-keep-indent ()
-  (interactive)
-    (let* ((col (current-column))
-           (cur-indent (current-indentation))
-           (should-indent (eq col cur-indent)))
-      (save-excursion
-        (newline 1 t))
-      (message "col: %d, cur-indent: %d" col cur-indent)
-      (when should-indent
-        (indent-to-column cur-indent))))
-
-(global-set-key (kbd "C-o") #'open-line-keep-indent)
-
 
 ;; hl-line overrides face of match -> don't use it globally
 (use-package hl-line
@@ -176,12 +162,6 @@
 
 (setq TeX-PDF-mode t)
 (latex-preview-pane-enable)
-
-
-(use-package keyfreq
-  :init
-  (keyfreq-mode 1)
-  (keyfreq-autosave-mode 1))
 
 
 (use-package pdf-tools
