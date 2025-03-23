@@ -63,7 +63,12 @@
   :vc (:fetcher github :repo "dalwadani/ned-mode"))
 
 (use-package envrc
-  :hook (after-init . envrc-global-mode))
+  :hook (after-init . envrc-global-mode)
+  :config
+  (setcar envrc-none-lighter " env[")
+  (setcar envrc-on-lighter " env[")
+  (setcar envrc-error-lighter " env[")
+  )
 
 
 (use-package jq-mode)
