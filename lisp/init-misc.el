@@ -84,5 +84,6 @@
     (delete-region start end)
     (insert insertion)))
 
+(use-package rainbow-mode)
 
 (provide 'init-misc)
