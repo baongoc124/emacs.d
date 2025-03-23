@@ -31,6 +31,7 @@
   (evil-set-initial-state 'xref--xref-buffer-mode 'emacs)
   (evil-set-initial-state 'inferior-python-mode 'emacs)
   (evil-set-initial-state 'special-mode 'emacs)
+  (evil-set-initial-state 'treemacs-mode 'emacs)
 
   (evil-set-leader nil (kbd "M-m"))
   (evil-set-leader 'normal (kbd "<SPC>"))
