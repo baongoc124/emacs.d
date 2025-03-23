@@ -32,6 +32,12 @@
 (global-set-key "\C-x\C-c" nil)          ; exit emacs accidentally no more
 (global-set-key (kbd "M-z") nil)
 
+;; unset shortcut for transpose functions
+;; because I never use them and sometimes press them accidentally
+(global-unset-key (kbd "C-x C-t"))
+(global-unset-key (kbd "M-t"))
+(global-unset-key (kbd "C-M-t"))
+
 
 ;;   ____ _   _ ___   _                      _
 ;;  / ___| | | |_ _| | |___      _____  __ _| | _____
