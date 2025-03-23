@@ -276,7 +276,11 @@ Version: 2015-10-01"
   (text-mode . display-fill-column-indicator-mode)
   :config
   (setq-default fill-column 80)
-  (setq-default display-fill-column-indicator-character ?\u2591))
+  ;; (setq-default display-fill-column-indicator-character ?\u2591)
+  (setq-default display-fill-column-indicator-character ?\u2506)
+  (set-face-attribute 'fill-column-indicator nil :foreground "grey30")
+  )
+
 
 ;; for auto detecting indentation
 (use-package dtrt-indent
