@@ -44,10 +44,10 @@
 
 (use-package nerd-icons)
 
-(use-package nerd-icons-dired
-  :after nerd-icons
-  :hook
-  (dired-mode . nerd-icons-dired-mode))
+;; (use-package nerd-icons-dired
+;;   :after nerd-icons
+;;   :hook
+;;   (dired-mode . nerd-icons-dired-mode))
 
 ;; FIXME this is currently working GLOBALLY!
 ;; https://emacs.stackexchange.com/a/51614 with modification
