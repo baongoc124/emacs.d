@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# name: gptel topic
+# key: t
+# --
+$>
+* Ideas in Development
+  :PROPERTIES:
+  :GPTEL_TOPIC:
+  :END:
+
+** $0
