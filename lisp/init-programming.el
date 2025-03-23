@@ -45,7 +45,9 @@
   (text-mode . yas-minor-mode)
   :config
   ;; https://emacs.stackexchange.com/questions/38242/problem-redoing-with-yasnippet
-  (setq yas-snippet-revival nil))
+  (setq yas-snippet-revival nil)
+  (yas-reload-all)
+  )
 
 ;; don't bind any key because i use counsel-dash for searching/filtering
 (use-package zeal-at-point
