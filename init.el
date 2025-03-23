@@ -20,6 +20,7 @@
 (require 'init-evil)
 (require 'init-core)
 
+(require 'init-auth)
 (require 'init-auto-completion)
 (require 'init-buffer)
 (require 'init-calendar)
