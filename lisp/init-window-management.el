@@ -1,3 +1,7 @@
+;; prevent top bottom split
+(setq split-height-threshold nil)
+
+
 (define-prefix-command 'ngoc/window-prefix)
 (define-key ngoc/window-prefix "d" #'delete-window)
 (define-key ngoc/window-prefix "e" #'balance-windows)
