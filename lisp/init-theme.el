@@ -1,3 +1,14 @@
+;; https://emacsredux.com/blog/2025/02/03/clean-unloading-of-emacs-themes/
+(defun er-disable-all-active-themes ()
+  "Disable all currently active themes."
+  (interactive)
+  (dolist (theme custom-enabled-themes)
+    (disable-theme theme)))
+
+(defun er-load-theme (theme)
+  (er-disable-all-active-themes)
+  (load-theme theme t))
+
 (use-package doom-themes
   :config
 ;;   ;; Enable flashing mode-line on errors
