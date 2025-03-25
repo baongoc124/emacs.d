@@ -16,6 +16,7 @@
   (setq magit-diff-refine-hunk t)
   (add-hook 'magit-pre-refresh-hook #'diff-hl-magit-pre-refresh)
   (add-hook 'magit-post-refresh-hook #'diff-hl-magit-post-refresh)
+  (add-hook 'magit-status-headers-hook #'magit-insert-repo-header)
   (add-hook 'magit-status-headers-hook #'magit-insert-user-header)
 
   (defun ngoc/disable-evil-on-magit-blame ()
