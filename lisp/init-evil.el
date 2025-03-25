@@ -75,7 +75,9 @@
 (use-package evil-nerd-commenter)
 
 (use-package evil-visualstar
+  :after evil
   :config
+  (setq evil-symbol-word-search t)
   (global-evil-visualstar-mode 1))
 
 (use-package evil-goggles
