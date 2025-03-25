@@ -138,5 +138,14 @@ mouse-3: Toggle minor modes"
 
 (use-package diminish)
 
+;; backup, autosave and lockfiles location
+;; copy from https://www.gnu.org/software/emacs/manual/html_node/efaq/Not-writing-files-to-the-current-directory.html
+(when (>= emacs-major-version 28)
+  (setq lock-file-name-transforms
+        '(("\\`/.*/\\([^/]+\\)\\'" "~/.emacs.d/aux/\\1" t))))
+(setq auto-save-file-name-transforms
+      '(("\\`/.*/\\([^/]+\\)\\'" "~/.emacs.d/aux/\\1" t)))
+(setq backup-directory-alist
+      '((".*" . "~/.emacs.d/aux/")))
 
 (provide 'init-core)
