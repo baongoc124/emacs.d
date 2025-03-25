@@ -124,7 +124,7 @@ mouse-3: Toggle minor modes"
 (defun rmrf/setup-frame (&optional frame)
   (tool-bar-mode -1)
   (toggle-scroll-bar -1)
-  (menu-bar-mode -1)
+  (menu-bar-mode 1)
   (modify-frame-parameters frame
                            '((vertical-scroll-bars . nil)
                              (horizontal-scroll-bars . nil)))
