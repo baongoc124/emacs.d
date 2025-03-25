@@ -20,6 +20,13 @@
   :init (setq markdown-command "multimarkdown"))
 
 
+;; temporary workaround
+(add-to-list 'auto-mode-alist '("\\.json5\\'" . js-json-mode))
+
+
+(use-package nix-mode
+  :mode "\\.nix\\'")
+
 (use-package flycheck
   :config
   (setq flycheck-mode-line-prefix "F"))

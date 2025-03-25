@@ -133,6 +133,34 @@ results in Zeal."
       (zeal-at-point-run-search (zeal-at-point-maybe-add-docset match)))))
 
 
+(use-package format-all
+  :config
+  (define-format-all-formatter black-macchiato
+    (:executable "black-macchiato")
+    (:install "pip install black-macchiato")
+    (:languages "Python")
+    (:features region)
+    (:format (format-all--buffer-easy executable)))
+
+    (setq-default format-all-formatters
+                  '(("SQL" pgformatter)))
+  )
+
+(use-package python-black
+  :demand t
+  :after python)
+
+(use-package go-mode)
+
+(use-package docker-compose-mode)
+
+(use-package docker
+  :bind ("C-x d" . docker))
+
+(use-package vue-mode)
+
+(use-package typescript-mode)
+
 (defun my-show-trailing-whitespace ()
   (setq show-trailing-whitespace t))
 
