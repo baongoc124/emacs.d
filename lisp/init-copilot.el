@@ -3,6 +3,7 @@
 ;;           3. disable copilot on Leetcode
 (use-package copilot
   :vc (:fetcher github :repo "copilot-emacs/copilot.el")
+  :diminish copilot-mode
   :bind (:map copilot-completion-map
               ("<escape>" . ngoc/copilot-clear-no-notify)
               ("<tab>"    . copilot-accept-completion) ; don't bind "TAB" so that i can use C-i when i need to adjust indent
@@ -41,8 +42,12 @@
 
   (defun ngoc/abort-copilot-start-company ()
     (interactive)
-    (copilot-clear-overlay t)             ; pass t to clear overlay so that it doesn't notify server about rejection
-    (company-manual-begin))
+
+    (when (memq evil-state '(emacs insert))
+      (copilot-clear-overlay t)             ; pass t to clear overlay so that it doesn't notify server about rejection
+      (company-manual-begin)
+      )
+    )
 
   (defun ngoc/remote-buffer-p ()
     (interactive)
@@ -52,6 +57,8 @@
   (add-hook     'copilot-enable-predicates          'ngoc/not-in-leetcode)
   (add-hook     'copilot-enable-display-predicates  'ngoc/company-not-manually-started)
   (add-hook     'company-completion-started-hook    'ngoc/abort-company-when-copilot-overlay-visible)
+
+  (global-set-key (kbd "M-c") #'ngoc/abort-copilot-start-company)
 
   ;; disable warnings
   (add-to-list 'warning-suppress-types '(copilot copilot-exceeds-max-char))
