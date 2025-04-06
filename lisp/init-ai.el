@@ -36,9 +36,17 @@ When responding to me:
 
 (defun m/switch-to-jarvis-buffer-other-window ()
   "Switch to the *Jarvis* buffer's window if visible, otherwise in another window.
-  Also create the *Jarvis* buffer if it doesn't exist."
+  Also create the *Jarvis* buffer & its file if it doesn't exist."
   (interactive)
   (unless (get-buffer "*Jarvis*")
+    (let ((jarvis-file (expand-file-name "~/.emacs.d/cache/gptel/*Jarvis*")))
+      (unless (file-exists-p jarvis-file)
+        (with-temp-file jarvis-file))
+      (find-file jarvis-file)
+      (org-mode)
+      (gptel-mode)
+      (setq buffer-save-without-query t)
+      )
     (gptel "*Jarvis*"))
   (if (get-buffer "*Jarvis*")
       (let ((jarvis-window (get-buffer-window "*Jarvis*" t)))
