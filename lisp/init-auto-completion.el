@@ -7,8 +7,8 @@
   :bind (("M-<space>" . company-complete)
          :map company-active-map
          ("M-8"       . yas-expand)
-         ("TAB"       . ngoc/company-complete-common-or-selection)
-         ("<tab>"     . ngoc/company-complete-common-or-selection)
+         ("TAB"       . company-complete-selection)
+         ("<tab>"     . company-complete-selection)
          ("<escape>"  . company-abort)
          ("M-n"       . company-select-next-or-abort)
          ("M-p"       . company-select-previous-or-abort)
@@ -19,18 +19,20 @@
   :config
   (keymap-unset company-active-map "RET" t)
   (keymap-unset company-active-map "<return>" t)
+
+  (global-set-key (kbd "M-c") #'(lambda ()
+                                  (interactive)
+                                  (company-cancel)
+                                  (company-begin-backend 'company-dabbrev-code)
+                                  )
+
+                  )
+
   (setq company-dabbrev-downcase nil)
   (setq company-minimum-prefix-length 1)
   (setq company-idle-delay 0.05)
   (setq company-format-margin-function 'company-text-icons-margin)
-
-  (defun ngoc/company-complete-common-or-selection ()
-    "Complete common if has one, else complete current selection."
-    (interactive)
-    (if (and (length> company-common 0)
-             (not (equal company-common company-prefix)))
-        (company-complete-common)
-      (company-complete-selection))))
+  )
 
 (use-package company-quickhelp
   :after company
