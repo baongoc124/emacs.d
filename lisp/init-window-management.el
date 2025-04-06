@@ -51,20 +51,13 @@
 ;;   )
 
 
-;; (use-package modern-tab-bar
-;;   :vc (:fetcher github :repo aaronjensen/emacs-modern-tab-bar)
-;;   :init
-;;   (setq tab-bar-show t
-;;         tab-bar-close-button-show t
-;;         tab-bar-tab-hints t)
-
-;;   (modern-tab-bar-mode))
 (use-package tab-bar
   :custom
   (tab-bar-mode t)
   (tab-bar-show 1)
   (tab-bar-close-button-show t)
   (tab-bar-new-button-show nil)
+  (tab-bar-tab-hints t) ;; show tab number
   (tab-bar-format '(tab-bar-format-tabs tab-bar-separator))
 
   :config
