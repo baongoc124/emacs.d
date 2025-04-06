@@ -243,8 +243,8 @@ Version: 2015-10-01"
 
 (require 'recentf)
 (setq recentf-auto-cleanup 'never) ;; disable before we start recentf!
-(setq recentf-max-menu-items 200)
-(setq recentf-max-saved-items 200)
+(setq recentf-max-menu-items 20)
+(setq recentf-max-saved-items 2000)
 (setq recentf-save-file (concat recentf-save-file "-" (system-name)))
 (recentf-mode 1)
 (global-set-key "\C-x\ \C-r" #'counsel-recentf)
