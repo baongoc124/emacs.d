@@ -41,4 +41,10 @@
   (setq company-quickhelp-delay 0.35))
 
 
+(use-package company-prescient
+  :after company
+  :config
+  (company-prescient-mode 1))
+
+
 (provide 'init-auto-completion)
