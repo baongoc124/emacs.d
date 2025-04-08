@@ -15,7 +15,12 @@
   :bind ("M-o" . ace-window)
   :config
   (setq aw-keys '(?h ?t ?n ?s ?a ?o ?e ?u)
-        aw-scope 'frame))
+        aw-scope 'frame)
+
+  (global-set-key (kbd "M-O") #'(lambda () (interactive)
+                                  (let ((aw-dispatch-always t))
+                                    (call-interactively #'ace-window))))
+  )
 
 
 (use-package winner
