@@ -30,31 +30,6 @@
   :config
   (winner-mode 1))
 
-;;(setq win:base-key ?`)		;; '`' is before 'a'
-;;(setq win:max-configs 27)	;; '`' to 'z' are 27 chars.
-;;(setq win:quick-selection nil)	;; Not assign `C-c LETTER'
-;;(setq win:switch-prefix "\C-q")
-;;(setq win:use-frame nil)
-;;(define-key global-map win:switch-prefix nil)
-;;(require 'windows)
-;;(win:startup-with-window)
-;;(define-key ctl-x-map "C" 'see-you-again)
-;;(define-key win:switch-map "\C-q" 'win-toggle-window)
-;;(define-key win:switch-map "n" 'win-switch-to-window)
-;;(define-key win:switch-map "p" 'win-switch-to-window)
-
-;; (use-package eyebrowse
-;;   :init
-;;   (setq eyebrowse-keymap-prefix (kbd "<f8>"))
-;;   :config
-;;   (eyebrowse-mode t)
-;;   (define-key eyebrowse-mode-map (kbd "<f8> <f8>") 'eyebrowse-last-window-config)
-;;   (setq eyebrowse-mode-line-style 'always)
-;;   (setq eyebrowse-mode-line-left-delimiter "《 ")
-;;   (setq eyebrowse-mode-line-right-delimiter " 》")
-;;   (setq eyebrowse-mode-line-separator "  ")
-;;   )
-
 
 (use-package tab-bar
   :custom
@@ -94,5 +69,22 @@
 
 
 (use-package transpose-frame)
+
+
+(defun m/buffer-to-side-window ()
+  "Place the current buffer in the side window at the bottom."
+  (interactive)
+  (let ((buf (current-buffer)))
+    (display-buffer-in-side-window
+     buf '((window-width . 0.25)
+           (side . left)
+           (slot . 1)
+           (window-parameters . ((no-delete-other-windows . t)))))
+    (delete-window)))
+
+(window-parameters (get-buffer-window (current-buffer)))
+
+
+
 
 (provide 'init-window-management)
