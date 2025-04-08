@@ -29,6 +29,8 @@
 (global-set-key (kbd "C-S-Y") 'counsel-yank-pop)
 
 
+(use-package counsel-tramp)
+
 (use-package ivy-prescient
   :after ivy
   :config
