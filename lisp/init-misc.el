@@ -1,7 +1,19 @@
 (use-package yaml-mode
   :defer t
   :init
-  (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-ts-mode)))
+  (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
+
+  (add-hook 'yaml-ts-mode-hook
+            (lambda ()
+              (flymake-mode 1)
+              (setq show-trailing-whitespace t)))
+  )
+
+(use-package flymake-yamllint
+  :after yaml-mode
+  :config
+  (add-hook 'yaml-ts-mode-hook 'flymake-yamllint-setup)
+  )
 
 (use-package rust-mode
   :init
