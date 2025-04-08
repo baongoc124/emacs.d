@@ -34,15 +34,26 @@
 
 ;; temporary workaround
 (add-to-list 'auto-mode-alist '("\\.json5\\'" . js-json-mode))
+;; (add-to-list 'auto-mode-alist '("\\.json5\\'" . js-ts-mode))
+(use-package flymake-eslint
+  :vc (:fetcher github :repo "orzechowskid/flymake-eslint")
+  :config
 
+  (defun my/flymake-eslint-setup ()
+    (when (string= (file-name-extension buffer-file-name) "json5")
+      (flymake-eslint-enable)
+      )
+  )
 
-(use-package nix-mode
-  :mode "\\.nix\\'")
+  (add-hook 'json-mode-hook 'my/flymake-eslint-setup)
+  )
 
 (use-package flycheck
   :config
   (setq flycheck-mode-line-prefix "F"))
 
+(use-package nix-mode
+  :mode "\\.nix\\'")
 
 ;; (use-package highlight-indentation
 ;;   :diminish highlight-indentation-mode
