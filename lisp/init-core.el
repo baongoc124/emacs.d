@@ -59,11 +59,6 @@
           #'(lambda ()
               (set-cursor-color "#69E300")))
 
-(setq text-scale-mode-step 1.1)
-(global-set-key (kbd "C-x C-=") #'global-text-scale-adjust)
-(global-set-key (kbd "C-x C--") #'global-text-scale-adjust)
-(global-set-key (kbd "C-x C-0") #'global-text-scale-adjust)
-
 ;;                      _        _ _
 ;;  _ __ ___   ___   __| | ___  | (_)_ __   ___
 ;; | '_ ` _ \ / _ \ / _` |/ _ \ | | | '_ \ / _ \

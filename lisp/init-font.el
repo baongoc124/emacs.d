@@ -1,55 +1,35 @@
-(setq ngoc/interface-font-name
+(setq my/font
       (cond
        ((eq system-type 'gnu/linux)
-        "Cascadia Code NF")
+        '("Cascadia Code NF" . 13.0))
        ((eq system-type 'darwin)
-        "Menlo")
+        '("Monaco" . 14.0))
        (t
-        "Monospace")))
+        '("Monospace" . 13.0))))
 
 (defun ngoc/setup-font (&optional frame)
   (interactive)
   ;; set fallback font for Japanese
-  (let ((jp-font "Droid Sans"))
+  (let ((jp-font "Droid Sans Fallback"))
     (set-fontset-font t 'han jp-font)
     (set-fontset-font t 'kana jp-font)
     (set-fontset-font t 'cjk-misc jp-font))
 
-  (set-frame-font (font-spec :family ngoc/interface-font-name
+  (set-frame-font (font-spec :family (car my/font)
                              :weight 'regular
-                             :size 10.5)
+                             :size (cdr my/font))
                   t t t)
 
   ;; fixed issue with unreadable char in Info docs
-  (set-face-attribute 'fixed-pitch-serif nil :family ngoc/interface-font-name :inherit 'default))
+  (set-face-attribute 'fixed-pitch-serif nil :family my/font :inherit 'default))
 
 (ngoc/setup-font)
 (add-hook 'after-make-frame-functions #'ngoc/setup-font)
 
-(use-package ligature
-  :config
-  ;; Enable the "www" ligature in every possible major mode
-  (ligature-set-ligatures 't '("www"))
-  ;; Enable traditional ligature support in eww-mode, if the
-  ;; `variable-pitch' face supports it
-  (ligature-set-ligatures 'eww-mode '("ff" "fi" "ffi"))
-  ;; Enable all Cascadia Code ligatures in programming modes
-  (ligature-set-ligatures 'prog-mode '("|||>" "<|||" "<==>" "<!--" "####" "~~>" "***" "||=" "||>"
-                                       ":::" "::=" "=:=" "===" "==>" "=!=" "=>>" "=<<" "=/=" "!=="
-                                       "!!." ">=>" ">>=" ">>>" ">>-" ">->" "->>" "-->" "---" "-<<"
-                                       "<~~" "<~>" "<*>" "<||" "<|>" "<$>" "<==" "<=>" "<=<" "<->"
-                                       "<--" "<-<" "<<=" "<<-" "<<<" "<+>" "</>" "###" "#_(" "..<"
-                                       "..." "+++" "/==" "///" "_|_" "www" "&&" "^=" "~~" "~@" "~="
-                                       "~>" "~-" "**" "*>" "*/" "||" "|}" "|]" "|=" "|>" "|-" "{|"
-                                       "[|" "]#" "::" ":=" ":>" ":<" "$>" "==" "=>" "!=" "!!" ">:"
-                                       ">=" ">>" ">-" "-~" "-|" "->" "--" "-<" "<~" "<*" "<|" "<:"
-                                       "<$" "<=" "<>" "<-" "<<" "<+" "</" "#{" "#[" "#:" "#=" "#!"
-                                       "##" "#(" "#?" "#_" "%%" ".=" ".-" ".." ".?" "+>" "++" "?:"
-                                       "?=" "?." "??" ";;" "/*" "/=" "/>" "//" "__" "~~" "(*" "*)"
-                                       "\\\\" "://"))
-  ;; Enables ligature checks globally in all buffers. You can also do it
-  ;; per mode with `ligature-mode'.
-  ;; (global-ligature-mode t)
-  )
+(setq text-scale-mode-step 1.1)
+(global-set-key (kbd "C-x C-=") #'global-text-scale-adjust)
+(global-set-key (kbd "C-x C--") #'global-text-scale-adjust)
+(global-set-key (kbd "C-x C-0") #'global-text-scale-adjust)
+
 
 (provide 'init-font)
