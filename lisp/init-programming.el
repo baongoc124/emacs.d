@@ -161,6 +161,11 @@ results in Zeal."
 
 (use-package typescript-mode)
 
+
+(use-package breadcrumb
+  :config
+  (breadcrumb-mode 1))
+
 (defun my-show-trailing-whitespace ()
   (setq show-trailing-whitespace t))
 
