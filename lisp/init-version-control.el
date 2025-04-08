@@ -13,6 +13,7 @@
   :bind (("C-x g" . magit-status)
          ("C-c g" . magit-file-dispatch))
   :config
+  (setq magit-log-margin-show-committer-date t) ;; to match with bitbucket display
   (setq magit-diff-refine-hunk t)
   (add-hook 'magit-pre-refresh-hook #'diff-hl-magit-pre-refresh)
   (add-hook 'magit-post-refresh-hook #'diff-hl-magit-post-refresh)
@@ -39,12 +40,35 @@
         (forward-line 1)
         (re-search-forward "remote: +" (line-end-position) t)
         (browse-url-at-point))))
+
+  (defun my/pr-create ()
+    "Create a BitBucket PR for the current branch."
+    (interactive)
+    (let* ((branch-name (magit-get-current-branch))
+           (repo-url (magit-get "remote" "origin" "url"))
+           (repo-info (when (string-match "git@bitbucket.org:\\(.+\\)\\.git" repo-url)
+                        (match-string 1 repo-url)))
+           (target-branch (completing-read "Target branch: " '("master" "develop" "feature/test")))
+           (pr-url (when repo-info
+                     (format "https://bitbucket.org/%s/pull-requests/new?source=%s&dest=%s"
+                             repo-info
+                             branch-name
+                             target-branch
+                             )
+                     )))
+      (if pr-url
+          (browse-url pr-url)
+        (message "Could not determine BitBucket repository URL."))))
   )
 
 (use-package forge
   :after magit
   :config
   )
+
+(use-package magit-todos
+  :after magit
+  :config (magit-todos-mode 1))
 
 
 (use-package diff-hl
