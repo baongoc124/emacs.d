@@ -21,6 +21,8 @@
 
 (setq org-link-abbrev-alist '(("gmail" . "https://mail.google.com/mail/u/0/#search/rfc822msgid%3A%h")))
 (setq org-export-with-smart-quotes t)
+(setq org-export-with-sub-superscripts '{})
+(setq org-use-sub-superscripts '{})
 (setq org-src-preserve-indentation t)
 
 (setq org-agenda-span 3)
