@@ -17,6 +17,8 @@
                '(python-mode . ("basedpyright-langserver" "--stdio")))
   (add-to-list 'eglot-server-programs
                '(python-ts-mode . ("basedpyright-langserver" "--stdio")))
+  (add-to-list 'eglot-server-programs
+               '((dockerfile-mode dockerfile-ts-mode) . ("docker-language-server" "start" "--stdio")))
 
   (transient-define-prefix ngoc/eglot-transient ()
     [:class transient-row "Eglot Menu"]

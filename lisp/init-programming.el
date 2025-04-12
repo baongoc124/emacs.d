@@ -153,6 +153,12 @@ results in Zeal."
 (use-package go-mode)
 
 (use-package docker-compose-mode)
+(use-package dockerfile-mode
+  :config
+
+  (add-hook 'dockerfile-mode-hook #'eglot-ensure)
+  (add-hook 'dockerfile-ts-mode-hook #'eglot-ensure)
+  )
 
 (use-package docker
   :bind ("C-x d" . docker))

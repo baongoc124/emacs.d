@@ -67,7 +67,6 @@
 (use-package ag)
 
 
-(use-package dockerfile-mode)
 
 
 (use-package figlet
