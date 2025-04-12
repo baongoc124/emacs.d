@@ -3,10 +3,23 @@
   :init
   (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
 
-  (add-hook 'yaml-ts-mode-hook
-            (lambda ()
-              (flymake-mode 1)
-              (setq show-trailing-whitespace t)))
+  (defun my/yaml-mode-setup ()
+    (flymake-mode 1)
+    (setq show-trailing-whitespace t)
+    )
+
+  (add-hook 'yaml-ts-mode-hook #'my/yaml-mode-setup)
+
+  ;; derive a mode for docker compose from yaml-ts-mode because it handles
+  ;; syntax much better than docker-compose-mode
+  (require 'yaml-ts-mode) ; Ensure yaml-ts-mode is available
+  (define-derived-mode my-docker-compose-mode yaml-ts-mode "My Docker Compose"
+    "My major mode for editing Docker Compose files."
+    (setq-local tab-width 2))
+
+  (add-hook 'my-docker-compose-mode-hook #'eglot-ensure)
+
+  (add-to-list 'auto-mode-alist '("\\(docker-\\|\\)compose\\.ya?ml" . my-docker-compose-mode))
   )
 
 (use-package flymake-yamllint
