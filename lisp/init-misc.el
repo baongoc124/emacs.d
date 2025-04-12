@@ -65,7 +65,7 @@
   :config
   (setq flycheck-mode-line-prefix "F"))
 
-(use-package nix-mode
+(use-package nix-ts-mode
   :mode "\\.nix\\'")
 
 ;; (use-package highlight-indentation
