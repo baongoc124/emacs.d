@@ -23,8 +23,8 @@
           (yaml "https://github.com/ikatyang/tree-sitter-yaml"))))
 
 
-;; (use-package treesit-auto
-;;   :config
-;;   (global-treesit-auto-mode))
+(use-package treesit-auto
+  :config
+  (global-treesit-auto-mode))
 
 (provide 'init-treesit)
