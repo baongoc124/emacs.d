@@ -61,9 +61,6 @@
   (add-hook 'json-mode-hook 'my/flymake-eslint-setup)
   )
 
-(use-package flycheck
-  :config
-  (setq flycheck-mode-line-prefix "F"))
 
 (use-package nix-ts-mode
   :mode "\\.nix\\'")
