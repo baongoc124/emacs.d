@@ -3,6 +3,7 @@
 (add-to-list 'load-path "~/.emacs.d/lisp/netlogo-mode/emacs")
 
 (add-to-list 'custom-theme-load-path "~/.emacs.d/lisp/nord-lightt/")
+(add-to-list 'custom-theme-load-path "~/.emacs.d/lisp/theme-custom/")
 
 
 (require 'package)
