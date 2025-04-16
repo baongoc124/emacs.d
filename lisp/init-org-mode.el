@@ -197,7 +197,7 @@
 (setq org-habit-following-days 1)
 (setq org-habit-show-done-always-green t)
 
-(require 'org-protocol)
+;; (require 'org-protocol)
 
 (use-package org-menu
   :vc (:fetcher github :repo "sheijk/org-menu")
@@ -225,7 +225,8 @@
   (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
   (org-roam-db-autosync-mode)
   ;; If using org-roam-protocol
-  (require 'org-roam-protocol))
+  ;; (require 'org-roam-protocol)
+  )
 
 (use-package org-cliplink
   :bind (("<f12>" . org-cliplink)))
