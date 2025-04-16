@@ -10,11 +10,12 @@
 
 
 (use-package magit
-  :bind (("C-x g" . magit-status)
+  :bind (("C-x g" . magit-dispatch)
          ("C-c g" . magit-file-dispatch))
   :config
   (setq magit-log-margin-show-committer-date t) ;; to match with bitbucket display
   (setq magit-diff-refine-hunk t)
+  (setq magit-save-repository-buffers 'dontask)
   (add-hook 'magit-pre-refresh-hook #'diff-hl-magit-pre-refresh)
   (add-hook 'magit-post-refresh-hook #'diff-hl-magit-post-refresh)
   (add-hook 'magit-status-headers-hook #'magit-insert-repo-header)
@@ -68,7 +69,7 @@
 
 (use-package magit-todos
   :after magit
-  :config (magit-todos-mode 1))
+  :config (magit-todos-mode -1))
 
 
 (use-package diff-hl
