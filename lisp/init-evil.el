@@ -39,38 +39,7 @@
   (evil-set-leader 'operator (kbd "<SPC>"))
   (evil-set-leader 'motion (kbd "<SPC>"))
 
-  (setq ngoc/prefix-keymap-alist
-        '(("`" . evil-goto-mark)
-          ("=" . ngoc/align-dwim)
-          ("3" . ngoc/cheatsheet)
-          ("M-b" . ibuffer)
-          ("b" . counsel-switch-buffer)
-          ("c" . evilnc-comment-operator)
-          ("d" . duplicate-dwim)
-          ("e" . ngoc/eglot-transient)
-          ("f" . project-find-file)
-          ("g" . ngoc/history-prefix)
-          ("h" . mark-paragraph)
-          ("m" . iedit-mode)
-          ("M-m" . yas-expand)
-          ("n" . ngoc/avy-back-to-future)
-          ("o" . symbol-overlay-transient)
-          ("q" . ngoc/fill-function-arguments-dwim)
-          ("r" . ngoc/org-roam-prefix)
-          ("s" . imenu-list-smart-toggle)
-          ("t" . avy-goto-char-timer)
-          ("u" . undo-tree-visualize)
-          ("v" . ngoc/git-transient)
-          ("w" . ngoc/window-prefix)))
-
-  (defun ngoc/bind-leader-map (key-function-pair-alist)
-    "Convenient function to bind my evil leader keymap."
-    (dolist (pair ngoc/prefix-keymap-alist)
-      (let ((key (car pair))
-            (function (cdr pair)))
-        (evil-define-key nil 'global (kbd (concat "<leader>" key)) function))))
-
-  (ngoc/bind-leader-map ngoc/prefix-keymap-alist))
+  )
 
 (use-package evil-nerd-commenter)
 

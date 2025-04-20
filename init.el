@@ -18,6 +18,7 @@
 (require 'init-exec-path)
 (require 'init-font)
 (require 'init-evil)
+(require 'init-shortcuts)
 (require 'init-core)
 (require 'init-auth)
 
@@ -39,7 +40,6 @@
 (require 'init-programming)
 (require 'init-python)
 (require 'init-search)
-(require 'init-shortcuts)
 (require 'init-ssh)
 (require 'init-terminal)
 (require 'init-theme)
@@ -108,16 +108,6 @@
   (define-key isearch-mode-map (kbd "C-<return>") #'ngoc/default-isearch-exit))
 
 (setq truncate-lines nil)
-
-(global-set-key (kbd "C-x k")     'kill-current-buffer)
-(global-set-key (kbd "C-0")       'delete-window)
-(global-set-key (kbd "C-1")       'delete-other-windows)
-(global-set-key (kbd "C-4")       'ctl-x-4-prefix)
-(global-set-key (kbd "C-5")       'ctl-x-5-prefix)
-(global-set-key (kbd "C-<left>")  'shrink-window-horizontally)
-(global-set-key (kbd "C-<right>") 'enlarge-window-horizontally)
-(global-set-key (kbd "C-<down>")  'shrink-window)
-(global-set-key (kbd "C-<up>")    'enlarge-window)
 
 
 ;; (setq grep-highlight-matches 'auto-detect)
@@ -196,12 +186,6 @@
 ;; (file-dependents (feature-file 'cl))
 
 (setq sentence-end-double-space nil) ; disable archaic double space after sentence
-
-;; editing
-;; don't need zap-to-char because zap-up-to-char + d = zap-to-char (in god-mode)
-(global-set-key (kbd "C-z")     'zap-up-to-char)
-(global-set-key (kbd "M-2")     'mark-word)
-
 
 (defvar xah-brackets '("“”" "()" "[]" "{}" "<>" "＜＞" "（）" "［］" "｛｝" "⦅⦆" "〚〛" "⦃⦄" "‹›" "«»" "「」" "〈〉" "《》" "【】" "〔〕" "⦗⦘" "『』" "〖〗" "〘〙" "｢｣" "⟦⟧" "⟨⟩" "⟪⟫" "⟮⟯" "⟬⟭" "⌈⌉" "⌊⌋" "⦇⦈" "⦉⦊" "❛❜" "❝❞" "❨❩" "❪❫" "❴❵" "❬❭" "❮❯" "❰❱" "❲❳" "〈〉" "⦑⦒" "⧼⧽" "﹙﹚" "﹛﹜" "﹝﹞" "⁽⁾" "₍₎" "⦋⦌" "⦍⦎" "⦏⦐" "⁅⁆" "⸢⸣" "⸤⸥" "⟅⟆" "⦓⦔" "⦕⦖" "⸦⸧" "⸨⸩" "｟｠")
  "A list of strings, each element is a string of 2 chars, the left bracket and a matching right bracket.
