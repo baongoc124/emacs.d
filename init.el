@@ -41,6 +41,7 @@
 (require 'init-search)
 (require 'init-shortcuts)
 (require 'init-ssh)
+(require 'init-terminal)
 (require 'init-theme)
 (require 'init-treemacs)
 (require 'init-treesit)
