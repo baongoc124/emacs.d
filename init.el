@@ -83,30 +83,6 @@
 (add-to-list 'display-buffer-alist (cons "\\*Async Shell Command\\*.*" (cons #'display-buffer-no-window nil)))
 
 
-;; https://emacs.stackexchange.com/a/52576
-;; modify default isearch behavior
-;; 1. always exit at start of the match
-;; 2. C-RET to have default exit behavior
-(defvar ngoc/isearch-default-exit-behavior nil
-  "If non-nil, isearch will exit with default behavior.")
-
-(defun ngoc/default-isearch-exit ()
-  (interactive)
-  (let ((ngoc/isearch-default-exit-behavior t))
-    (isearch-exit)))
-
-(defun ngoc/isearch-always-exits-at-start ()
-  (when (and isearch-forward
-             (number-or-marker-p isearch-other-end)
-             (not mark-active)
-             (not isearch-mode-end-hook-quit)
-             (not ngoc/isearch-default-exit-behavior))
-    (goto-char isearch-other-end)))
-
-(with-eval-after-load "isearch"
-  (add-hook 'isearch-mode-end-hook #'ngoc/isearch-always-exits-at-start)
-  (define-key isearch-mode-map (kbd "C-<return>") #'ngoc/default-isearch-exit))
-
 (setq truncate-lines nil)
 
 
@@ -217,6 +193,7 @@ Version: 2015-10-01"
   (interactive)
   (re-search-forward (regexp-opt xah-right-brackets) nil t))
 
+;; FIXME: make it easier to use in evil
 ;; use middle fingers for paragraph movements
 ;; use ring fingers for bracket movements
 ;; to alternating hands like Dvorak's idea
@@ -307,10 +284,6 @@ Version: 2015-10-01"
 (setq dabbrev-abbrev-char-regexp "\\sw\\|\\s_\\|\\s.")
 (setq dabbrev-case-fold-search nil)
 
-;; COMMENT
-(use-package comment-dwim-2
-  :bind ("C-;" . comment-dwim-2))
-
 (use-package wgrep
   :config
   (setq wgrep-too-many-file-length 20)) ;; TODO how to use this
@@ -341,36 +314,6 @@ Version: 2015-10-01"
   :config
   (setq expand-region-reset-fast-key "<escape>")
   (require 'er-basic-expansions))
-
-
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                              PRETTIFY SYMBOL
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; https://gist.github.com/kwf/dea7bc51101083acb95c875140e2a96d
-(setq-default prettify-symbols-alist
-              '(("lambda"   . ?λ)
-                ("function" . ?ƒ)
-                ;; ("function"    . ?𝐅)
-                ;; ("return"   . ?⏎)
-                ;; ("return"   . ?)
-                ;; ("return"   . ?↰)
-                ("return"   . ?↩)
-                ;; ("class"       . ?𝐂)
-                ("!="       . ?≠)
-                ("<-"       . ?←)
-                ("->"       . ?➜)
-                ("=>"       . ?⤇)
-                ("<="       . ?≤)
-                (">="       . ?≥)))
-
-;; (setq prettify-symbols-unprettify-at-point t)
-;; (global-prettify-symbols-mode +1)
-
-;; (require 'emojify)
-;; (setq emojify-emoji-styles '(unicode))
-;; (global-emojify-mode t)
 
 
 ;;     _  _____ ___  __  __ ___ ____    ____ _   _ ____   ___  __  __ _____
