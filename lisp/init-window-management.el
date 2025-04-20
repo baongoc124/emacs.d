@@ -3,23 +3,37 @@
 
 
 (define-prefix-command 'ngoc/window-prefix)
+(define-key ngoc/window-prefix "c" #'my-ace-copy-window)
 (define-key ngoc/window-prefix "d" #'delete-window)
 (define-key ngoc/window-prefix "e" #'balance-windows)
-(define-key ngoc/window-prefix "w" #'delete-other-windows)
 (define-key ngoc/window-prefix "h" #'hsplit-last-buffer)
-(define-key ngoc/window-prefix "v" #'vsplit-last-buffer)
+(define-key ngoc/window-prefix "m" #'my-ace-move-window)
 (define-key ngoc/window-prefix "t" #'transpose-frame)
+(define-key ngoc/window-prefix "v" #'vsplit-last-buffer)
+(define-key ngoc/window-prefix "w" #'delete-other-windows)
 (define-key ngoc/window-prefix "x" #'ace-swap-window)
 
 (use-package ace-window
-  :bind ("M-o" . ace-window)
+  :bind ("M-t" . ace-window)
   :config
-  (setq aw-keys '(?h ?t ?n ?s ?a ?o ?e ?u)
+  (setq aw-keys '(?h ?c ?t ?m ?w ?n ?e ?u ?j ?q)
         aw-scope 'frame)
 
-  (global-set-key (kbd "M-O") #'(lambda () (interactive)
+  (global-set-key (kbd "M-T") #'(lambda () (interactive)
                                   (let ((aw-dispatch-always t))
                                     (call-interactively #'ace-window))))
+  (ace-window-posframe-mode 1)
+  (set-face-attribute 'aw-leading-char-face nil :height 3.0)
+
+  (defun my-ace-move-window ()
+    (interactive)
+    (aw-select " Ace - Move Window"
+               #'aw-move-window))
+
+  (defun my-ace-copy-window ()
+    (interactive)
+    (aw-select " Ace - Copy Window"
+               #'aw-copy-window))
   )
 
 

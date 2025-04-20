@@ -1,7 +1,7 @@
 (use-package eat
   :after ivy
   :config
-  (keymap-unset eat-semi-char-mode-map "M-o") ;; prevent shadowing my switch window shortcut
+  (keymap-unset eat-semi-char-mode-map "M-t") ;; prevent shadowing my switch window shortcut
 
   (defun my-set-eat-buffer-name ()
     "Set eat-buffer-name to project name for current buffer."
