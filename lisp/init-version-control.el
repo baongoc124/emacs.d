@@ -119,4 +119,66 @@
       (add-hook 'transient-exit-hook #'ngoc/maybe-disable-git-gutter)
       (transient-setup 'ngoc/git-transient)))))
 
+
+;; show git's current checked out branch or commit on header of dired buffers
+(require 'dired)
+(defvar-local dired-git-branch nil
+  "Current git branch for dired buffer.")
+
+(defun dired-git-branch-update ()
+  "Update git branch information."
+  (when default-directory
+    (setq dired-git-branch (string-trim
+                            (shell-command-to-string
+                             "git symbolic-ref -q --short HEAD 2>/dev/null || git rev-parse --short HEAD 2>/dev/null || echo Not git"
+                             )))))
+
+(defun dired-git-refresh-project-buffers ()
+  "Refresh git branch info in dired buffers of current project."
+  (when-let ((project-root (magit-toplevel)))
+    (dolist (buffer (buffer-list))
+      (with-current-buffer buffer
+        (when (and (derived-mode-p 'dired-mode)
+                   (string-prefix-p project-root
+                                    (expand-file-name default-directory)))
+          (dired-git-branch-update)
+          (force-mode-line-update))))))
+
+;; show on header version
+(define-minor-mode dired-git-branch-mode
+  "Minor mode to display git branch in dired header line."
+  :lighter ""
+  (if dired-git-branch-mode
+      (progn
+        (dired-git-branch-update)
+        (add-hook 'dired-after-readin-hook #'dired-git-branch-update nil t)
+        (setq header-line-format
+              '(:eval (if dired-git-branch
+                          (format " 🌱 %s" (propertize dired-git-branch
+                                                       'face '(:height 1.1 :inherit font-lock-string-face)
+                                                       ))
+                        " Not a git repository"))))
+    (setq header-line-format nil)
+    (remove-hook 'dired-after-readin-hook #'dired-git-branch-update t)))
+
+;; (define-minor-mode dired-git-branch-mode
+;;   "Minor mode to display git branch in dired mode line."
+;;   :lighter ""
+;;   (if dired-git-branch-mode
+;;       (progn
+;;         (dired-git-branch-update)
+;;         (add-hook 'dired-after-readin-hook #'dired-git-branch-update nil t)
+;;         (setq-local dired-git-original-mode-line mode-line-format)
+;;         (setq-local mode-line-format
+;;                     (append mode-line-format
+;;                             '((:eval (if dired-git-branch
+;;                                          (format "Y:%s" dired-git-branch)
+;;                                        ""))))))
+;;     (when (boundp 'dired-git-original-mode-line)
+;;       (setq-local mode-line-format dired-git-original-mode-line))
+;;     (remove-hook 'dired-after-readin-hook #'dired-git-branch-update t)))
+
+(add-hook 'dired-mode-hook #'dired-git-branch-mode)
+(add-hook 'magit-post-refresh-hook #'dired-git-refresh-project-buffers)
+
 (provide 'init-version-control)
