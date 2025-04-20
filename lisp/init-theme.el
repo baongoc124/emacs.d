@@ -19,6 +19,15 @@
   (modify-all-frames-parameters '((internal-border-width . 0)))
   )
 
+(use-package modus-themes
+  :config
+  (setq modus-themes-headings
+	(quote ((1 . (variable-pitch 1.5))
+		(2 . (1.3))
+		(agenda-date . (1.3))
+		(agenda-structure . (variable-pitch light 1.8))
+		(t . (1.1)))))
+  )
 
 (use-package doom-themes
   :config
