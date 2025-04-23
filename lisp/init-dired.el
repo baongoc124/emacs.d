@@ -1,7 +1,5 @@
 (require 'dired)
-(if (eq system-type 'gnu/linux)
-    (setq dired-listing-switches "-lah --group-directories-first")
-  (setq dired-listing-switches "-lah"))
+(setq dired-listing-switches "-lah --group-directories-first")
 (setq delete-by-moving-to-trash t)
 (setq dired-dwim-target nil)
 
@@ -21,15 +19,23 @@
 
 ;;; file opening procedures
 (defun ngoc/dired-open-containing-dir ()
-  "Try to run `nautilus' to open the containing folder of file under point and select it."
+  "Try to run `nautilus' or `open' to open the containing folder of file under point and select it."
   (interactive)
-  (if (executable-find "nautilus")
-      (let ((file (ignore-errors (dired-get-file-for-visit))))
-        (start-process-shell-command "nautilus"
-                                     nil
-                                     (concat "nautilus -s "
-                                             (shell-quote-argument (file-truename file)))))
-    (message "xdg-open not found")))
+  (let ((command
+         (cond
+          ((eq system-type 'gnu/linux)
+           '("nautilus" . "nautilus -s "))
+          ((eq system-type 'darwin)
+           '("open" . "open -R "))
+          )))
+    (if (executable-find (car command))
+        (let ((file (ignore-errors (dired-get-file-for-visit))))
+          (start-process-shell-command (car command)
+                                       nil
+                                       (concat (cdr command)
+                                               (shell-quote-argument (file-truename file)))))
+      (message "%s not found" (car command))))
+  )
 
 
 (define-key dired-mode-map (kbd "<S-return>") #'ngoc/dired-open-containing-dir)
@@ -44,10 +50,11 @@
 
 (use-package nerd-icons)
 
-;; (use-package nerd-icons-dired
-;;   :after nerd-icons
-;;   :hook
-;;   (dired-mode . nerd-icons-dired-mode))
+(use-package nerd-icons-dired
+  :after nerd-icons
+  :diminish nerd-icons-dired-mode
+  :hook
+  (dired-mode . nerd-icons-dired-mode))
 
 ;; FIXME this is currently working GLOBALLY!
 ;; https://emacs.stackexchange.com/a/51614 with modification
@@ -73,5 +80,14 @@
     (call-interactively 'find-name-dired)))
 
 (defalias 'fnp #'m/find-name-project)
+
+(use-package dired-filter)
+(use-package dired-collapse
+  :config
+  (global-dired-collapse-mode 1)
+  )
+
+(use-package dired-ranger)
+
 
 (provide 'init-dired)
