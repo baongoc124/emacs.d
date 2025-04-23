@@ -125,4 +125,6 @@
 
 (use-package rainbow-mode)
 
+(use-package gnuplot)
+
 (provide 'init-misc)
