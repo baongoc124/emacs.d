@@ -27,15 +27,27 @@
   (setq auto-package-update-interval 3
         auto-package-update-prompt-before-update t)
 
-  (defun ngoc/attempt-auto-update-on-weekend ()
+  (defun my/should-update-p ()
+    (or
+    (not (file-exists-p auto-package-update-last-update-day-path))
+    (let* ((last-update-day (apu--read-last-update-day))
+           (days-since (- (apu--today-day) last-update-day)))
+      (>=
+       (/ days-since auto-package-update-interval)
+       1)))
+    )
+  (defun my/remind-update-packages ()
     (require 'calendar)
     (let ((current-day (calendar-day-of-week (calendar-current-date))))
-      (when (or (= current-day 0)
-                (= current-day 6))
-        (auto-package-update-maybe))))
+      (when (and (my/should-update-p)
+                 (or (= current-day 0)
+                     (= current-day 6)))
+        (message "It's time to update your packages."))))
 
-  ;; first attempt 1 min after startup. After that, attempt every 3 hours.
-  (run-at-time "1 min" (* 3 3600) #'ngoc/attempt-auto-update-on-weekend))
+  (my/remind-update-packages)
+
+  ;; first attempt 1 min after startup. After that, every hour.
+  (run-at-time "1 min" 3600 #'my/remind-update-packages))
 
 (use-package pacdiff)
 
