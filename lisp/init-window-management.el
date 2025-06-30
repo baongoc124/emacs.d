@@ -10,8 +10,10 @@
 (define-key ngoc/window-prefix "m" #'my-ace-move-window)
 (define-key ngoc/window-prefix "t" #'transpose-frame)
 (define-key ngoc/window-prefix "v" #'vsplit-last-buffer)
-(define-key ngoc/window-prefix "w" #'delete-other-windows)
+;; (define-key ngoc/window-prefix "w" #'delete-other-windows)
 (define-key ngoc/window-prefix "x" #'ace-swap-window)
+(define-key ngoc/window-prefix "s" #'my-save-window-config)
+(define-key ngoc/window-prefix "w" #'my-restore-window-config)
 
 (use-package ace-window
   :bind ("M-t" . ace-window)
@@ -98,6 +100,23 @@
 
 (window-parameters (get-buffer-window (current-buffer)))
 
+
+(defvar my-saved-window-state nil)
+
+(defun my-save-window-config ()
+  "Save current window configuration."
+  (interactive)
+  (setq my-saved-window-state (window-state-get (frame-root-window) t))
+  (message "Saved window config"))
+
+(defun my-restore-window-config ()
+  "Restore saved window configuration."
+  (interactive)
+  (when my-saved-window-state
+    (window-state-put my-saved-window-state (frame-root-window))))
+
+;; (global-set-key (kbd "M-m w s") #'my-save-window-config)
+;; (global-set-key (kbd "M-m w w") #'my-restore-window-config)
 
 
 
