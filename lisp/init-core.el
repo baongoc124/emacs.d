@@ -143,4 +143,11 @@ mouse-3: Toggle minor modes"
 (setq backup-directory-alist
       '((".*" . "~/.emacs.d/aux/")))
 
+
+(defun my/sort-lines-ignore-case ()
+  (interactive)
+  (let ((sort-fold-case t))
+    (sort-lines nil (region-beginning) (region-end))))
+
 (provide 'init-core)
+
