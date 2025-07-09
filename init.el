@@ -253,12 +253,24 @@ Version: 2015-10-01"
 ;; for auto detecting indentation
 (use-package dtrt-indent
   :diminish dtrt-indent-mode
-  :hook
-  (prog-mode . dtrt-indent-mode))
+  :config
+
+  (defun my/enable-dtrt-indent ()
+    (unless (derived-mode-p 'python-mode)
+      (dtrt-indent-mode 1))
+    )
+
+  (add-hook 'prog-mode-hook #'my/enable-dtrt-indent)
+
+
+  (add-to-list 'dtrt-indent-hook-generic-mapping-list
+               '(t tab-width))
+
+  )
 
 (setq-default indent-tabs-mode nil)
 ;; set default tab char's display width to 4 spaces
-(setq-default tab-width 4) ; emacs 23.1, 24.2, default to 8
+(setq-default tab-width 8) ; emacs 23.1, 24.2, default to 8
 (setq backward-delete-char-untabify-method 'hungry)
 (setq-default c-basic-offset 4)
 (setq-default cperl-indent-level 4)
