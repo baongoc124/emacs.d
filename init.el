@@ -213,7 +213,9 @@ Version: 2015-10-01"
 
 
 (use-package autorevert
-  :diminish auto-revert-mode)
+  :diminish auto-revert-mode
+  :config
+  (global-auto-revert-mode 1))
 
 
 (require 'display-line-numbers)
