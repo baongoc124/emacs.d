@@ -8,12 +8,12 @@
     (setq show-trailing-whitespace t)
     )
 
-  (add-hook 'yaml-ts-mode-hook #'my/yaml-mode-setup)
+  (add-hook 'yaml-mode-hook #'my/yaml-mode-setup)
 
   ;; derive a mode for docker compose from yaml-ts-mode because it handles
   ;; syntax much better than docker-compose-mode
-  (require 'yaml-ts-mode) ; Ensure yaml-ts-mode is available
-  (define-derived-mode my-docker-compose-mode yaml-ts-mode "My Docker Compose"
+  ;; probably no longer needed because using external tree-sitter -> i can use yaml-mode
+  ;; (require 'yaml-ts-mode) ; Ensure yaml-ts-mode is available
     "My major mode for editing Docker Compose files."
     (setq-local tab-width 2))
 
@@ -25,7 +25,7 @@
 (use-package flymake-yamllint
   :after yaml-mode
   :config
-  (add-hook 'yaml-ts-mode-hook 'flymake-yamllint-setup)
+  (add-hook 'yaml-mode-hook 'flymake-yamllint-setup)
   )
 
 (use-package rust-mode
