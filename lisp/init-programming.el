@@ -179,4 +179,12 @@ results in Zeal."
 (defalias 'dtw #'delete-trailing-whitespace)
 (defalias 'dts #'delete-trailing-whitespace)
 
+(use-package smartparens
+  :diminish smartparens-mode
+  :hook (prog-mode text-mode markdown-mode)
+  :config
+  (show-paren-mode 1)
+  (require 'smartparens-config))
+
+
 (provide 'init-programming)

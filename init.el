@@ -227,12 +227,6 @@ Version: 2015-10-01"
 (add-hook 'conf-mode-hook 'display-line-numbers-mode)
 
 
-(use-package elec-pair
-  :config
-  (electric-pair-mode 1)
-  (show-paren-mode 1)
-  (setq show-paren-delay 0.025))
-
 (use-package hl-todo
   :hook
   (prog-mode . hl-todo-mode)
