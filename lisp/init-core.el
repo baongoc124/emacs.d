@@ -38,6 +38,9 @@
 (global-unset-key (kbd "M-t"))
 (global-unset-key (kbd "C-M-t"))
 
+;; unset menu-set-font
+(global-unset-key (kbd "s-t"))
+
 
 ;;   ____ _   _ ___   _                      _
 ;;  / ___| | | |_ _| | |___      _____  __ _| | _____

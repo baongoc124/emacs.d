@@ -31,5 +31,10 @@
 (global-set-key (kbd "C-x C--") #'global-text-scale-adjust)
 (global-set-key (kbd "C-x C-0") #'global-text-scale-adjust)
 
+;; unbind Control - wheel up and down shortcuts
+;; disable text-scale-adjust using mouse
+(global-unset-key (kbd "<C-wheel-up>"))
+(global-unset-key (kbd "<C-wheel-down>"))
+
 
 (provide 'init-font)
