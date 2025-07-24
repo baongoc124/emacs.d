@@ -149,5 +149,12 @@ mouse-3: Toggle minor modes"
   (let ((sort-fold-case t))
     (sort-lines nil (region-beginning) (region-end))))
 
+
+(use-package persistent-scratch
+  :demand t
+  :config
+  (persistent-scratch-setup-default))
+
+
 (provide 'init-core)
 
