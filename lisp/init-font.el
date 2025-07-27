@@ -3,9 +3,17 @@
        ((eq system-type 'gnu/linux)
         '("Cascadia Code NF" . 13.0))
        ((eq system-type 'darwin)
-        '("Monaco" . 14.0))
+        ;; '("Monaco" . 14.0))
+        ;; '("SF Mono" . 14.0))
+        ;; '("Spleen 6x12" . 15.0))
+       ;; '("Spleen 8x16" . 14.0))
+       ;; '("Menlo" . 14.0))
+       '("JetBrains Mono NL" . 16.0))
+       ;; '("Atlassian Mono" . 16.0))
+       ;; '("Comic Code" . 15.0))
        (t
-        '("Monospace" . 13.0))))
+        '("Monospace" . 14.0))))
+
 
 (defun ngoc/setup-font (&optional frame)
   (interactive)
@@ -24,7 +32,7 @@
   (set-face-attribute 'fixed-pitch-serif nil :family my/font :inherit 'default))
 
 (ngoc/setup-font)
-(add-hook 'after-make-frame-functions #'ngoc/setup-font)
+;; (remove-hook 'after-make-frame-functions #'ngoc/setup-font)
 
 (setq text-scale-mode-step 1.1)
 (global-set-key (kbd "C-x C-=") #'global-text-scale-adjust)
