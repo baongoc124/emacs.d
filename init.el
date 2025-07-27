@@ -59,17 +59,6 @@
 
 
 
-;; ;; hl-line overrides face of match -> don't use it globally
-(use-package hl-line
-  :hook
-  (prog-mode . hl-line-mode)
-  (dired-mode . hl-line-mode)
-  ;; (text-mode . hl-line-mode)
-  (conf-mode . hl-line-mode)
-  (org-agenda-mode . hl-line-mode)
-  (package-menu-mode . hl-line-mode))
-
-
 (setq frame-title-format
       '("" invocation-name ": " (:eval (replace-regexp-in-string
                                         "^ +" "" (buffer-name)))))
