@@ -109,6 +109,8 @@
   (setcar envrc-error-lighter " env[")
   )
 
+(use-package inheritenv)
+
 
 (use-package jq-mode)
 
