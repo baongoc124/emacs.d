@@ -25,7 +25,7 @@
    '(mode-line                     ((t (:height 1.1 :box (:line-width (1 . 4) :color nil :style flat-button)))))
    '(region                        ((t (:extend t :background "#7c4343"))))
    ;; https://www.gnu.org/software/emacs/manual/html_node/elisp/Frame-Layout.html
-   '(internal-border               ((t (:background "red"))))
+   '(internal-border               ((t (:background "3F3F3F")))) ; "red"
    )
 
 (provide-theme 'my-doom-zenburn)
