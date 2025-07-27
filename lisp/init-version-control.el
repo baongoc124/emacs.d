@@ -288,4 +288,9 @@ Creates a new branch with random suffix. Uses ivy for branch selection."
 (eval-after-load 'magit
   '(add-hook 'git-commit-setup-hook 'my/git-prepare-commit-message))
 
+
+;; quickly open web link of current repo at current file, current line
+(use-package browse-at-remote
+  :bind ("C-c C-g" . browse-at-remote))
+
 (provide 'init-version-control)
