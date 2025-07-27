@@ -70,13 +70,22 @@
 ;;   )
 
 (use-package vterm
+  :demand t
   :hook ((vterm-mode . compilation-shell-minor-mode)
          (vterm-mode . goto-address-mode))
   :config
+  (setopt vterm-max-scrollback 4096)
   (keymap-unset vterm-mode-map "M-t") ;; prevent shadowing my switch window shortcut
   (keymap-unset vterm-mode-map "<f8>") ;; prevent shadowing my tab switch shortcut
-  (keymap-unset vterm-mode-map "M-B") ;; prevent shadowing my winner shortcuts
-  (keymap-unset vterm-mode-map "M-F") ;; prevent shadowing my tab switch shortcut
+  (keymap-unset vterm-mode-map "M-B") ;; prevent shadowing my winner shortcut
+  (keymap-unset vterm-mode-map "M-F") ;; prevent shadowing my winner shortcut
+  (keymap-unset vterm-mode-map "M-j") ;; prevent shadowing my term switch
+
+  ;; prevent shadowing my window shortcuts
+  (keymap-unset vterm-mode-map "M-<left>")
+  (keymap-unset vterm-mode-map "M-<right>")
+  (keymap-unset vterm-mode-map "M-<up>")
+  (keymap-unset vterm-mode-map "M-<down>")
 
   (setq vterm-shell "/Users/ngoc/.nix-profile/bin/bash")
 
@@ -111,7 +120,7 @@
 
   (defun my/vterm-switch ()
     "Switch to a vterm buffer from the current project with live preview in current window.
-Buffers ordered by recency, auto-select first different from current."
+Buffers ordered by recency, auto-select if only one is available."
     (interactive)
     (let* ((project-root (my/project-root))
            (buffers (my/project-vterm-buffer-names project-root))
@@ -122,22 +131,33 @@ Buffers ordered by recency, auto-select first different from current."
              (mapcar #'buffer-name (buffer-list))))
            (initial-buf (cl-find-if (lambda (b) (not (equal b (buffer-name))))
                                     sorted-buffers)))
-      (if sorted-buffers
-          (ivy-read "Project vterm: "
-                    sorted-buffers
-                    :action #'switch-to-buffer
-                    :preselect initial-buf
-                    :update-fn (lambda ()
-                                 (let ((buf (ivy-state-current ivy-last)))
-                                   (when (get-buffer buf)
-                                     (with-ivy-window
-                                       (switch-to-buffer buf)))))
-                    :caller 'my/vterm-switch)
-        (message "No vterm buffers for this project."))))
+      (cond
+       ((null sorted-buffers)
+        (message "No vterm buffers for this project."))
+       ((= (length sorted-buffers) 1)
+        (switch-to-buffer (car sorted-buffers)))
+       (t
+        (ivy-read "Project vterm: "
+                  sorted-buffers
+                  :action #'switch-to-buffer
+                  :preselect initial-buf
+                  :update-fn (lambda ()
+                               (let ((buf (ivy-state-current ivy-last)))
+                                 (when (get-buffer buf)
+                                   (with-ivy-window
+                                     (switch-to-buffer buf)))))
+                  :caller 'my/vterm-switch)))))
 
+  ;; (global-set-key (kbd "M-j c") #'my/vterm-new)
+  ;; (global-set-key (kbd "<leader>t t") #'my/vterm-switch)
 
-  (global-set-key (kbd "<leader>t c") #'my/vterm-new)
-  (global-set-key (kbd "<leader>t t") #'my/vterm-switch)
+  ;; lambda to launch my/vterm-switch when call without prefix C-u and my/vterm-new with C-u
+  (global-set-key (kbd "M-j")
+                  (lambda (orig-fun &rest args)
+                    (interactive "P")
+                    (if current-prefix-arg
+                        (apply #'my/vterm-new args)
+                      (apply #'my/vterm-switch args))))
   )
 
 (provide 'init-terminal)
