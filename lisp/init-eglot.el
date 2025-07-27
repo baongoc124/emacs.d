@@ -38,11 +38,8 @@
     )
   (add-hook 'eglot-managed-mode-hook #'my/my-eglot-setup)
 
-  ;; python
   (add-to-list 'eglot-server-programs
-               '(python-mode . ("basedpyright-langserver" "--stdio")))
-  (add-to-list 'eglot-server-programs
-               '(python-ts-mode . ("basedpyright-langserver" "--stdio")))
+               '(python-mode . ("/Users/ngoc/builds/pylsp/run-pylsp.sh")))
   (add-to-list 'eglot-server-programs
                '((dockerfile-mode dockerfile-ts-mode) . ("docker-language-server" "start" "--stdio")))
   (add-to-list 'eglot-server-programs
