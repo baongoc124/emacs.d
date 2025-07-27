@@ -34,6 +34,12 @@
   (setq company-format-margin-function 'company-text-icons-margin)
   )
 
+(use-package company-posframe
+  :diminish company-posframe-mode
+  :config
+  (company-posframe-mode 1)
+  )
+
 (use-package company-quickhelp
   :after company
   :config
