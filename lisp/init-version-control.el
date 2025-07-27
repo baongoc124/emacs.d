@@ -262,4 +262,30 @@ Creates a new branch with random suffix. Uses ivy for branch selection."
       (magit-call-git "cherry-pick" cherry-range))
     (message "Created %s from %s with cherry-picked commits after %s. Remember to push after fixing any merging issues."
              new-branch target-branch merge-base)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; extract JIRA-style ticket IDs from branch name and insert it into commit
+;; message automatically
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun my/git-extract-ticket-name ()
+  "Extract ticket ID from branch if it starts with 'feature/'."
+  (when-let* ((branch (magit-get-current-branch)))
+    (when (string-match "\\([[:alnum:]]+-[[:digit:]]+\\)" branch)
+      (match-string 1 branch))))
+
+(defun my/git-prepare-commit-message ()
+  "Prepare commit message based on branch name if first line is empty."
+  (when-let ((feature (my/git-extract-ticket-name)))
+    (goto-char (point-min))
+    ;; Check if first line is empty or whitespace-only
+    (when (looking-at "^\\s-*$")
+      (delete-region (line-beginning-position) (line-end-position))
+      (insert "\n")
+      (goto-char (point-min))
+      (insert feature " - ")
+      )))
+
+(eval-after-load 'magit
+  '(add-hook 'git-commit-setup-hook 'my/git-prepare-commit-message))
+
 (provide 'init-version-control)
