@@ -181,4 +181,9 @@
 (add-hook 'dired-mode-hook #'dired-git-branch-mode)
 (add-hook 'magit-post-refresh-hook #'dired-git-refresh-project-buffers)
 
+
+(use-package difftastic-bindings
+  :vc (:fetcher github :repo "pkryger/difftastic.el")
+  ;; :ensure difftastic ;; or nil if you prefer manual installation
+  :config (difftastic-bindings-mode))
 (provide 'init-version-control)
