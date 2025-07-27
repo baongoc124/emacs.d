@@ -6,11 +6,13 @@
   (setq ediff-window-setup-function 'ediff-setup-windows-plain)
   (setq ediff-split-window-function 'split-window-horizontally)
   (setq ediff-diff-options "-w")
-  (setq ediff-merge-filename-prefix ""))
+  (setq ediff-merge-filename-prefix "")
+  (setq ediff-keep-variants t)
+  )
 
 
 (use-package magit
-  :bind (("C-x g" . magit-dispatch)
+  :bind (("C-x g" . magit-status)
          ("C-c g" . magit-file-dispatch))
   :config
   (setq magit-log-margin-show-committer-date t) ;; to match with bitbucket display
