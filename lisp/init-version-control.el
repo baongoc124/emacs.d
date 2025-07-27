@@ -186,4 +186,42 @@
   :vc (:fetcher github :repo "pkryger/difftastic.el")
   ;; :ensure difftastic ;; or nil if you prefer manual installation
   :config (difftastic-bindings-mode))
+
+(defun my/magit-cherry-pick-onto-branch ()
+  "Cherry-pick commits from current branch onto a selected target branch.
+Creates a new branch with random suffix. Uses ivy for branch selection."
+  (interactive)
+  (let* ((repo (magit-toplevel))
+         (default-directory repo)
+         ;; Fetch origin
+         (_ (magit-fetch-from-upstream "origin" nil))
+         ;; Get all remote branches
+         (target-branches (magit-list-remote-branch-names))
+         ;; Let user select target branch with ivy
+         (target-branch
+          (ivy-read "Select target branch: " target-branches
+                    :preselect "origin/beta"
+                    :require-match t
+                    :caller 'my/magit-cherry-pick-onto-branch))
+         ;; Get current branch
+         (current-branch (magit-get-current-branch))
+         ;; Create random suffix
+         (random-suffix (format "%04x" (random #xffff)))
+         ;; Name of new branch
+         (new-branch (concat current-branch "-" random-suffix))
+         (upstream-branch (magit-git-string "rev-parse" "--abbrev-ref" "--symbolic-full-name" "@{u}"))
+         ;; Find merge base between upstream branch and current branch
+         (merge-base (string-trim
+                      (shell-command-to-string
+                       (format "git merge-base %s %s" upstream-branch current-branch)))))
+    (unless merge-base
+      (error "Could not find merge base between %s and %s"
+             target-branch current-branch))
+    ;; Create new branch from target
+    (magit-call-git "checkout" "-b" new-branch target-branch)
+    ;; Cherry-pick from merge base to HEAD
+    (let ((cherry-range (format "%s..%s" merge-base current-branch)))
+      (magit-call-git "cherry-pick" cherry-range))
+    (message "Created %s from %s with cherry-picked commits after %s. Remember to push after fixing any merging issues."
+             new-branch target-branch merge-base)))
 (provide 'init-version-control)
