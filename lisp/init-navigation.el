@@ -74,4 +74,8 @@
   (global-set-key (kbd "M-P") 'symbol-overlay-switch-backward))
 
 
+(global-set-key (kbd "M-o") #'evil-jump-backward)
+(global-set-key (kbd "M-i") #'evil-jump-forward)
+(setq evil-want-C-i-jump nil)
+
 (provide 'init-navigation)

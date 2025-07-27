@@ -16,6 +16,10 @@
   (define-key evil-emacs-state-map [escape] nil)
   (define-key evil-visual-state-map (kbd "v") 'er/expand-region)
 
+  ;; define as motion keys allow evil-jumps to work & other action with motions!
+  (define-key evil-motion-state-map (kbd "s") 'avy-goto-char-timer)
+  (define-key evil-motion-state-map (kbd "S") 'avy-goto-line)
+
   ;; Disable evil on some modes
   (evil-set-initial-state 'term-mode 'emacs)
   (evil-set-initial-state 'help-mode 'emacs)
