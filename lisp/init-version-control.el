@@ -60,6 +60,44 @@
       (if pr-url
           (browse-url pr-url)
         (message "Could not determine BitBucket repository URL."))))
+
+  (defun my/magit-show-deleted-files ()
+    "Display commit logs for deleted files with committer details."
+    (interactive)
+    (let ((buffer (get-buffer-create "*Magit Deleted Files*")))
+      (with-current-buffer buffer
+	    (let ((inhibit-read-only t))
+	      (erase-buffer)
+	      (magit-mode)
+	      (font-lock-mode 1)
+	      (insert (propertize "COMMITS WITH DELETED FILES\n\n"
+			                  'face 'magit-section-heading))
+	      (call-process "git" nil buffer t "log" "--name-status"
+			            "--diff-filter=D"
+			            "--format=%n%n%h %cd %s%n%cn <%ce>" "--date=short")
+	      (goto-char (point-min))
+	      (while (re-search-forward "^\\([0-9a-f]+\\) \\(.*\\)$" nil t)
+	        (put-text-property (match-beginning 1) (match-end 1)
+			                   'face 'magit-log-author)
+	        (put-text-property (+ (line-beginning-position) 18) (line-end-position)
+			                   'face 'magit-keyword)
+	        (next-line)
+	        (put-text-property (line-beginning-position) (line-end-position)
+			                   'face 'magit-dimmed)
+	        )
+	      (goto-char (point-min))
+	      (while (re-search-forward "^D\t\\(.*\\)$" nil t)
+	        (put-text-property (match-beginning 1) (match-end 1)
+			                   'face 'magit-filename))
+	      ))
+      (switch-to-buffer buffer)
+      (goto-char (point-min))
+      (setq buffer-read-only t)))
+
+
+  (transient-append-suffix 'magit-log "s"
+    '("M-d" "Show deleted files" my/magit-show-deleted-files))
+
   )
 
 (use-package forge
