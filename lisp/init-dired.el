@@ -82,10 +82,6 @@
 (defalias 'fnp #'m/find-name-project)
 
 (use-package dired-filter)
-(use-package dired-collapse
-  :config
-  (global-dired-collapse-mode 1)
-  )
 
 (use-package dired-ranger)
 
