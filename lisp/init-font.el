@@ -37,4 +37,64 @@
 (global-unset-key (kbd "<C-wheel-down>"))
 
 
+(defvar my/font-weight-cycle
+  '(thin extra-light light semi-light normal medium semi-bold bold)
+  "List of font weights to cycle through.")
+
+(defun my/get-current-weight-index ()
+  "Return index of current font weight in `my/font-weight-cycle`."
+  (let ((current (face-attribute 'default :weight)))
+    (or (cl-position current my/font-weight-cycle) 1))) ; default to 'normal
+
+(defun my/get-current-weight-index ()
+  "Return index of current font weight in `my/font-weight-cycle`."
+  (let ((current (face-attribute 'default :weight)))
+    (or (cl-position current my/font-weight-cycle) 1))) ; default to normal
+
+(defun my/set-font-weight-by-index (index)
+  "Set font weight to INDEX from `my/font-weight-cycle`."
+  (let* ((len (length my/font-weight-cycle))
+         (i (max 0 (min index (1- len))))
+         (weight (nth i my/font-weight-cycle)))
+    (set-face-attribute 'default nil :weight weight)
+    (message "Font weight: %s" weight)
+    i))
+
+(defvar my/font-weight-index (my/get-current-weight-index))
+
+(defun my/font-weight-increase ()
+  (interactive)
+  (setq my/font-weight-index (my/set-font-weight-by-index (1+ my/font-weight-index))))
+
+(defun my/font-weight-decrease ()
+  (interactive)
+  (setq my/font-weight-index (my/set-font-weight-by-index (1- my/font-weight-index))))
+
+(defun my/font-weight-reset ()
+  (interactive)
+  (setq my/font-weight-index (my/set-font-weight-by-index 1))) ; index of 'normal
+
+(use-package hydra)
+
+;; (defhydra hydra-font-weight (:hint nil)
+;;   " Font Weight: _+_: heavier  _-_: lighter  _0_: reset  _q_: quit "
+;;   ("+" my/font-weight-increase)
+;;   ("-" my/font-weight-decrease)
+;;   ("0" my/font-weight-reset)
+;;   ("q" nil "quit"))
+
+(defhydra hydra-font-weight (:hint nil)
+  "
+Font Weight: _=_: heavier  _-_: lighter  _0_: reset  _q_: quit
+"
+  ("=" my/font-weight-increase)
+  ("-" my/font-weight-decrease)
+  ("0" my/font-weight-reset)
+  ("q" nil "quit"))
+
+
+
+(global-set-key (kbd "C-M-0") 'hydra-font-weight/body)
+
+
 (provide 'init-font)
