@@ -38,6 +38,7 @@
 (require 'init-plantuml)
 (require 'init-project)
 (require 'init-programming)
+(require 'init-programming-docker)
 (require 'init-programming-serverless)
 (require 'init-python)
 (require 'init-search)
