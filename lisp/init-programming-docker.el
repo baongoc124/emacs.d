@@ -1,21 +1,20 @@
 ;===============================================================================
 ; path mapping for quick jumping from error logs to source files
 ;===============================================================================
-(defun my/get-docker-mounts (container)
+(defun my/get-docker-mounts ()
   "Update docker path mapping from running container."
-  (interactive "sDocker compose service name: ")
-  (let* ((output (inheritenv-apply 'shell-command-to-string (concat "docker-mounts.sh " container)))
+  (let* ((output (inheritenv-apply 'shell-command-to-string "docker-mounts.sh 2>/dev/null"))
          (pairs (read (concat "(" output ")"))))
     pairs))
 
-(defun my/reset-compilation-transform-file-match-alist ()
+(defun my/reset-docker-path-mapping ()
   (interactive)
   (setq compilation-transform-file-match-alist nil))
 
-(defun my/update-compilation-path-mappings (container)
+(defun my/update-docker-path-mapping ()
   "Update `compilation-transform-file-match-alist` using mounts from CONTAINER."
-  (interactive "sDocker compose service name: ")
-  (let ((mounts (my/get-docker-mounts container)))
+  (interactive)
+  (let ((mounts (my/get-docker-mounts)))
     (dolist (pair mounts)
       (let ((docker-path (car pair))
             (host-path (cdr pair)))
@@ -23,7 +22,6 @@
         (add-to-list
          'compilation-transform-file-match-alist
          (list (concat "^" (regexp-quote docker-path)) host-path))))
-    (message "Updated compilation path mappings for %s" container)))
-
+    (message "Updated compilation path transforms for current project: %s" compilation-transform-file-match-alist)))
 
 (provide 'init-programming-docker)
