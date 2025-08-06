@@ -55,6 +55,8 @@
 (require 'init-window-management)
 (require 'init-writing)
 
+;============================= less important stuff ============================
+(require 'init-visual-holo-layer)
 (require 'init-daemon)
 ;; (require 'init-exwm)
 

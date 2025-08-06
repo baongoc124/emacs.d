@@ -29,12 +29,12 @@
 (setq redisplay-skip-fontification-on-input t)
 
 
-(use-package beacon
-  :diminish beacon-mode
-  :config
-  (setq beacon-blink-when-focused t)
-  (setq beacon-color "#579E33")
-  (beacon-mode 1))
+;; (use-package beacon
+;;   :diminish beacon-mode
+;;   :config
+;;   (setq beacon-blink-when-focused t)
+;;   (setq beacon-color "#579E33")
+;;   (beacon-mode 1))
 
 
 (use-package dumb-jump
