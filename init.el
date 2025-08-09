@@ -12,27 +12,27 @@
 (setq garbage-collection-messages t)
 (setq max-lisp-eval-depth 6400)
 
-(add-to-list 'load-path "~/.emacs.d/lisp/")
 ;============================== mac compatibility ==============================
 (setq mac-option-modifier 'meta)      ;; Use Option as Meta
 (setq mac-command-modifier 'super)    ;; Optional: use Command as Super
 
 (global-set-key (kbd "M-u") #'universal-argument)
 
+(add-to-list 'load-path "~/.emacs.d/lisp/")
+;===================== must be loaded, otherwise suffering =====================
 (require 'init-package-management)
+(require 'init-lib)
 (require 'init-exec-path)
-(require 'init-font)
 (require 'init-evil)
 (require 'init-shortcuts)
 (require 'init-core)
 (require 'init-auth)
 
-(require 'init-ai)
 (require 'init-auto-completion)
 (require 'init-buffer)
 (require 'init-calendar)
 (require 'init-cheatsheet)
-(require 'init-copilot)
+;; (require 'init-copilot)
 (require 'init-dired)
 (require 'init-eglot)
 (require 'init-fcitx)
@@ -43,16 +43,13 @@
 (require 'init-plantuml)
 (require 'init-project)
 (require 'init-programming)
-(require 'init-programming-docker)
-(require 'init-programming-golang)
-(require 'init-programming-serverless)
 (require 'init-programming-vue)
 (require 'init-python)
 (require 'init-search)
 (require 'init-ssh)
 (require 'init-terminal)
 (require 'init-theme)
-(require 'init-treemacs)
+;; (require 'init-treemacs)
 (require 'init-treesit)
 (require 'init-undo-tree)
 (require 'init-version-control)
@@ -60,12 +57,21 @@
 (require 'init-window-management)
 (require 'init-writing)
 
+;========================= must be loaded for good work ========================
+(require 'init-programming-wakatime)
+
+;================================= nice to have ================================
+(require 'init-embark)
+(require 'init-ai)
+
+(require 'init-programming-docker)
+(require 'init-programming-golang)
+(require 'init-programming-serverless)
+
+(require 'init-font)
 ;============================= less important stuff ============================
 (require 'init-visual-holo-layer)
 (require 'init-daemon)
-;; (require 'init-exwm)
-
-;; (require 'ironoko)
 
 
 
