@@ -13,6 +13,11 @@
 (setq max-lisp-eval-depth 6400)
 
 (add-to-list 'load-path "~/.emacs.d/lisp/")
+;============================== mac compatibility ==============================
+(setq mac-option-modifier 'meta)      ;; Use Option as Meta
+(setq mac-command-modifier 'super)    ;; Optional: use Command as Super
+
+(global-set-key (kbd "M-u") #'universal-argument)
 
 (require 'init-package-management)
 (require 'init-exec-path)

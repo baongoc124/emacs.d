@@ -80,6 +80,7 @@
   (keymap-unset vterm-mode-map "M-B") ;; prevent shadowing my winner shortcut
   (keymap-unset vterm-mode-map "M-F") ;; prevent shadowing my winner shortcut
   (keymap-unset vterm-mode-map "M-j") ;; prevent shadowing my term switch
+  (keymap-unset vterm-mode-map "M-u") ;; prevent shadowing my alternate C-u
 
   ;; prevent shadowing my window shortcuts
   (keymap-unset vterm-mode-map "M-<left>")
