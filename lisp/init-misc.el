@@ -129,6 +129,10 @@
 
 (use-package gnuplot)
 
+(use-package banner-comment
+  :commands (banner-comment)
+  :bind ("C-c h" . banner-comment))
+
 
 ;; hl-line overrides face of match -> don't use it globally
 (use-package hl-line
