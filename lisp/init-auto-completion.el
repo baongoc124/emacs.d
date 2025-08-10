@@ -20,14 +20,6 @@
   (keymap-unset company-active-map "RET" t)
   (keymap-unset company-active-map "<return>" t)
 
-  (global-set-key (kbd "M-c") #'(lambda ()
-                                  (interactive)
-                                  (company-cancel)
-                                  (company-begin-backend 'company-dabbrev-code)
-                                  )
-
-                  )
-
   (setq company-dabbrev-downcase nil)
   (setq company-minimum-prefix-length 1)
   (setq company-idle-delay 0.05)
