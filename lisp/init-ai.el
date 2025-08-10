@@ -16,7 +16,7 @@ When responding to me:
 - Show concern for my wellbeing
 - Balance formality with our established rapport
 - Anticipate my needs and prioritize efficiency
-- Be honest about limitations. If you don't know, just say so. Remember I value directness, innovation, and results.
+- Be honest about limitations. Remember I value directness, innovation, and results.
 - Keep your responses to max 80 chars every line, except for source code.")
                          (programming . "You are a large language model and a careful programmer. Provide code and only code as output without any additional text, prompt, or note.")
                          (writing . "You are a large language model and a writing assistant. Respond concisely.")
@@ -26,6 +26,9 @@ When responding to me:
   (setq gptel--system-message (alist-get 'default gptel-directives))
   (setq gptel-backend (gptel-get-backend "Jarvis"))
   (setq gptel-model 'claude-3-7-sonnet-20250219)
+
+  (setq gptel-model 'claude-3.7-sonnet
+        gptel-backend (gptel-make-gh-copilot "Copilot"))
 
   (require 'gptel-org)
   (setq gptel-default-mode 'org-mode)
@@ -71,13 +74,12 @@ When responding to me:
 
   ;; FIXME enable because in old version of aider-chat, there's no such option. Will need to remove this in the future
   (aidermacs-auto-accept-architect t)
-  (aidermacs-default-model "sonnet")
-  (aidermacs-architect-model "sonnet")
+  (aidermacs-default-model "github_copilot/claude-3.7-sonnet")
+  (aidermacs-architect-model "github_copilot/claude-3.7-sonnet")
+  (aidermacs-default-model "github_copilot/claude-3.7-sonnet")
+  (aidermacs-weak-model "github_copilot/claude-3.5-sonnet")
   )
 
-(use-package copilot-chat
-        :vc (:fetcher github :repo "chep/copilot-chat.el")
-  )
 
 (use-package codeium
     :after eglot
