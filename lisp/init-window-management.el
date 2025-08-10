@@ -119,5 +119,28 @@
 ;; (global-set-key (kbd "M-m w w") #'my-restore-window-config)
 
 
+(use-package popper
+  :ensure t ; or :straight t
+  :bind (("C-`"   . popper-toggle)
+         ;; ("M-`"   . popper-cycle)
+         ;; ("C-M-`" . popper-toggle-type)
+         )
+  :init
+  (defun my/popper-fit-window-height-or-half (win)
+    (fit-window-to-buffer
+     win
+     (floor (frame-height) 2)
+     (floor (frame-height) 3)))
+  (setq popper-window-height #'my/popper-fit-window-height-or-half)
+  (setq popper-reference-buffers
+        '("\\*Messages\\*"
+          "Output\\*$"
+          "\\*Async Shell Command\\*"
+          "\\*HTTP Response\\*"
+          help-mode
+          compilation-mode))
+  (popper-mode +1)
+  (popper-echo-mode +1))
+
 
 (provide 'init-window-management)
