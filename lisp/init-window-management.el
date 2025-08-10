@@ -4,7 +4,7 @@
 
 (define-prefix-command 'ngoc/window-prefix)
 (define-key ngoc/window-prefix "c" #'my-ace-copy-window)
-(define-key ngoc/window-prefix "d" #'delete-window)
+(define-key ngoc/window-prefix "d" #'ace-delete-window)
 (define-key ngoc/window-prefix "e" #'balance-windows)
 (define-key ngoc/window-prefix "h" #'hsplit-last-buffer)
 (define-key ngoc/window-prefix "m" #'my-ace-move-window)
@@ -14,6 +14,35 @@
 (define-key ngoc/window-prefix "x" #'ace-swap-window)
 (define-key ngoc/window-prefix "s" #'my-save-window-config)
 (define-key ngoc/window-prefix "w" #'my-restore-window-config)
+
+;; use M-arrow keys for moving to windows
+(global-set-key (kbd "M-<left>") 'windmove-left)
+(global-set-key (kbd "M-<right>") 'windmove-right)
+(global-set-key (kbd "M-<up>") 'windmove-up)
+(global-set-key (kbd "M-<down>") 'windmove-down)
+
+;; use s-M-arrow keys for moving windows into direction of the arrow
+(defmacro define-buffer-move (name direction)
+  `(defun ,name ()
+     ,(format "Move buffer to the %s window." direction)
+     (interactive)
+     (let ((other-win (windmove-find-other-window ',direction)))
+       (when other-win
+         (let ((this-buf (current-buffer))
+               (other-buf (window-buffer other-win)))
+           (set-window-buffer (selected-window) other-buf)
+           (set-window-buffer other-win this-buf)
+           (select-window other-win))))))
+
+(define-buffer-move my/move-buffer-left  left)
+(define-buffer-move my/move-buffer-right right)
+(define-buffer-move my/move-buffer-up    up)
+(define-buffer-move my/move-buffer-down  down)
+
+(global-set-key (kbd "M-s-<left>")  'my/move-buffer-left)
+(global-set-key (kbd "M-s-<right>") 'my/move-buffer-right)
+(global-set-key (kbd "M-s-<up>")    'my/move-buffer-up)
+(global-set-key (kbd "M-s-<down>")  'my/move-buffer-down)
 
 (use-package ace-window
   :bind ("M-t" . ace-window)
