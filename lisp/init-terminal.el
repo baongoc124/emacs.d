@@ -90,6 +90,13 @@
 
   (setq vterm-shell "/Users/ngoc/.nix-profile/bin/bash")
 
+  ;; allow killing vterm buffers without confirmation
+  (defun my/disable-confirm-kill-process-in-vterm ()
+            (when-let (proc (get-buffer-process (current-buffer)))
+                (set-process-query-on-exit-flag proc nil)))
+
+  (add-hook 'vterm-mode-hook #'my/disable-confirm-kill-process-in-vterm)
+
   (defvar my/project-vterm-buffers (make-hash-table :test #'equal)
     "Hash table mapping project root to list of vterm buffers.")
 
