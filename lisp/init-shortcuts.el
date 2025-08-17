@@ -36,7 +36,7 @@
           ("f" . project-find-file)
           ("M-f" . format-all-buffer)
           ("g" . ngoc/history-prefix)
-          ("m" . iedit-mode)
+          ;; ("m" . iedit-mode)
           ("M-m" . yas-expand)
           ("n" . ngoc/avy-back-to-future)
           ("o" . symbol-overlay-transient)

@@ -116,4 +116,85 @@
   ;; other faces such as `diff-added` will be used for other actions
   ;; (evil-goggles-use-diff-faces))
 
+
+(use-package evil-mc
+  :demand t
+  :config
+  (global-evil-mc-mode t)
+  (setq evil-mc-mode-line-prefix "mc")
+  (setq-default evil-mc-one-cursor-show-mode-line-text nil)
+  (add-to-list 'evil-mc-incompatible-minor-modes 'minuet-auto-suggestion-mode)
+
+
+  (require 'transient)
+
+  (transient-define-prefix evil-mc-transient ()
+    "Evil multiple cursors menu"
+    :transient-suffix 'transient--do-stay
+    :transient-non-suffix 'transient--do-warn
+
+    [["Match"
+      ("n" "Make & goto next match" evil-mc-make-and-goto-next-match)
+      ("p" "Make & goto prev match" evil-mc-make-and-goto-prev-match)
+      ("N" "Skip to next match" evil-mc-skip-and-goto-next-match)
+      ("P" "Skip to prev match" evil-mc-skip-and-goto-prev-match)
+      ""
+      ("j" "Make & goto next line" evil-mc-make-cursor-move-next-line)
+      ("k" "Make & goto previous line" evil-mc-make-cursor-move-prev-line)
+      ""
+      ("a" "Make all cursors" evil-mc-make-all-cursors)
+      ]
+
+     ["Navigation"
+      ("M-n" "Make & goto next cursor" evil-mc-make-and-goto-next-cursor)
+      ("M-p" "Make & goto prev cursor" evil-mc-make-and-goto-prev-cursor)
+      ("M-N" "Skip to next cursor" evil-mc-skip-and-goto-next-cursor)
+      ("M-P" "Skip to prev cursor" evil-mc-skip-and-goto-prev-cursor)
+      ""
+      ("f" "Make & goto first cursor" evil-mc-make-and-goto-first-cursor)
+      ("l" "Make & goto last cursor" evil-mc-make-and-goto-last-cursor)
+      ""
+      ("h" "Make cursor here" evil-mc-make-cursor-here)
+      ]
+
+     ["Visual Selection"
+      ("b" "Cursors at line beginnings" evil-mc-make-cursor-in-visual-selection-beg)
+      ("e" "Cursors at line ends" evil-mc-make-cursor-in-visual-selection-end)
+      ]
+     ]
+
+    [["Control"
+      ("SPC" my/evil-mc-toggle-pause-cursors :description (lambda () (if evil-mc-frozen "Resume cursors" "Pause cursors")) :transient transient--do-exit)
+
+      ("u" "Undo last cursor" evil-mc-undo-last-added-cursor)
+      ("U" "Undo all cursors" evil-mc-undo-all-cursors)]
+
+     ["Exit"
+      ("c" "Clear mc and quit" evil-mc-undo-all-cursors :transient nil)
+      ("q" "Quit" transient-quit-one)]]
+
+    (interactive)
+    (when evil-mc-frozen (evil-mc-resume-cursors))
+    (transient-setup #'evil-mc-transient)
+    )
+
+  ;; Helper function to toggle pause/resume
+  (defun my/evil-mc-toggle-pause-cursors ()
+    "Toggle between pausing and resuming cursors based on current state."
+    (interactive)
+    (if evil-mc-frozen
+        (evil-mc-resume-cursors)
+      (evil-mc-pause-cursors)))
+
+  (global-set-key (kbd "<leader> m") 'evil-mc-transient)
+
+  ;; unbind default keybinds because we already have transient menu
+  (evil-define-key* '(normal visual) evil-mc-key-map
+                      (kbd "M-n") nil
+                      (kbd "M-p") nil
+                      (kbd "C-n") nil
+                      (kbd "C-t") nil
+                      (kbd "C-p") nil)
+  )
+
 (provide 'init-evil)
