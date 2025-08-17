@@ -13,6 +13,10 @@
   (setq evil-replace-state-cursor '((bar . 3) "pink"))
   (setq evil-operator-state-cursor '("red" hollow))
 
+
+  ;; switch to evil-search because i want to use gn, gN
+  (evil-select-search-module 'evil-search-module 'evil-search)
+
   (define-key evil-emacs-state-map [escape] nil)
   (define-key evil-visual-state-map (kbd "v") 'er/expand-region)
 
@@ -49,6 +53,45 @@
   (evil-set-leader 'visual (kbd "<SPC>"))
   (evil-set-leader 'operator (kbd "<SPC>"))
   (evil-set-leader 'motion (kbd "<SPC>"))
+
+  (defvar-local my/evil-search-timer nil
+    "Timer to clear Evil search highlight after search inactivity.")
+
+  (defun my/evil-clear-highlight-timer (buf)
+    "Run `evil-ex-nohighlight` in BUF."
+    (when (buffer-live-p buf)
+      (with-current-buffer buf
+        (evil-ex-nohighlight))
+      ;; Clear timer var in that buffer
+      (with-current-buffer buf
+        (setq my/evil-search-timer nil))))
+
+  (defun my/evil-search-activity (&rest _)
+    "Restart 10-second idle timer to clear highlights in current buffer."
+    (when (and (local-variable-p 'my/evil-search-timer)
+               my/evil-search-timer)
+      (cancel-timer my/evil-search-timer))
+    (setq my/evil-search-timer
+          (run-with-timer
+           10 nil #'my/evil-clear-highlight-timer (current-buffer))))
+
+  (dolist (fn '(evil-next-match
+                evil-previous-match
+                evil-ex-search-next
+                evil-ex-search-previous
+                evil-ex-search-word-forward
+                evil-ex-search-word-backward
+                evil-ex-search-forward
+                evil-ex-search-backward))
+    (advice-add fn :after #'my/evil-search-activity))
+
+  ;; (dolist (fn '(evil-ex-search-next
+  ;;               evil-ex-search-previous
+  ;;               evil-ex-search-word-forward
+  ;;               evil-ex-search-word-backward
+  ;;               evil-ex-search-forward
+  ;;               evil-ex-search-backward))
+  ;;   (advice-remove fn #'my/evil-search-activity))
 
   )
 
