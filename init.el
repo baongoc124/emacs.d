@@ -65,6 +65,7 @@
 (require 'init-ai)
 
 (require 'init-evil-paste)
+(require 'init-fold)
 
 (require 'init-programming-docker)
 (require 'init-programming-golang)
