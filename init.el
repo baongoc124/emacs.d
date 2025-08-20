@@ -64,6 +64,8 @@
 (require 'init-embark)
 (require 'init-ai)
 
+(require 'init-evil-paste)
+
 (require 'init-programming-docker)
 (require 'init-programming-golang)
 (require 'init-programming-serverless)
