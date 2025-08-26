@@ -70,6 +70,7 @@
 (require 'init-programming-docker)
 (require 'init-programming-golang)
 (require 'init-programming-serverless)
+(require 'init-programming-toggle-debug-comment)
 
 (require 'init-font)
 ;============================= less important stuff ============================
