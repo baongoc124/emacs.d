@@ -25,7 +25,10 @@
   (add-hook 'eglot-managed-mode-hook #'my/my-eglot-setup)
 
   (add-to-list 'eglot-server-programs
-               '(python-mode . ("/Users/ngoc/builds/pylsp/run-pylsp.sh")))
+               '(python-mode . ("uvx" "--from" "python-lsp-server[all]>=1.12.2" "pylsp")))
+
+  ;; remove python from assoc list eglot-server-programs
+  ;; (setq eglot-server-programs (cl-delete-if (lambda (entry) (eq (car entry) '(python-mode python-ts-mode))) eglot-server-programs))
   (add-to-list 'eglot-server-programs
                '((dockerfile-mode dockerfile-ts-mode) . ("docker-language-server" "start" "--stdio")))
   (add-to-list 'eglot-server-programs
