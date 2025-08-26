@@ -8,6 +8,10 @@
         `(("." . ,(file-name-as-directory (file-name-concat user-emacs-directory
                                                            "cache"
                                                            "undo-history")))))
+
+  (define-key undo-tree-visualizer-mode-map (kbd "M-p") #'undo-tree-visualize-undo-to-x)
+  (define-key undo-tree-visualizer-mode-map (kbd "M-n") #'undo-tree-visualize-redo-to-x)
+
   (global-undo-tree-mode))
 
 (provide 'init-undo-tree)
