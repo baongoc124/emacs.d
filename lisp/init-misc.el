@@ -146,6 +146,24 @@
   (ibuffer-mode . hl-line-mode)
   )
 
+;=================================== dbt mode ==================================
+(use-package jinja2-mode)
+(use-package polymode)
+
+(add-to-list 'load-path "~/.emacs.d/lisp/dbt-mode/")
+
+(require 'dbt-mode)
+;; Customize `sql-product' to set the flavor of the SQL syntax.
+;; (setq sql-product 'ansi)
+
+
+(use-package flymake-sqlfluff
+  :config
+  (add-hook 'sql-mode-hook #'flymake-sqlfluff-load)
+  (add-hook 'sql-mode-hook #'flymake-mode)
+  (add-hook 'jinja2-mode-hook #'flymake-sqlfluff-load)
+  (add-hook 'jinja2-mode-hook #'flymake-mode)
+  )
 
 
 (provide 'init-misc)
