@@ -16,10 +16,30 @@
 (define-key ngoc/window-prefix "w" #'my-restore-window-config)
 
 ;; use M-arrow keys for moving to windows
-(global-set-key (kbd "M-<left>") 'windmove-left)
-(global-set-key (kbd "M-<right>") 'windmove-right)
-(global-set-key (kbd "M-<up>") 'windmove-up)
-(global-set-key (kbd "M-<down>") 'windmove-down)
+;; (global-set-key (kbd "M-<left>") 'windmove-left)
+;; (global-set-key (kbd "M-<right>") 'windmove-right)
+;; (global-set-key (kbd "M-<up>") 'windmove-up)
+;; (global-set-key (kbd "M-<down>") 'windmove-down)
+(global-set-key (kbd "C-S-h") 'windmove-left)
+(global-set-key (kbd "C-S-n") 'windmove-right)
+(global-set-key (kbd "C-S-c") 'windmove-up)
+(global-set-key (kbd "C-S-t") 'windmove-down)
+
+(global-set-key (kbd "M-t") '(lambda ()
+                                 (interactive)
+                                 (select-window (get-mru-window nil nil t)))
+                )
+
+
+(use-package golden-ratio
+  :diminish golden-ratio-mode
+  :config
+  (add-to-list 'golden-ratio-extra-commands #'ace-window)
+
+  (setq golden-ratio-auto-scale t)
+  (setq golden-ratio-exclude-buffer-names '(" *undo-tree*" ;; notice the space before the actual name
+                                            ))
+  )
 
 ;; use s-M-arrow keys for moving windows into direction of the arrow
 (defmacro define-buffer-move (name direction)
@@ -44,8 +64,9 @@
 (global-set-key (kbd "M-s-<up>")    'my/move-buffer-up)
 (global-set-key (kbd "M-s-<down>")  'my/move-buffer-down)
 
+
 (use-package ace-window
-  :bind ("M-t" . ace-window)
+  ;; :bind ("M-t" . ace-window)
   :config
   (setq aw-keys '(?h ?c ?t ?m ?w ?n ?e ?u ?j ?q)
         aw-scope 'frame)
