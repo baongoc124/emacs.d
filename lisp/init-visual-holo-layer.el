@@ -4,7 +4,7 @@
 (setq holo-layer-enable-cursor-animation t)
 (setq holo-layer-cursor-animation-type "jelly easing")
 (setq holo-layer-cursor-alpha 128)
-(setq holo-layer-cursor-animation-interval 10)
+(setq holo-layer-cursor-animation-interval 30)
 (setq holo-layer-cursor-block-commands '(list
                                          "watch-other-window-up"
                                          "watch-other-window-down"
