@@ -3,6 +3,8 @@
 (setq delete-by-moving-to-trash t)
 (setq dired-dwim-target nil)
 
+;; make this consistent with ripgrep
+(keymap-set dired-mode-map (kbd "e") #'dired-toggle-read-only)
 
 (defun ngoc/dired-open-last-downloaded ()
   "Open Download folder and select last downloaded file."
