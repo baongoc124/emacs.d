@@ -30,8 +30,6 @@
 
 (require 'init-auto-completion)
 (require 'init-buffer)
-(require 'init-calendar)
-(require 'init-cheatsheet)
 ;; (require 'init-copilot)
 (require 'init-dired)
 (require 'init-eglot)
@@ -49,7 +47,6 @@
 (require 'init-search)
 (require 'init-ssh)
 (require 'init-terminal)
-(require 'init-theme)
 ;; (require 'init-treemacs)
 (require 'init-treesit)
 (require 'init-undo-tree)
@@ -57,9 +54,6 @@
 (require 'init-web)
 (require 'init-window-management)
 (require 'init-writing)
-
-;========================= must be loaded for good work ========================
-(require 'init-programming-wakatime)
 
 ;================================= nice to have ================================
 (require 'init-embark)
@@ -74,8 +68,15 @@
 (require 'init-programming-toggle-debug-comment)
 
 (require 'init-font)
+(require 'init-calendar)
+
+(require 'init-programming-wakatime)
+
 ;============================= less important stuff ============================
-(require 'init-visual-holo-layer)
+
+(require 'init-cheatsheet)
+(require 'init-theme)
+;; (require 'init-visual-holo-layer)
 (require 'init-daemon)
 
 
