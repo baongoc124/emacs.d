@@ -183,6 +183,11 @@ results in Zeal."
 
 (defalias 'dtw #'delete-trailing-whitespace-with-save)
 
+(use-package restclient
+  ;; auto load restclient-mode for http & rest files
+  :mode (("\\.http\\'" . restclient-mode)
+         ("\\.rest\\'" . restclient-mode))
+  )
 
 (use-package smartparens
   :diminish smartparens-mode
