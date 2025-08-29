@@ -163,8 +163,6 @@ results in Zeal."
 (use-package docker
   :bind ("C-x d" . docker))
 
-(use-package vue-mode)
-
 (use-package typescript-mode)
 
 

@@ -4,12 +4,9 @@
 (define-derived-mode vue-mode web-mode "Vue")
 (add-to-list 'auto-mode-alist '("\\.vue\\'" . vue-mode))
 
-;; (add-hook 'vue-mode-hook #'eglot-ensure)
-(add-to-list 'eglot-server-programs
-  '(vue-mode "vue-language-server" "--stdio"))
-
 
 ;; https://github.com/joaotavora/eglot/discussions/1184
+;; this will break on vue-language-server v3
 (defun vue-eglot-init-options ()
   "Set SDK path and default options."
   (let* ((tsdk-path (expand-file-name
