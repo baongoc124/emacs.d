@@ -166,6 +166,15 @@ Buffers ordered by recency, auto-select if only one is available."
                     (if current-prefix-arg
                         (apply #'my/vterm-new args)
                       (apply #'my/vterm-switch args))))
+
+  (defun my/vterm-copy-mode-evil-setup ()
+    "Enter Evil normal state when entering `vterm-copy-mode',
+and go back to emacs state when leaving."
+    (if vterm-copy-mode
+        (evil-normal-state)
+      (evil-emacs-state)))
+
+  (add-hook 'vterm-copy-mode-hook #'my/vterm-copy-mode-evil-setup)
   )
 
 (provide 'init-terminal)
