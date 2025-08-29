@@ -278,7 +278,7 @@ Version: 2015-10-01"
 
 (setq-default indent-tabs-mode nil)
 ;; set default tab char's display width to 4 spaces
-(setq-default tab-width 8) ; emacs 23.1, 24.2, default to 8
+(setq-default tab-width 8) ; emacs 23.1, 24.2, default to 8. Org mode export depends on this.
 (setq backward-delete-char-untabify-method 'hungry)
 (setq-default c-basic-offset 4)
 (setq-default cperl-indent-level 4)
