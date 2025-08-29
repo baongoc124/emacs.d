@@ -71,6 +71,8 @@
 
 (use-package vterm
   :demand t
+  :init
+  (setq vterm-module-cmake-args "-DCMAKE_C_COMPILER=clang")
   :hook ((vterm-mode . compilation-shell-minor-mode)
          (vterm-mode . goto-address-mode))
   :config
