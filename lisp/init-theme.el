@@ -29,11 +29,6 @@
 		(t . (1.1)))))
   )
 
-(use-package spacious-padding
-  :config
-  (spacious-padding-mode t)
-  )
-
 (use-package doom-themes
   :config
 ;;   ;; Enable flashing mode-line on errors
