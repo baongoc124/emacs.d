@@ -134,7 +134,10 @@ mouse-3: Toggle minor modes"
 (add-hook 'after-make-frame-functions 'rmrf/setup-frame)
 
 
-(use-package diminish)
+(use-package diminish
+  :config
+  (diminish 'eldoc-mode)
+  )
 
 ;; backup, autosave and lockfiles location
 ;; copy from https://www.gnu.org/software/emacs/manual/html_node/efaq/Not-writing-files-to-the-current-directory.html
