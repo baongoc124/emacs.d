@@ -146,6 +146,9 @@ mouse-3: Toggle minor modes"
 (setq backup-directory-alist
       '((".*" . "~/.emacs.d/aux/")))
 
+;; auto save
+(setq auto-save-timeout 2
+      auto-save-interval 300)
 
 (defun my/sort-lines-ignore-case ()
   (interactive)
