@@ -174,8 +174,15 @@ results in Zeal."
   (setq show-trailing-whitespace t))
 
 (add-hook 'prog-mode-hook #'my-show-trailing-whitespace)
-(defalias 'dtw #'delete-trailing-whitespace)
-(defalias 'dts #'delete-trailing-whitespace)
+
+(defun delete-trailing-whitespace-with-save ()
+  (interactive)
+  (delete-trailing-whitespace)
+  (when (buffer-file-name)
+    (save-buffer)))
+
+(defalias 'dtw #'delete-trailing-whitespace-with-save)
+
 
 (use-package smartparens
   :diminish smartparens-mode
