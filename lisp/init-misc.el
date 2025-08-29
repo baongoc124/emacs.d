@@ -65,9 +65,10 @@
 (use-package nix-ts-mode
   :mode "\\.nix\\'")
 
-;; (use-package highlight-indentation
-;;   :diminish highlight-indentation-mode
-;;   :hook (prog-mode . highlight-indentation-mode))
+(use-package highlight-indentation
+  :diminish highlight-indentation-mode
+  ;; :hook (prog-mode . highlight-indentation-mode)
+  )
 
 (use-package ggtags
   :config
