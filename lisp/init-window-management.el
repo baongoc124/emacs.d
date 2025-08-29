@@ -1,6 +1,9 @@
 ;; prevent top bottom split
 (setq split-height-threshold nil)
 
+;; big enough so even with golden ratio mode, it won't trigger
+;; FIXME: should fix split-window-sensibly
+(setq split-width-threshold 180)
 
 (define-prefix-command 'ngoc/window-prefix)
 (define-key ngoc/window-prefix "c" #'my-ace-copy-window)
@@ -36,9 +39,16 @@
   :config
   (add-to-list 'golden-ratio-extra-commands #'ace-window)
 
-  (setq golden-ratio-auto-scale t)
+  (setq golden-ratio-auto-scale nil)
   (setq golden-ratio-exclude-buffer-names '(" *undo-tree*" ;; notice the space before the actual name
+                                            "*Ediff Control Panel*"
+                                            ;; "COMMIT_EDITMSG" ;; magit
                                             ))
+  (setq golden-ratio-exclude-modes nil)
+  ;; (setq golden-ratio-exclude-modes '(
+  ;;                                    magit-log-mode
+  ;;                                    ))
+  (golden-ratio-mode 1)
   )
 
 ;; use s-M-arrow keys for moving windows into direction of the arrow
