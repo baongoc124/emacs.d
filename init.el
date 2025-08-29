@@ -44,6 +44,7 @@
 (require 'init-project)
 (require 'init-programming)
 (require 'init-programming-vue)
+(require 'init-programming-swift)
 (require 'init-python)
 (require 'init-search)
 (require 'init-ssh)
