@@ -67,6 +67,7 @@
 
 (use-package ace-window
   ;; :bind ("M-t" . ace-window)
+  :demand t
   :config
   (setq aw-keys '(?h ?c ?t ?m ?w ?n ?e ?u ?j ?q)
         aw-scope 'frame)
@@ -74,8 +75,14 @@
   (global-set-key (kbd "M-T") #'(lambda () (interactive)
                                   (let ((aw-dispatch-always t))
                                     (call-interactively #'ace-window))))
-  (ace-window-posframe-mode 1)
-  (set-face-attribute 'aw-leading-char-face nil :height 3.0)
+  (if (display-graphic-p)
+      (progn
+        (ace-window-posframe-mode 1)
+        (set-face-attribute 'aw-leading-char-face nil :height 3.0)
+        )
+
+    (set-face-attribute 'aw-leading-char-face nil :weight 'bold :inverse-video t)
+    )
 
   (defun my-ace-move-window ()
     (interactive)

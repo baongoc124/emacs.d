@@ -198,4 +198,74 @@
                       (kbd "C-p") nil)
   )
 
+
+;=============================== evil on terminal ==============================
+;; change modeline color based on evil state
+;; another option is to change cursor of kitty terminal by sending escape codes
+;; (when (not (display-graphic-p))
+;;   (with-eval-after-load 'evil
+;;     (defun my-get-evil-modeline-colors ()
+;;       "Get appropriate colors based on current theme (dark/light mode)."
+;;       (let ((bg (face-attribute 'default :background))
+;;             (fg (face-attribute 'default :foreground))
+;;             (is-dark (eq (frame-parameter nil 'background-mode) 'dark)))
+;;         (if is-dark
+;;             ;; Dark theme colors
+;;             `((insert . (:background "#8b0000" :foreground ,fg))     ; dark red
+;;               (normal . (:background "#006400" :foreground ,fg))     ; dark green
+;;               (visual . (:background "#ff8c00" :foreground ,bg))     ; dark orange
+;;               (emacs  . (:background "#191970" :foreground ,fg)))    ; midnight blue
+;;           ;; Light theme colors
+;;           `((insert . (:background "#ffcccb" :foreground ,fg))       ; light red
+;;             (normal . (:background "#90ee90" :foreground ,fg))       ; light green
+;;             (visual . (:background "#ffd700" :foreground ,fg))       ; gold
+;;             (emacs  . (:background "#add8e6" :foreground ,fg))))))   ; light blue
+
+;;     (defun my-evil-modeline-color ()
+;;       "Set mode line color based on Evil state and current theme."
+;;       (when (bound-and-true-p evil-mode)
+;;         (let* ((colors (my-get-evil-modeline-colors))
+;;                (state-color (cond ((evil-normal-state-p) (alist-get 'normal colors))
+;;                                   ((evil-insert-state-p) (alist-get 'insert colors))
+;;                                   ((evil-visual-state-p) (alist-get 'visual colors))
+;;                                   ((evil-emacs-state-p)  (alist-get 'emacs colors))
+;;                                   (t (alist-get 'normal colors)))))
+;;           (when state-color
+;;             (set-face-attribute 'mode-line nil
+;;                                 :background (plist-get state-color :background)
+;;                                 :foreground (plist-get state-color :foreground))))))
+
+;;     (defun my-reset-modeline-color ()
+;;       "Reset mode line to default colors."
+;;       (set-face-attribute 'mode-line nil
+;;                           :background 'unspecified
+;;                           :foreground 'unspecified))
+
+;;     (add-hook 'post-command-hook 'my-evil-modeline-color)
+;;     )
+;;   )
+
+
+(when (not (display-graphic-p))
+  (with-eval-after-load 'evil
+
+    (defun kitty-set-cursor-color (color)
+      "Set Kitty terminal cursor color via escape sequence."
+      (send-string-to-terminal (format "\e]12;%s\007" color)))
+
+    ;; Function to update cursor based on evil state
+    (defun update-kitty-cursor-for-evil-state ()
+      "Update Kitty cursor color based on current evil state."
+      (when (getenv "KITTY_WINDOW_ID") ; Only run if in Kitty
+        (cond
+         ((evil-normal-state-p)  (kitty-set-cursor-color "#4CAF50"))  ; Green
+         ((evil-insert-state-p)  (kitty-set-cursor-color "#F44336"))  ; Red
+         ((evil-visual-state-p)  (kitty-set-cursor-color "#FF9800"))  ; Orange
+         ;; ((evil-replace-state-p) (kitty-set-cursor-color "#2196F3"))  ; Blue
+         (t (kitty-set-cursor-color "#9A7DFF")))))                    ; Default
+
+    (add-hook 'post-command-hook 'update-kitty-cursor-for-evil-state)
+    )
+  )
+
 (provide 'init-evil)

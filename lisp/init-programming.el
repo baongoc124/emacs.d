@@ -184,6 +184,7 @@ results in Zeal."
   :hook (prog-mode text-mode markdown-mode)
   :config
   (show-paren-mode 1)
+  (setq show-paren-highlight-openparen nil) ;; only highlight the one that's cursor is not on
   (require 'smartparens-config))
 
 

@@ -177,4 +177,34 @@ and go back to emacs state when leaving."
   (add-hook 'vterm-copy-mode-hook #'my/vterm-copy-mode-evil-setup)
   )
 
+;; (use-package term-keys
+;;   :vc (:fetcher github :repo "CyberShadow/term-keys")
+;;   :config
+;;   (term-keys-mode 1)
+
+;; ;; this is to write config for kitty
+;; (require 'term-keys-kitty)
+;; (with-temp-buffer
+;;   (insert (term-keys/kitty-conf))
+;;   (write-region (point-min) (point-max) "~/kitty-for-term-keys.conf"))
+;; )
+
+;; to use system clipboard when in terminal
+(use-package xclip
+  :if (not (display-graphic-p))
+  :config
+  (xclip-mode 1))
+
+;; kitty keyboard protocol
+;; https://sw.kovidgoyal.net/kitty/keyboard-protocol/
+(use-package kkp
+  :if (not (display-graphic-p))
+  :config
+  ;; (setq kkp-alt-modifier 'alt) ;; use this if you want to map the Alt keyboard modifier to Alt in Emacs (and not to Meta)
+  (global-kkp-mode +1))
+
+(when (not (display-graphic-p))
+  (xterm-mouse-mode 1)
+  )
+
 (provide 'init-terminal)
