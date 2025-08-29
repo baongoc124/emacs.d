@@ -110,6 +110,7 @@
 
 (require 'tramp)
 (setq tramp-default-method "scp")
+(setq tramp-connection-timeout 10)
 
 (defun sudo-edit-current-file ()
   (interactive)
