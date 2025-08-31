@@ -268,4 +268,11 @@
     )
   )
 
+;; display a popup to show register contents automatically when it's needed
+(use-package evil-owl
+  :diminish evil-owl-mode
+  :config
+  (setq evil-owl-max-string-length 128)
+  (evil-owl-mode 1))
+
 (provide 'init-evil)
