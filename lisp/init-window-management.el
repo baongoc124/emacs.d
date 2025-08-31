@@ -13,7 +13,6 @@
 (define-key ngoc/window-prefix "m" #'my-ace-move-window)
 (define-key ngoc/window-prefix "t" #'transpose-frame)
 (define-key ngoc/window-prefix "v" #'vsplit-last-buffer)
-;; (define-key ngoc/window-prefix "w" #'delete-other-windows)
 (define-key ngoc/window-prefix "x" #'ace-swap-window)
 (define-key ngoc/window-prefix "s" #'my-save-window-config)
 (define-key ngoc/window-prefix "w" #'my-restore-window-config)
@@ -29,9 +28,8 @@
 (global-set-key (kbd "C-S-t") 'windmove-down)
 
 (global-set-key (kbd "M-t") '(lambda ()
-                                 (interactive)
-                                 (select-window (get-mru-window nil nil t)))
-                )
+                               (interactive)
+                               (select-window (get-mru-window nil nil t))))
 
 
 (use-package golden-ratio
@@ -48,7 +46,7 @@
   ;; (setq golden-ratio-exclude-modes '(
   ;;                                    magit-log-mode
   ;;                                    ))
-  (golden-ratio-mode 1)
+  ;; (golden-ratio-mode 1)
   )
 
 ;; use s-M-arrow keys for moving windows into direction of the arrow
@@ -73,6 +71,12 @@
 (global-set-key (kbd "M-s-<right>") 'my/move-buffer-right)
 (global-set-key (kbd "M-s-<up>")    'my/move-buffer-up)
 (global-set-key (kbd "M-s-<down>")  'my/move-buffer-down)
+
+;; alternative
+(global-set-key (kbd "C-M-S-h") 'my/move-buffer-left)
+(global-set-key (kbd "C-M-S-n") 'my/move-buffer-right)
+(global-set-key (kbd "C-M-S-c") 'my/move-buffer-up)
+(global-set-key (kbd "C-M-S-t") 'my/move-buffer-down)
 
 
 (use-package ace-window
@@ -130,14 +134,14 @@
 (defun n/tab-switch (num)
   "Switch to tab based on number input."
   (interactive "c")
-    (when (and (>= num ?0) (<= num ?9))
-      (tab-bar-select-tab (- num ?0))))
+  (when (and (>= num ?0) (<= num ?9))
+    (tab-bar-select-tab (- num ?0))))
 
 (dotimes (i 10)
   (global-set-key (kbd (format "<f8>%d" i))
                   `(lambda () (interactive) (n/tab-switch ,(string-to-char (number-to-string i))))))
 
-; duplicate tab and set name
+;; duplicate tab and set name
 (defun n/tab-duplicate-and-rename ()
   "Duplicate current tab and set name."
   (interactive)
@@ -173,41 +177,98 @@
 (defun my-save-window-config ()
   "Save current window configuration."
   (interactive)
-  (setq my-saved-window-state (window-state-get (frame-root-window) t))
+  ;; (setq my-saved-window-state (current-window-configuration))
+  (setq my-saved-window-state (winner-conf))
   (message "Saved window config"))
 
 (defun my-restore-window-config ()
   "Restore saved window configuration."
   (interactive)
   (when my-saved-window-state
-    (window-state-put my-saved-window-state (frame-root-window))))
+    ;; (set-window-configuration my-saved-window-state)
+    (winner-set my-saved-window-state)
+    ))
 
-;; (global-set-key (kbd "M-m w s") #'my-save-window-config)
-;; (global-set-key (kbd "M-m w w") #'my-restore-window-config)
+;;================================= window rules ================================
+(defun my/fit-window-to-buffer-horizontally (window)
+  (interactive)
+  (let ((fit-window-to-buffer-horizontally t))
+    (fit-window-to-buffer window)))
 
+(defun my/find-large-window-to-display (buffer alist)
+  "Return the largest window for displaying BUFFER.
+The window must not be a side window and not be dedicated.
+Among windows of similar size, prefer least recently used (LRU).
 
-(use-package popper
-  :ensure t ; or :straight t
-  :bind (("C-`"   . popper-toggle)
-         ;; ("M-`"   . popper-cycle)
-         ;; ("C-M-`" . popper-toggle-type)
-         )
-  :init
-  (defun my/popper-fit-window-height-or-half (win)
-    (fit-window-to-buffer
-     win
-     (floor (frame-height) 2)
-     (floor (frame-height) 3)))
-  (setq popper-window-height #'my/popper-fit-window-height-or-half)
-  (setq popper-reference-buffers
-        '("\\*Messages\\*"
-          "Output\\*$"
-          "\\*Async Shell Command\\*"
-          "\\*HTTP Response\\*"
-          help-mode
-          compilation-mode))
-  (popper-mode +1)
-  (popper-echo-mode +1))
+To be used with display-buffer-use-some-window's some-window parameter.
+"
+  (let ((candidates '()))
+    ;; Collect all suitable windows
+    (dolist (window (window-list (selected-frame) 'nominibuf))
+      (when (and (not (window-dedicated-p window))
+                 (not (window-parameter window 'window-side)))
+        (push window candidates)))
 
+    ;; Return the largest window by area, with LRU as tiebreaker
+    (when candidates
+      (car (sort candidates
+            (lambda (w1 w2)
+              (let ((area1 (* (window-height w1) (window-width w1)))
+                    (area2 (* (window-height w2) (window-width w2))))
+                (if (<= (/ (abs (- area1 area2))
+                           (float (max area1 area2)))
+                        0.1)
+                    ;; Same size - prefer LRU (smaller window use time)
+                      (< (window-use-time w1)
+                         (window-use-time w2))
+                  ;; Different sizes - prefer larger area
+                  (> area1 area2)))))))))
+
+(setq display-buffer-alist
+      '(("\\*Help\\*"
+         (display-buffer-in-side-window)
+         (side . right)
+         (post-command-select-window . t)
+         (window-width . my/fit-window-to-buffer-horizontally))
+
+        ("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+         nil
+         (window-parameters (mode-line-format . none)))
+
+        ("\\*Async Shell Command\\*.*"
+         display-buffer-no-window)
+
+        ("\\*rg\\*"
+         (display-buffer-full-frame)
+         (post-command-select-window . t))
+
+        ("^\\*Ilist\\*$"
+         imenu-list-display-buffer)
+
+        ("*evil-owl*"
+         (display-buffer-in-side-window)
+         (side . bottom)
+         (window-height . 0.33))
+
+        ("*undo-tree*"
+         (display-buffer-in-direction)
+         (direction . left)
+         (window-width . my/fit-window-to-buffer-horizontally))
+
+        ((major-mode . vterm-mode)
+         (display-buffer-reuse-mode-window display-buffer-at-bottom)
+         (window-height . 0.25))))
+
+(setq display-buffer-base-action
+      '((display-buffer-reuse-window
+         display-buffer-in-previous-window
+         display-buffer-same-window
+         display-buffer-use-some-window) ;; if can't use same window because dedicated
+        (some-window . my/find-large-window-to-display)
+        ))
+
+(with-eval-after-load 'magit-mode
+  (setq magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
+  )
 
 (provide 'init-window-management)

@@ -30,12 +30,7 @@
   ;; (add-hook 'context-menu-functions #'embark-context-menu 100)
 
   :config
-
-  ;; Hide the mode line of the Embark live/completions buffers
-  (add-to-list 'display-buffer-alist
-               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
-                 nil
-                 (window-parameters (mode-line-format . none)))))
+  )
 
 
 ;; Consult users will also want the embark-consult package.

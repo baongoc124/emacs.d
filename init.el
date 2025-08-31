@@ -91,9 +91,6 @@
     (setq browse-url-generic-program "/usr/bin/open")
   (setq browse-url-generic-program "google-chrome-stable"))
 (setq browse-url-browser-function 'browse-url-generic)
-;; prevent async output buffer to show up
-(add-to-list 'display-buffer-alist (cons "\\*Async Shell Command\\*.*" (cons #'display-buffer-no-window nil)))
-
 
 (setq truncate-lines nil)
 

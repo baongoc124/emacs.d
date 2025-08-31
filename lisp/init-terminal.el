@@ -124,9 +124,12 @@
     (let* ((project-root (my/project-root))
            (buffer-name (generate-new-buffer-name
                          (format "*vterm:%s*" (file-name-nondirectory (directory-file-name project-root))))))
-      (with-current-buffer (vterm buffer-name)
+      (save-window-excursion
+        (vterm buffer-name)
         (my/add-project-vterm-buffer project-root buffer-name))
-      (switch-to-buffer buffer-name)))
+      (pop-to-buffer buffer-name)
+      )
+    )
 
   (defun my/vterm-switch ()
     "Switch to a vterm buffer from the current project with live preview in current window.
@@ -145,23 +148,20 @@ Buffers ordered by recency, auto-select if only one is available."
        ((null sorted-buffers)
         (message "No vterm buffers for this project."))
        ((= (length sorted-buffers) 1)
-        (switch-to-buffer (car sorted-buffers)))
+        (pop-to-buffer (car sorted-buffers)))
        (t
         (ivy-read "Project vterm: "
                   sorted-buffers
-                  :action #'switch-to-buffer
+                  :action #'pop-to-buffer
                   :preselect initial-buf
                   :update-fn (lambda ()
                                (let ((buf (ivy-state-current ivy-last)))
                                  (when (get-buffer buf)
                                    (with-ivy-window
-                                     (switch-to-buffer buf)))))
+                                     (display-buffer buf)))))
                   :caller 'my/vterm-switch)))))
 
-  ;; (global-set-key (kbd "M-j c") #'my/vterm-new)
-  ;; (global-set-key (kbd "<leader>t t") #'my/vterm-switch)
-
-  ;; lambda to launch my/vterm-switch when call without prefix C-u and my/vterm-new with C-u
+  ;; launch my/vterm-switch when call without prefix C-u and my/vterm-new with C-u
   (global-set-key (kbd "M-j")
                   (lambda (orig-fun &rest args)
                     (interactive "P")
