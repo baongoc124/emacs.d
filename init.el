@@ -47,7 +47,6 @@
 (require 'init-search)
 (require 'init-ssh)
 (require 'init-terminal)
-;; (require 'init-treemacs)
 (require 'init-treesit)
 (require 'init-undo-tree)
 (require 'init-version-control)
@@ -56,6 +55,7 @@
 (require 'init-writing)
 
 ;================================= nice to have ================================
+(require 'init-neotree)
 (require 'init-embark)
 (require 'init-ai)
 
