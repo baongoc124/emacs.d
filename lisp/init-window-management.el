@@ -201,12 +201,19 @@ The window must not be a side window and not be dedicated.
 Among windows of similar size, prefer least recently used (LRU).
 
 To be used with display-buffer-use-some-window's some-window parameter.
+
+This function also respects inhibit-same-window param.
 "
-  (let ((candidates '()))
+  (let ((candidates '())
+        (inhibit-same-window (cdr (assq 'inhibit-same-window alist)))
+        (current-window (selected-window)))
     ;; Collect all suitable windows
     (dolist (window (window-list (selected-frame) 'nominibuf))
       (when (and (not (window-dedicated-p window))
-                 (not (window-parameter window 'window-side)))
+                 (not (window-parameter window 'window-side))
+                 ;; Skip current window if inhibit-same-window is t
+                 (not (and inhibit-same-window
+                          (eq window current-window))))
         (push window candidates)))
 
     ;; Return the largest window by area, with LRU as tiebreaker
