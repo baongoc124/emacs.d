@@ -63,6 +63,7 @@
 (require 'init-fold)
 
 (require 'init-programming-docker)
+(require 'init-programming-docs)
 (require 'init-programming-golang)
 (require 'init-programming-serverless)
 (require 'init-programming-toggle-debug-comment)
