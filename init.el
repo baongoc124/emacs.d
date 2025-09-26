@@ -21,6 +21,14 @@
 (add-to-list 'load-path (expand-file-name "lisp/" user-emacs-directory))
 
 (require 'init-package-management)
+
+
+;=========== used to detect Dropbox conflict files when open in emacs ==========
+(add-to-list 'load-path (expand-file-name "lisp/dropbox-conflicts-el/" user-emacs-directory))
+(require 'dropbox-conflicts)
+(dropbox-conflicts-mode t)
+
+;===================== must be loaded, otherwise suffering =====================
 (require 'init-lib)
 (require 'init-exec-path)
 (require 'init-evil)
@@ -139,10 +147,6 @@
 
 (use-package cdlatex)
 
-
-;; used to detect Dropbox conflict files when open in emacs
-;; (require 'dropbox-conflicts)
-;; (dropbox-conflicts-mode t)
 
 (setq TeX-PDF-mode t)
 (latex-preview-pane-enable)
