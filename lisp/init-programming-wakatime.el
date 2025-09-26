@@ -1,4 +1,4 @@
-(add-to-list 'load-path "~/.emacs.d/lisp/wakatime-mode/")
+(add-to-list 'load-path (expand-file-name "lisp/wakatime-mode/" user-emacs-directory))
 
 (require 'wakatime-mode)
 (setq wakatime-api-key (m/get-password "wakatime.com" "apikey"))

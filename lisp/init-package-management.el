@@ -1,6 +1,6 @@
-(add-to-list 'load-path "~/.emacs.d/lisp/highlight-symbol/")
-(add-to-list 'load-path "~/.emacs.d/lisp/history")
-(add-to-list 'load-path "~/.emacs.d/lisp/netlogo-mode/emacs")
+(add-to-list 'load-path (expand-file-name "lisp/highlight-symbol/" user-emacs-directory))
+(add-to-list 'load-path (expand-file-name "lisp/history" user-emacs-directory))
+(add-to-list 'load-path (expand-file-name "lisp/netlogo-mode/emacs" user-emacs-directory))
 
 (add-to-list 'custom-theme-load-path "~/.emacs.d/lisp/nord-lightt/")
 (add-to-list 'custom-theme-load-path "~/.emacs.d/lisp/theme-custom/")

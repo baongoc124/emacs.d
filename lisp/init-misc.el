@@ -151,7 +151,7 @@
 (use-package jinja2-mode)
 (use-package polymode)
 
-(add-to-list 'load-path "~/.emacs.d/lisp/dbt-mode/")
+(add-to-list 'load-path (expand-file-name "lisp/dbt-mode/" user-emacs-directory))
 
 (require 'dbt-mode)
 ;; Customize `sql-product' to set the flavor of the SQL syntax.

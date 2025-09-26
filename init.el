@@ -18,8 +18,8 @@
 
 (global-set-key (kbd "M-u") #'universal-argument)
 
-(add-to-list 'load-path "~/.emacs.d/lisp/")
-;===================== must be loaded, otherwise suffering =====================
+(add-to-list 'load-path (expand-file-name "lisp/" user-emacs-directory))
+
 (require 'init-package-management)
 (require 'init-lib)
 (require 'init-exec-path)
