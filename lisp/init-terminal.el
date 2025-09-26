@@ -77,7 +77,9 @@ Buffers ordered by recency, auto-select if only one is available."
        ((null sorted-buffers)
         (message "No vterm buffers for this project."))
        ((= (length sorted-buffers) 1)
-        (pop-to-buffer (car sorted-buffers)))
+        (if (eq (selected-window) (get-buffer-window (car sorted-buffers)))
+            (message "Already on the only vterm buffer for this project.")
+          (pop-to-buffer (car sorted-buffers))))
        (t
         (ivy-read "Project vterm: "
                   sorted-buffers

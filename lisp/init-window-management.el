@@ -1,9 +1,44 @@
 ;; prevent top bottom split
 (setq split-height-threshold nil)
+(setq split-width-threshold 160)
 
-;; big enough so even with golden ratio mode, it won't trigger
-;; FIXME: should fix split-window-sensibly
-(setq split-width-threshold 180)
+;; Fix annoying vertical window splitting.
+;; https://lists.gnu.org/archive/html/help-gnu-emacs/2015-08/msg00339.html
+(with-eval-after-load "window"
+  (defcustom split-window-below nil
+    "If non-nil, vertical splits produce new windows below."
+    :group 'windows
+    :type 'boolean)
+
+  (defcustom split-window-right nil
+    "If non-nil, horizontal splits produce new windows to the right."
+    :group 'windows
+    :type 'boolean)
+
+  ;; (fmakunbound #'split-window-sensibly)
+
+  (defun split-window-more-sensibly
+      (&optional window)
+    (setq window (or window (selected-window)))
+    (or (and (window-splittable-p window t)
+             ;; Split window horizontally.
+             (split-window window nil (if split-window-right 'left  'right)))
+        (and (window-splittable-p window)
+             ;; Split window vertically.
+             (split-window window nil (if split-window-below 'above 'below)))
+        (and (eq window (frame-root-window (window-frame window)))
+             (not (window-minibuffer-p window))
+             ;; If WINDOW is the only window on its frame and is not the
+             ;; minibuffer window, try to split it horizontally disregarding the
+             ;; value of `split-width-threshold'.
+             (let ((split-width-threshold 0))
+               (when (window-splittable-p window t)
+                 (split-window window nil (if split-window-right
+                                              'left
+                                            'right)))))))
+  (setq split-window-preferred-function #'split-window-more-sensibly)
+  )
+
 
 (define-prefix-command 'ngoc/window-prefix)
 (define-key ngoc/window-prefix "c" #'my-ace-copy-window)
@@ -11,6 +46,7 @@
 (define-key ngoc/window-prefix "e" #'balance-windows)
 (define-key ngoc/window-prefix "h" #'hsplit-last-buffer)
 (define-key ngoc/window-prefix "m" #'my-ace-move-window)
+(define-key ngoc/window-prefix "." #'window-toggle-side-windows)
 (define-key ngoc/window-prefix "t" #'transpose-frame)
 (define-key ngoc/window-prefix "v" #'vsplit-last-buffer)
 (define-key ngoc/window-prefix "x" #'ace-swap-window)
@@ -29,7 +65,7 @@
 
 (global-set-key (kbd "M-t") '(lambda ()
                                (interactive)
-                               (select-window (get-mru-window nil nil t))))
+                               (select-window (get-mru-window nil t t))))
 
 
 (use-package golden-ratio
@@ -190,6 +226,9 @@
     ))
 
 ;;================================= window rules ================================
+;; in general, main working space will be 1 or 2 windows in the middle
+;; all temporary windows like docs, term will be on the side
+;; this is to allow reusing of main windows as much as possible
 (defun my/fit-window-to-buffer-horizontally (window)
   (interactive)
   (let ((fit-window-to-buffer-horizontally t))
@@ -197,8 +236,11 @@
 
 (defun my/find-large-window-to-display (buffer alist)
   "Return the largest window for displaying BUFFER.
+Only considers windows with at least 40% of frame height.
 The window must not be a side window and not be dedicated.
 Among windows of similar size, prefer least recently used (LRU).
+
+If no suitable candidates found, splits the largest window.
 
 To be used with display-buffer-use-some-window's some-window parameter.
 
@@ -206,36 +248,43 @@ This function also respects inhibit-same-window param.
 "
   (let ((candidates '())
         (inhibit-same-window (cdr (assq 'inhibit-same-window alist)))
-        (current-window (selected-window)))
+        (current-window (selected-window))
+        (min-height (* 0.4 (frame-height))))
     ;; Collect all suitable windows
     (dolist (window (window-list (selected-frame) 'nominibuf))
       (when (and (not (window-dedicated-p window))
                  (not (window-parameter window 'window-side))
+                 (>= (window-height window) min-height)
                  ;; Skip current window if inhibit-same-window is t
                  (not (and inhibit-same-window
                           (eq window current-window))))
         (push window candidates)))
 
     ;; Return the largest window by area, with LRU as tiebreaker
-    (when candidates
-      (car (sort candidates
-            (lambda (w1 w2)
-              (let ((area1 (* (window-height w1) (window-width w1)))
-                    (area2 (* (window-height w2) (window-width w2))))
-                (if (<= (/ (abs (- area1 area2))
-                           (float (max area1 area2)))
-                        0.1)
-                    ;; Same size - prefer LRU (smaller window use time)
-                      (< (window-use-time w1)
-                         (window-use-time w2))
-                  ;; Different sizes - prefer larger area
-                  (> area1 area2)))))))))
+    (if candidates
+        (car (sort candidates
+              (lambda (w1 w2)
+                (let ((area1 (* (window-height w1) (window-width w1)))
+                      (area2 (* (window-height w2) (window-width w2))))
+                  (if (<= (/ (abs (- area1 area2))
+                             (float (max area1 area2)))
+                          0.1)
+                      ;; Same size - prefer LRU (smaller window use time)
+                        (< (window-use-time w1)
+                           (window-use-time w2))
+                    ;; Different sizes - prefer larger area
+                    (> area1 area2))))))
+      ;; No candidates found - split the largest window
+      (when-let ((largest-window (get-largest-window nil nil nil)))
+          (split-window largest-window nil 'right)))))
+
 
 (setq display-buffer-alist
       '(("\\*Help\\*"
          (display-buffer-in-side-window)
          (side . right)
-         (post-command-select-window . t)
+         (body-function . select-window)
+         ;; (post-command-select-window . t)
          (window-width . my/fit-window-to-buffer-horizontally))
 
         ("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
@@ -262,16 +311,47 @@ This function also respects inhibit-same-window param.
          (direction . left)
          (window-width . my/fit-window-to-buffer-horizontally))
 
+        ;; ((major-mode . vterm-mode)
+        ;;  (display-buffer-reuse-mode-window display-buffer-at-bottom)
+        ;;  (window-height . 0.25))
+
         ((major-mode . vterm-mode)
-         (display-buffer-reuse-mode-window display-buffer-at-bottom)
-         (window-height . 0.25))))
+         (display-buffer-reuse-window
+          display-buffer-reuse-mode-window
+          display-buffer-same-window)
+         ;; (body-function . select-window)
+         ;; (inhibit-same-window . t)
+         ;; (window-parameters . ((window-dedicated . nil)))
+         )
+
+        ;; ;; somehow magit-log keeps resizing bottom side window
+        ;; ;; -> it was because of transient window
+        ;; ((major-mode . vterm-mode)
+        ;;  (display-buffer-reuse-window
+        ;;   display-buffer-in-side-window)
+        ;;  (side . bottom)
+        ;;  (window-height . 0.33)
+        ;;  ;; (window-parameters . ((window-dedicated . nil)))
+        ;;  )
+
+        ((major-mode . devdocs-mode)
+         nil
+
+         (post-command-select-window . t)
+         (inhibit-same-window . t)
+         )
+
+        )
+      )
 
 (setq display-buffer-base-action
       '((display-buffer-reuse-window
          display-buffer-in-previous-window
          display-buffer-same-window
-         display-buffer-use-some-window) ;; if can't use same window because dedicated
+         display-buffer-use-some-window ;; if can't use same window because dedicated or inhibit-same-window
+         )
         (some-window . my/find-large-window-to-display)
+        (reusable-frames . nil)
         ))
 
 (with-eval-after-load 'magit-mode
