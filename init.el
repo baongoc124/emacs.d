@@ -389,25 +389,5 @@ Version: 2015-10-01"
   (chrome-reload))
 
 
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   '("5e1777af6af8bdf6376b4d7b17a91a8057063ca60f4d8ed7b547d06fd02277d1" "81179c35607016fd92ed2751068a14438ef847c4db82dabcf74b2ff94be4eabc" "be51dc2e9c578c884b442d3bf46555454e095785b8223e8530bd1e949d7ebcb7" "c3b359e781e5418343a9a0e4f9a6d8f1b57ea4be4c020fe329b60bad12c6fb6e" "6c685287c7234f04cc1beedf2920dbfff8193dec34266ac22fa55dbaa047b39e" "733a3296be05c918fb3ee4f83dd8d7725014c0dff1b22265b44391e247f7d8c7" "dda894ceb5ad3685778c84596014de3bf60bd31107f16b2a38d71e3707a4793a" "571661a9d205cb32dfed5566019ad54f5bb3415d2d88f7ea1d00c7c794e70a36" default))
- '(package-vc-selected-packages
-   '((transient-showcase :url "https://github.com/positron-solutions/transient-showcase.git")))
- '(safe-local-variable-values
-   '((eval setq cc-search-directories
-           (list "."
-                 (expand-file-name "~/builds/comm/include")
-                 (expand-file-name "~/builds/comm/src")
-                 (expand-file-name "~/builds/comm/src/**")
-                 "/usr/include" "/usr/local/include/*"))
-     (eval setq flycheck-clang-include-path
-           (list
-            (expand-file-name "~/apps/omnetpp-5.7/include")
-            (expand-file-name "~/builds/comm/include")
-            (expand-file-name "~/builds/comm/src/message"))))))
-
+(setq custom-file (expand-file-name "init-custom.el" user-emacs-directory))
+(load custom-file)
