@@ -16,8 +16,8 @@
 
   (defun my/my-eglot-setup ()
     (when (eglot-managed-p)
-      (setq company-backends (list
-                              '(company-capf company-dabbrev-code company-files :separate)))
+      (setq company-backends '((company-capf :with company-dabbrev-code :separate)
+                               company-files))
       )
 
     (add-hook 'completion-at-point-functions (cape-capf-nonexclusive 'eglot-completion-at-point) 0 t)
@@ -25,7 +25,7 @@
   (add-hook 'eglot-managed-mode-hook #'my/my-eglot-setup)
 
   (add-to-list 'eglot-server-programs
-               '(python-mode . ("uvx" "--from" "python-lsp-server[all]>=1.12.2" "pylsp")))
+               '(python-mode . ("uvx" "--offline" "--from" "python-lsp-server[all]>=1.12.2" "pylsp")))
 
   ;; remove python from assoc list eglot-server-programs
   ;; (setq eglot-server-programs (cl-delete-if (lambda (entry) (eq (car entry) '(python-mode python-ts-mode))) eglot-server-programs))
