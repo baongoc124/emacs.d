@@ -182,46 +182,6 @@
 
 (setq sentence-end-double-space nil) ; disable archaic double space after sentence
 
-(defvar xah-brackets '("“”" "()" "[]" "{}" "<>" "＜＞" "（）" "［］" "｛｝" "⦅⦆" "〚〛" "⦃⦄" "‹›" "«»" "「」" "〈〉" "《》" "【】" "〔〕" "⦗⦘" "『』" "〖〗" "〘〙" "｢｣" "⟦⟧" "⟨⟩" "⟪⟫" "⟮⟯" "⟬⟭" "⌈⌉" "⌊⌋" "⦇⦈" "⦉⦊" "❛❜" "❝❞" "❨❩" "❪❫" "❴❵" "❬❭" "❮❯" "❰❱" "❲❳" "〈〉" "⦑⦒" "⧼⧽" "﹙﹚" "﹛﹜" "﹝﹞" "⁽⁾" "₍₎" "⦋⦌" "⦍⦎" "⦏⦐" "⁅⁆" "⸢⸣" "⸤⸥" "⟅⟆" "⦓⦔" "⦕⦖" "⸦⸧" "⸨⸩" "｟｠")
- "A list of strings, each element is a string of 2 chars, the left bracket and a matching right bracket.
-Used by `xah-select-text-in-quote' and others.")
-
-(defconst xah-left-brackets
-  (mapcar (lambda (x) (substring x 0 1)) xah-brackets)
-  "List of left bracket chars. Each element is a string.")
-
-(defconst xah-right-brackets
-  (mapcar (lambda (x) (substring x 1 2)) xah-brackets)
-  "List of right bracket chars. Each element is a string.")
-
-(defun xah-backward-left-bracket ()
-  "Move cursor to the previous occurrence of left bracket.
-The list of brackets to jump to is defined by `xah-left-brackets'.
-
-URL `http://xahlee.info/emacs/emacs/emacs_navigating_keys_for_brackets.html'
-Version: 2015-10-01"
-  (interactive)
-  (re-search-backward (regexp-opt xah-left-brackets) nil t))
-
-(defun xah-forward-right-bracket ()
-  "Move cursor to the next occurrence of right bracket.
-The list of brackets to jump to is defined by `xah-right-brackets'.
-
-URL `http://xahlee.info/emacs/emacs/emacs_navigating_keys_for_brackets.html'
-Version: 2015-10-01"
-  (interactive)
-  (re-search-forward (regexp-opt xah-right-brackets) nil t))
-
-;; FIXME: make it easier to use in evil
-;; use middle fingers for paragraph movements
-;; use ring fingers for bracket movements
-;; to alternating hands like Dvorak's idea
-(global-set-key (kbd "C-2") 'xah-backward-left-bracket)
-(global-set-key (kbd "C-9") 'xah-forward-right-bracket)
-(global-set-key (kbd "C-3") 'backward-paragraph)
-(global-set-key (kbd "C-8") 'forward-paragraph)
-
-
 (require 'recentf)
 (setq recentf-auto-cleanup 17) ;; disable before we start recentf!
 (setq recentf-max-menu-items 20)
