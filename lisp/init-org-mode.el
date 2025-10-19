@@ -358,4 +358,32 @@
 ;; change scale of org-format-latex-options
 (setq org-format-latex-options (plist-put org-format-latex-options :scale 2))
 
+;===============================================================================
+(setq org-startup-with-inline-images t)
+
+(defun my/org-paste-image ()
+  "Paste image from clipboard into an `images` folder relative to current org file.
+The image filename will be prefixed with the current org file name (up to 16 chars)."
+  (interactive)
+  (unless (buffer-file-name)
+    (user-error "This buffer is not visiting a file"))
+  (let* ((org-dir (file-name-directory (buffer-file-name)))
+         (org-base (file-name-base (buffer-file-name)))
+         (prefix (substring org-base 0 (min 32 (length org-base))))
+         (img-dir (concat org-dir ""))
+         (img-name (format "%s_%s.png"
+                           prefix
+                           (format-time-string "%Y%m%d_%H%M%S")))
+         (img-path (concat img-dir img-name)))
+    (unless (file-exists-p img-dir)
+      (make-directory img-dir))
+    (call-process "pngpaste" nil nil nil img-path)
+    (if (file-exists-p img-path)
+        (progn
+          (insert (format "[[file:%s]]" img-name))
+          (org-display-inline-images))
+      (message "No image in clipboard! Did you use Cmd+Shift+Ctrl+4?"))))
+
+(define-key org-mode-map (kbd "C-c p") #'my/org-paste-image)
+
 (provide 'init-org-mode)
