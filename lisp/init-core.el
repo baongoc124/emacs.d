@@ -1,5 +1,3 @@
-;; common settings for normal instance and exwm instance
-
 (defun display-startup-echo-area-message ()
   (message "Knowledge is power!"))
 
@@ -56,6 +54,8 @@
 (setq minibuffer-prompt-properties '(readonly t point-entered minibuffer-avoid-prompt face minibuffer-prompt))
 
 (blink-cursor-mode 0)
+
+(setq-default indicate-empty-lines t)
 
 
 (add-hook 'window-setup-hook
