@@ -31,7 +31,6 @@
           ("M-b" . ibuffer)
           ("b" . counsel-switch-buffer)
           ("c" . evilnc-comment-operator)
-          ("d" . duplicate-dwim)
           ("e" . ngoc/eglot-transient)
           ("f" . project-find-file)
           ("M-f" . format-all-buffer)
