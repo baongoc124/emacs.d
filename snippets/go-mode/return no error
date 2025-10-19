@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: return no error
+# key: rn
+# --
+return $0, nil

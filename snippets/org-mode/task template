@@ -1,0 +1,19 @@
+# -*- mode: snippet -*-
+# name: task template
+# key: tt
+# --
+* $0Task name
+
+** ✅ Achievements
+   - [ ] Started
+
+** 🔹 Steps to Complete
+   - [ ] Clarify goal
+   - [ ] Break into smaller actions
+   - [ ] Gather materials/resources
+   - [ ] Draft initial version
+   - [ ] Review & refine
+   - [ ] Finalize
+
+** Notes
+  - Use this section to jot ideas, blockers, or reflections.
