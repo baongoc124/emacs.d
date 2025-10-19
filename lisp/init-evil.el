@@ -2,23 +2,37 @@
 ;; old evil config
 ;; https://github.com/baongoc124/emacs.d/blob/1b9f05cb86f8c609b271dd0364bfb005b6aba36a/init.el
 (use-package evil
+  :init
+  (setq evil-want-keybinding nil)
   :config
   (evil-mode 1)
   (setq evil-want-fine-undo t)
   (setq evil-undo-system 'undo-tree)
-  (setq evil-emacs-state-cursor '("pink" box))
-  (setq evil-normal-state-cursor '("#00B400" box))
-  (setq evil-visual-state-cursor '("orange" box))
-  (setq evil-insert-state-cursor '((bar . 3) "red"))
-  (setq evil-replace-state-cursor '((bar . 3) "pink"))
-  (setq evil-operator-state-cursor '("red" hollow))
 
+  (defun my/set-evil-cursor ()
+    (interactive)
+    (if (eq (frame-parameter nil 'background-mode) 'dark)
+        (progn
+          (setq evil-emacs-state-cursor  '("#ff3399" box))
+          (setq evil-normal-state-cursor '("green" box))
+          (setq evil-visual-state-cursor '("orange" box))
+          (setq evil-insert-state-cursor '((bar . 3) "red"))
+          (setq evil-replace-state-cursor '((bar . 3) "pink"))
+          (setq evil-operator-state-cursor '("red" hollow)))
+      (setq evil-emacs-state-cursor '("#cc0077" box))
+      (setq evil-normal-state-cursor '("#00B400" box))
+      (setq evil-visual-state-cursor '("orange" box))
+      (setq evil-insert-state-cursor '((bar . 3) "red"))
+      (setq evil-replace-state-cursor '((bar . 3) "magenta"))
+      (setq evil-operator-state-cursor '("red" hollow))))
+
+  (my/set-evil-cursor)
 
   ;; switch to evil-search because i want to use gn, gN
   (evil-select-search-module 'evil-search-module 'evil-search)
 
   (define-key evil-emacs-state-map [escape] nil)
-  (define-key evil-visual-state-map (kbd "v") 'er/expand-region)
+  ;; (define-key evil-visual-state-map (kbd "v") 'er/expand-region)
 
   ;; define as motion keys allow evil-jumps to work & other action with motions!
   (define-key evil-motion-state-map (kbd "s") 'avy-goto-char-timer)
@@ -34,6 +48,7 @@
   (evil-set-initial-state 'eat-mode 'emacs)
   (evil-set-initial-state 'elfeed-search-mode 'emacs)
   (evil-set-initial-state 'elfeed-show-mode 'emacs)
+  (evil-set-initial-state 'ediff-mode 'emacs)
   (evil-set-initial-state 'eshell-mode 'emacs)
   (evil-set-initial-state 'exwm-mode 'emacs)
   (evil-set-initial-state 'help-mode 'emacs)
@@ -221,11 +236,18 @@
     )
   )
 
+
 ;; display a popup to show register contents automatically when it's needed
 (use-package evil-owl
   :diminish evil-owl-mode
   :config
   (setq evil-owl-max-string-length 128)
   (evil-owl-mode 1))
+
+
+(use-package evil-matchit
+  :config
+  (global-evil-matchit-mode 1))
+
 
 (provide 'init-evil)
