@@ -38,7 +38,6 @@
 
 (require 'init-auto-completion)
 (require 'init-buffer)
-;; (require 'init-copilot)
 (require 'init-dired)
 (require 'init-eglot)
 (require 'init-fcitx)
