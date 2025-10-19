@@ -1,5 +1,13 @@
 (require 'dired)
-(setq dired-listing-switches "-lah --group-directories-first")
+
+;; gls is used by insert-directory-program
+(when (eq system-type 'darwin)
+  (let ((gls (executable-find "gls")))
+    (unless gls
+      (display-warning 'user-config "GNU ls (gls) not found. Dired might fail to work."))))
+
+(setq dired-listing-switches "-lAh --group-directories-first")
+
 (setq delete-by-moving-to-trash t)
 (setq dired-dwim-target nil)
 
@@ -44,10 +52,12 @@
 
 (use-package terminal-here
   :config
-  (progn
-    (setq terminal-here-linux-terminal-command 'gnome-terminal
-          terminal-here-command-flag "--")
-    (global-set-key (kbd "C-!") 'terminal-here-launch)))
+  (if (eq system-type 'darwin)
+      (setq terminal-here-linux-terminal-command '("open" "-a" "iTerm"))
+    (setq terminal-here-linux-terminal-command 'gnome-terminal))
+  (setq terminal-here-command-flag "--")
+  (global-set-key (kbd "C-!") 'terminal-here-launch)
+  )
 
 
 (use-package nerd-icons)
