@@ -90,9 +90,13 @@
 
 
 
+;; (setq frame-title-format
+;;       '("" invocation-name ": " (:eval (replace-regexp-in-string
+;;                                         "^ +" "" (buffer-name)))))
 (setq frame-title-format
-      '("" invocation-name ": " (:eval (replace-regexp-in-string
-                                        "^ +" "" (buffer-name)))))
+      '(:eval (if buffer-file-name
+                  (abbreviate-file-name buffer-file-name)
+                "%b")))
 (setq mouse-yank-at-point t)
 
 ;; set default browser based on OS
