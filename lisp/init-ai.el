@@ -42,7 +42,7 @@ When responding to me:
   Also create the *Jarvis* buffer & its file if it doesn't exist."
   (interactive)
   (unless (get-buffer "*Jarvis*")
-    (let ((jarvis-file (expand-file-name "~/.emacs.d/cache/gptel/*Jarvis*")))
+    (let ((jarvis-file (expand-file-name "cache/gptel/*Jarvis*" user-emacs-directory)))
       (unless (file-exists-p jarvis-file)
         (with-temp-file jarvis-file))
       (find-file jarvis-file)

@@ -6,7 +6,6 @@
 
   :bind (("M-<space>" . company-complete)
          :map company-active-map
-         ("M-8"       . yas-expand)
          ("TAB"       . company-complete-selection)
          ("<tab>"     . company-complete-selection)
          ("<escape>"  . company-abort)
@@ -24,6 +23,11 @@
   (setq company-minimum-prefix-length 1)
   (setq company-idle-delay 0.05)
   (setq company-format-margin-function 'company-text-icons-margin)
+
+  ;; remove inline preview frontends because it's reserved for AI completion
+  (setq-default company-frontends '(company-pseudo-tooltip-frontend
+                            company-echo-metadata-frontend
+                            company-quickhelp-frontend))
   )
 
 (use-package company-posframe
