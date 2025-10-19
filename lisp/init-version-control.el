@@ -160,6 +160,9 @@
       (transient-setup 'ngoc/git-transient)))))
 
 
+(use-package git-modes)
+
+
 ;; show git's current checked out branch or commit on header of dired buffers
 (require 'dired)
 (defvar-local dired-git-branch nil
