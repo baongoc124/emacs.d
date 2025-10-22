@@ -52,11 +52,10 @@
 
 (use-package terminal-here
   :config
-  (if (eq system-type 'darwin)
-      (setq terminal-here-linux-terminal-command '("open" "-a" "iTerm"))
-    (setq terminal-here-linux-terminal-command 'gnome-terminal))
-  (setq terminal-here-command-flag "--")
-  (global-set-key (kbd "C-!") 'terminal-here-launch)
+  (setq terminal-here-mac-terminal-command 'iterm2)
+  (setq terminal-here-linux-terminal-command 'gnome-terminal)
+  ;; (setq terminal-here-command-flag "--")
+  (global-set-key (kbd "C-S-<return>") 'terminal-here-launch)
   )
 
 
