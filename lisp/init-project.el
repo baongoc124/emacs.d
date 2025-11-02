@@ -48,4 +48,16 @@
   (add-hook 'project-find-functions #'ngoc/project-find-root))
 
 
+(use-package otpp
+  :after project
+  :init
+  ;; Enable `otpp-mode` globally
+  (otpp-mode 1)
+  ;; If you want to advice the commands in `otpp-override-commands`
+  ;; to be run in the current's tab (so, current project's) root directory
+  (otpp-override-mode 1)
+
+  (add-to-list 'otpp-override-commands #'my/vterm-dispatch)
+  )
+
 (provide 'init-project)
