@@ -100,6 +100,19 @@
   (transient-append-suffix 'magit-log "s"
     '("M-d" "Show deleted files" my/magit-show-deleted-files))
 
+
+  ;; TODO: add this to stash popup
+  (defun my/magit-stash-edit-message (stash message)
+    "Change STASH's message to MESSAGE."
+    (interactive
+     (let* ((stash (magit-read-stash "Rename"))
+            (old-msg (magit-git-string "show" "-s" "--format=%s" stash)))
+       (list stash (magit-read-string "Stash message" old-msg))))
+    (let ((commit (magit-rev-parse stash))
+          (inhibit-magit-refresh t))
+      (magit-stash-drop stash)
+      (magit-stash-store message "refs/stash" commit))
+    (magit-refresh))
   )
 
 (use-package forge
