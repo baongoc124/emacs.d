@@ -35,19 +35,12 @@
 (use-package project
   :config
 
-  (defvar ngoc/project-marker ".ngoc-project"
-    "Project marker file name.")
-
-  (defun ngoc/project-find-root (dir)
-    "Find the root directory of the current project."
-    (let ((root (locate-dominating-file dir ngoc/project-marker)))
-      (if root
-          (list 'vc nil root)
-        nil)))
-
-  (add-hook 'project-find-functions #'ngoc/project-find-root))
+  ;; from 29.1
+  (add-to-list 'project-vc-extra-root-markers ".ngoc-project")
+  )
 
 
+;; one tab per project mode
 (use-package otpp
   :after project
   :init
