@@ -280,6 +280,15 @@ This function also respects inhibit-same-window param.
       (when-let ((largest-window (get-largest-window nil nil nil)))
           (split-window largest-window nil 'right)))))
 
+(defun my/display-buffer-split-if-one-window (buffer alist)
+  "Display buffer by splitting window if only one main window exists."
+  (let ((main-windows (seq-filter
+                       (lambda (w)
+                         (not (window-parameter w 'window-side)))
+                       (window-list))))
+    (when (= (length main-windows) 1)
+      (display-buffer-pop-up-window buffer alist))))
+
 
 (setq display-buffer-alist
       '(("\\*Help\\*"
@@ -297,28 +306,37 @@ This function also respects inhibit-same-window param.
          display-buffer-no-window)
 
         ("\\*rg\\*"
-         (display-buffer-full-frame)
+         nil
+         ;; (display-buffer-full-frame)
          (post-command-select-window . t))
 
         ("^\\*Ilist\\*$"
          imenu-list-display-buffer)
 
-        ("*evil-owl*"
+        ("\\*evil-owl\\*"
          (display-buffer-in-side-window)
          (side . bottom)
          (window-height . 0.33))
 
-        ("*undo-tree*"
+        ("\\*undo-tree Diff\\*"
+         (display-buffer-in-side-window)
+         (side . bottom)
+         (window-height . 0.6)
+         )
+
+        ("\\*undo-tree\\*"
          (display-buffer-in-direction)
          (direction . left)
          (window-width . my/fit-window-to-buffer-horizontally))
+
 
         ;; ((major-mode . vterm-mode)
         ;;  (display-buffer-reuse-mode-window display-buffer-at-bottom)
         ;;  (window-height . 0.25))
 
         ((major-mode . vterm-mode)
-         (display-buffer-reuse-window
+         (my/display-buffer-split-if-one-window
+          display-buffer-reuse-window
           display-buffer-reuse-mode-window
           display-buffer-same-window)
          ;; (body-function . select-window)
