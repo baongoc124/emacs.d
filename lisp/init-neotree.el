@@ -1,4 +1,5 @@
 (use-package neotree
+  :demand t
   :bind
   (
    ;; ("C-c C-p" . neotree-find-project-root)  ; Open neotree at project root
@@ -11,8 +12,18 @@
   (setq neo-window-width 36)
   (setq neo-theme 'nerd-icons)
   (setq neo-auto-indent-point t)
-  (setq neo-show-hidden-files t)
+  (setq neo-show-hidden-files nil)
   (setq neo-show-slash-for-folder nil)
+
+  ;; Basic example - exclude common files/folders
+  (setq neo-hidden-regexp-list
+        '("^\\.git$"           ; .git folder
+          "^node_modules$"     ; node_modules folder
+          "^\\.DS_Store$"      ; macOS .DS_Store
+          "^__pycache__$"      ; Python cache
+          "\\.pyc$"            ; Python compiled files
+          "^\\.venv$"           ; .git folder
+          ))                   ; Emacs lock files
 
   (defun my/neotree-smart-toggle ()
     "Smart neotree toggle with three-state behavior:
