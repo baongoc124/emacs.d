@@ -166,7 +166,23 @@
   (tab-bar-format '(tab-bar-format-tabs tab-bar-separator))
 
   :config
+  (tab-bar-history-mode t)
+  (defun tab-or-winner-undo ()
+    (interactive)
+    (if (and tab-bar-history-mode (not (null (funcall tab-bar-tabs-function))))
+        (tab-bar-history-back)
+      (winner-undo)))
+
+  (defun tab-or-winner-redo ()
+    (interactive)
+    (if (and tab-bar-history-mode (not (null (funcall tab-bar-tabs-function))))
+        (tab-bar-history-forward)
+      (winner-redo)))
+
+  (global-set-key [remap winner-undo] #'tab-or-winner-undo)
+  (global-set-key [remap winner-redo] #'tab-or-winner-redo)
   )
+
 
 
 (defun n/tab-switch (num)
