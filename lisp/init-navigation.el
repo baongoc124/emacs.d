@@ -74,8 +74,13 @@
   (global-set-key (kbd "M-P") 'symbol-overlay-switch-backward))
 
 
-(global-set-key (kbd "M-o") #'evil-jump-backward)
-(global-set-key (kbd "M-i") #'evil-jump-forward)
+(use-package better-jumper
+  :config
+  (better-jumper-mode +1)
+  )
+
+(global-set-key (kbd "M-o") #'better-jumper-jump-backward)
+(global-set-key (kbd "M-i") #'better-jumper-jump-forward)
 (setq evil-want-C-i-jump nil)
 
 (provide 'init-navigation)
