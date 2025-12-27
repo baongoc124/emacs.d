@@ -3,7 +3,7 @@
   :init
   (add-to-list 'auto-mode-alist '("\\.plantuml\\'" . plantuml-mode))
   :config
-  (setq plantuml-default-exec-mode 'plantuml)
+  (setq plantuml-default-exec-mode 'executable)
   )
 
 (provide 'init-plantuml)
