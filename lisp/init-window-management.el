@@ -361,11 +361,19 @@ This function also respects inhibit-same-window param.
          (inhibit-same-window . t)
          )
 
+
+        ("\\*claudemacs:.*"
+         (display-buffer-in-side-window)
+         (side . right)
+         (window-width . 0.3)
+         )
+
         )
       )
 
 (setq display-buffer-base-action
-      '((display-buffer-reuse-window
+      '((my/display-buffer-split-if-one-window
+         display-buffer-reuse-window
          display-buffer-in-previous-window
          display-buffer-same-window
          display-buffer-use-some-window ;; if can't use same window because dedicated or inhibit-same-window
