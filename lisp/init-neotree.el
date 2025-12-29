@@ -1,4 +1,5 @@
 (use-package neotree
+  :vc (:fetcher github :repo "baongoc124/emacs-neotree") ;; my fork with project.el support
   :demand t
   :bind
   (
@@ -14,6 +15,10 @@
   (setq neo-auto-indent-point t)
   (setq neo-show-hidden-files nil)
   (setq neo-show-slash-for-folder nil)
+
+
+  (setq neo-autorefresh t)
+  (setq neo-smart-open t)
 
   ;; Basic example - exclude common files/folders
   (setq neo-hidden-regexp-list
