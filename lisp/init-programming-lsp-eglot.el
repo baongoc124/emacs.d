@@ -63,4 +63,4 @@
       ("h" "Toggle Inlay hints" eglot-inlay-hints-mode)]]))
 
 
-(provide 'init-eglot)
+(provide 'init-programming-lsp-eglot)

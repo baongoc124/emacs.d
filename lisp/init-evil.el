@@ -63,6 +63,7 @@
   (evil-set-initial-state 'win:switch-menu-mode 'emacs)
   (evil-set-initial-state 'xref--xref-buffer-mode 'emacs)
   (evil-set-initial-state 'undo-tree-visualizer-mode 'emacs)
+  (evil-set-initial-state 'lsp-bridge-ref-mode 'emacs)
 
   (evil-set-leader nil (kbd "M-m"))
   (evil-set-leader 'normal (kbd "<SPC>"))
