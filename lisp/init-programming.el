@@ -189,13 +189,11 @@ results in Zeal."
          ("\\.rest\\'" . restclient-mode))
   )
 
-(use-package smartparens
-  :diminish smartparens-mode
-  :hook (prog-mode text-mode markdown-mode)
+(use-package elec-pair
   :config
+  (electric-pair-mode 1)
   (show-paren-mode 1)
-  (setq show-paren-highlight-openparen nil) ;; only highlight the one that's cursor is not on
-  (require 'smartparens-config))
+  (setq show-paren-delay 0.025))
 
 
 (provide 'init-programming)
