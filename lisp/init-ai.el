@@ -198,4 +198,12 @@ When responding to me:
   ;; using `M-xxx` bindings.
 
 
+(use-package claudemacs
+  :vc (:fetcher github :repo "cpoile/claudemacs")
+
+  :config
+  (global-set-key (kbd "C-9") #'claudemacs-transient-menu)
+  )
+
+
 (provide 'init-ai)
