@@ -24,10 +24,10 @@
   (switch-to-buffer nil))
 
 
-
 (global-set-key (kbd "C-/")    nil)      ; don't use and easily mispress when in god-mode
 (global-set-key "\C-x\C-z" nil)          ; suspend emacs accidentally no more
 (global-set-key "\C-x\C-c" nil)          ; exit emacs accidentally no more
+(global-set-key (kbd "s-q") nil)         ; exit emacs accidentally no more
 (global-set-key (kbd "M-z") nil)
 
 ;; unset shortcut for transpose functions
@@ -38,6 +38,7 @@
 
 ;; unset menu-set-font
 (global-unset-key (kbd "s-t"))
+(global-unset-key (kbd "s-w"))
 
 
 ;;   ____ _   _ ___   _                      _
