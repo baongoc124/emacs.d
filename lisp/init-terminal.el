@@ -165,12 +165,14 @@ Buffers ordered by recency, auto-select if only one is available."
                   :caller 'my/vterm-switch)))))
 
   ;; launch my/vterm-switch when call without prefix C-u and my/vterm-new with C-u
-  (global-set-key (kbd "M-j")
-                  (lambda (orig-fun &rest args)
-                    (interactive "P")
-                    (if current-prefix-arg
-                        (apply #'my/vterm-new args)
-                      (apply #'my/vterm-switch args))))
+
+  (defun my/vterm-dispatch (orig-func &rest args)
+    (interactive "P")
+    (if current-prefix-arg
+        (apply #'my/vterm-new args)
+      (apply #'my/vterm-switch args)))
+
+  (global-set-key (kbd "M-j") #'my/vterm-dispatch)
 
   (defun my/vterm-copy-mode-evil-setup ()
     "Enter Evil normal state when entering `vterm-copy-mode',
