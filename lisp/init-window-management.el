@@ -379,9 +379,10 @@ This function also respects inhibit-same-window param.
 
 
         ("\\*claudemacs:.*"
-         (display-buffer-in-side-window)
+         (display-buffer-reuse-window
+          display-buffer-in-side-window)
          (side . right)
-         (window-width . 0.3)
+         (window-width . 0.25)
          )
 
         )

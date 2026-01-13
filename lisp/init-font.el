@@ -1,19 +1,25 @@
-(setq my/font
-      (cond
-       ((eq system-type 'gnu/linux)
-        '("Cascadia Code NF" . 13.0))
-       ((eq system-type 'darwin)
-        ;; '("Monaco" . 14.0))
-        ;; '("SF Mono" . 14.0))
-        ;; '("Spleen 6x12" . 15.0))
-       ;; '("Spleen 8x16" . 14.0))
-       ;; '("Menlo" . 14.0))
-       '("JetBrains Mono NL" . 16.0))
-       ;; '("Atlassian Mono" . 16.0))
-       ;; '("Comic Code" . 15.0))
-       (t
-        '("Monospace" . 14.0))))
+(defcustom my/font
+  (cond
+   ((eq system-type 'gnu/linux)
+    "Cascadia Code NF")
+   ((eq system-type 'darwin)
+    ;; "Monaco"
+    "Ubuntu Mono"
+    ;; "SF Mono"
+    ;; "Spleen 6x12"
+    ;; "Spleen 8x16"
+    ;; "Menlo"
+    ;; "JetBrains Mono NL"
+    ;; "Atlassian Mono"
+    ;; "Comic Code"
+    )
+   (t
+    "Monospace"))
+  "My font"
+  )
 
+(defvar my/font-size 14.0 "My font size")
+(defvar my/font-size-default 14.0 "My font size")
 
 (defun ngoc/setup-font (&optional frame)
   (interactive)
@@ -23,16 +29,16 @@
     (set-fontset-font t 'kana jp-font)
     (set-fontset-font t 'cjk-misc jp-font))
 
-  (set-frame-font (font-spec :family (car my/font)
+  (set-frame-font (font-spec :family my/font
                              :weight 'regular
-                             :size (cdr my/font))
+                             :size my/font-size)
                   t t t)
 
   ;; fixed issue with unreadable char in Info docs
   (set-face-attribute 'fixed-pitch-serif nil :family my/font :inherit 'default))
 
 (ngoc/setup-font)
-;; (remove-hook 'after-make-frame-functions #'ngoc/setup-font)
+(add-hook 'after-make-frame-functions #'ngoc/setup-font)
 
 (setq text-scale-mode-step 1.1)
 (global-set-key (kbd "C-x C-=") #'global-text-scale-adjust)
@@ -63,9 +69,15 @@
   "Set font weight to INDEX from `my/font-weight-cycle`."
   (let* ((len (length my/font-weight-cycle))
          (i (max 0 (min index (1- len))))
-         (weight (nth i my/font-weight-cycle)))
+         (weight (nth i my/font-weight-cycle))
+         (bold-weight (nth (min (+ i 3) (1- len)) my/font-weight-cycle))
+         )
     (set-face-attribute 'default nil :weight weight)
-    (message "Font weight: %s" weight)
+    ;; (set-face-attribute 'bold nil :weight bold-weight)
+    ;; (set-face-attribute 'font-lock-builtin-face nil :weight bold-weight)
+    ;; (set-face-attribute 'font-lock-keyword-face nil :weight bold-weight)
+    ;; (set-face-attribute 'font-lock-function-name-face nil :weight bold-weight)
+    (message "Font weight: %s %s" weight bold-weight)
     i))
 
 (defvar my/font-weight-index (my/get-current-weight-index))
