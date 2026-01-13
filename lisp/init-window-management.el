@@ -127,14 +127,13 @@
   (global-set-key (kbd "M-T") #'(lambda () (interactive)
                                   (let ((aw-dispatch-always t))
                                     (call-interactively #'ace-window))))
-  (if (display-graphic-p)
-      (progn
-        (ace-window-posframe-mode 1)
-        (set-face-attribute 'aw-leading-char-face nil :height 3.0)
-        )
+  (when (display-graphic-p)
+    (ace-window-posframe-mode 1))
 
-    (set-face-attribute 'aw-leading-char-face nil :weight 'bold :inverse-video t)
-    )
+  (defun my-ace-window-set-face ()
+    (if (display-graphic-p)
+        (set-face-attribute 'aw-leading-char-face nil :height 3.0)
+      (set-face-attribute 'aw-leading-char-face nil :weight 'bold :inverse-video t)))
 
   (defun my-ace-move-window ()
     (interactive)
