@@ -63,6 +63,7 @@
 (require 'init-writing)
 
 ;================================= nice to have ================================
+(require 'init-eshell)
 (require 'init-neotree)
 (require 'init-embark)
 (require 'init-ai)
