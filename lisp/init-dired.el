@@ -3,7 +3,10 @@
 ;; gls is used by insert-directory-program
 (when (eq system-type 'darwin)
   (let ((gls (executable-find "gls")))
-    (unless gls
+    (if gls
+        ;; normally we don't need to do this but we use exec-path to get PATH
+        ;; from env too late so emacs couldn't figure out that we have gls
+        (setq insert-directory-program "gls")
       (display-warning 'user-config "GNU ls (gls) not found. Dired might fail to work."))))
 
 (setq dired-listing-switches "-lAh --group-directories-first")
