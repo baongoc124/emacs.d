@@ -56,6 +56,7 @@
   (evil-set-initial-state 'info-mode 'emacs)
   (evil-set-initial-state 'minibuffer-mode 'emacs)
   (evil-set-initial-state 'shell-mode 'emacs)
+  (evil-set-initial-state 'shell-command-mode 'emacs)
   (evil-set-initial-state 'special-mode 'emacs)
   (evil-set-initial-state 'term-mode 'emacs)
   (evil-set-initial-state 'treemacs-mode 'emacs)
