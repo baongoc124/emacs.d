@@ -37,6 +37,19 @@
 
   ;; from 29.1
   (add-to-list 'project-vc-extra-root-markers ".ngoc-project")
+
+
+  ;; Disable project-try-vc for Docker TRAMP buffers because it makes Emacs hang
+  (defun my/disable-project-vc-for-docker-tramp (orig-fun dir)
+    "Disable project-try-vc for Docker TRAMP buffers."
+    (if (and (file-remote-p dir)
+             (string-match-p "^/docker:" dir))
+        (progn
+          (message dir)
+          nil)
+      (funcall orig-fun dir)))
+
+  (advice-add 'project-try-vc :around #'my/disable-project-vc-for-docker-tramp)
   )
 
 
