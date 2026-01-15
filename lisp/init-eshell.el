@@ -16,6 +16,12 @@
          (propertize (if (= (user-uid) 0) " # " " $ ") 'face `(:foreground "dark green"))
          )))
 
+(defun my/eshell-setup ()
+  (setenv "BUILDKIT_PROGRESS" "plain")
+  )
+
+(add-hook 'eshell-mode-hook #'my/eshell-setup)
+
 ;; https://www.reddit.com/r/emacs/comments/1ddkmmx/comment/l872gr6/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
 ;; Bash completion for eshell.
 (use-package bash-completion
