@@ -32,5 +32,18 @@
 ;;               (ibuffer-tramp-set-filter-groups-by-tramp-connection)
 ;;               (ibuffer-do-sort-by-alphabetic))))
 
+(defun my/kill-deleted-buffers ()
+  "Kill buffers for deleted files and directories."
+  (interactive)
+  (let ((killed-count 0))
+    (dolist (buf (buffer-list))
+      (with-current-buffer buf
+        (when (or (and (buffer-file-name)
+                       (not (file-exists-p (buffer-file-name))))
+                  (and (eq major-mode 'dired-mode)
+                       (not (file-exists-p dired-directory))))
+          (kill-buffer buf)
+          (setq killed-count (1+ killed-count)))))
+    (message "Killed %d buffer(s) for deleted files/directories" killed-count)))
 
 (provide 'init-buffer)
