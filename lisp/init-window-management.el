@@ -180,6 +180,13 @@
 
   (global-set-key [remap winner-undo] #'tab-or-winner-undo)
   (global-set-key [remap winner-redo] #'tab-or-winner-redo)
+
+
+  (defun my/tab-ensure-split ()
+    (when (= (count-windows) 1)
+      (split-window-right)))
+
+  (advice-add 'tab-bar-new-tab :after #'my/tab-ensure-split)
   )
 
 
