@@ -50,6 +50,7 @@
 (require 'init-programming)
 (require 'init-programming-lsp-bridge)
 (require 'init-programming-swift)
+(require 'init-programming-flymake)
 (require 'init-programming-vue)
 (require 'init-python)
 (require 'init-search)

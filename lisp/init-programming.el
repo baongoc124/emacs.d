@@ -1,11 +1,3 @@
-(use-package flymake)
-(use-package flymake-diagnostic-at-point
-  :after flymake
-  :config
-  (add-hook 'flymake-mode-hook #'flymake-diagnostic-at-point-mode)
-  (setq flymake-no-changes-timeout 1.1))
-
-
 ;;                                             _     _ _     _
 ;;   __ _ _ __ __ _ _   _ _ __ ___   ___ _ __ | |_  | (_)___| |_
 ;;  / _` | '__/ _` | | | | '_ ` _ \ / _ \ '_ \| __| | | / __| __|
