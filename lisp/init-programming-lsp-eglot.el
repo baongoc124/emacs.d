@@ -21,6 +21,8 @@
       )
 
     (add-hook 'completion-at-point-functions (cape-capf-nonexclusive 'eglot-completion-at-point) 0 t)
+
+    (eglot-inlay-hints-mode -1)
     )
   (add-hook 'eglot-managed-mode-hook #'my/my-eglot-setup)
 
