@@ -50,6 +50,8 @@
       (funcall orig-fun dir)))
 
   (advice-add 'project-try-vc :around #'my/disable-project-vc-for-docker-tramp)
+
+  (setq project-switch-commands #'magit-project-status)
   )
 
 
