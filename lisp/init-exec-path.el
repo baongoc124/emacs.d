@@ -3,7 +3,7 @@
   (when (memq window-system '(mac ns x))
     (message "Initializing exec-path-from-shell")
     (when (string= system-type "darwin")
-      (setq exec-path-from-shell-shell-name "/Users/ngoc/.nix-profile/bin/bash")
+      (setq exec-path-from-shell-shell-name (expand-file-name "~/.nix-profile/bin/bash"))
       (setq exec-path-from-shell-arguments '("-i"))
       )
 
@@ -14,7 +14,6 @@
             "MANPATH"
 
             ;; my setup
-            "DOCKER_CLI_HINTS"
             "LANG"
             "LC_CTYPE"
             "NIX_PROFILES"
@@ -32,5 +31,7 @@
 
     (exec-path-from-shell-initialize)
     ))
+
+(setenv "SHELL" (expand-file-name "~/.nix-profile/bin/bash"))
 
 (provide 'init-exec-path)
