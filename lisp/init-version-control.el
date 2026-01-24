@@ -18,6 +18,8 @@
   (setq magit-log-margin-show-committer-date t) ;; to match with bitbucket display
   (setq magit-diff-refine-hunk t)
   (setq magit-save-repository-buffers 'dontask)
+  (setq magit-branch-read-upstream-first nil)
+
   (add-hook 'magit-pre-refresh-hook #'diff-hl-magit-pre-refresh)
   (add-hook 'magit-post-refresh-hook #'diff-hl-magit-post-refresh)
   (add-hook 'magit-status-headers-hook #'magit-insert-repo-header)
