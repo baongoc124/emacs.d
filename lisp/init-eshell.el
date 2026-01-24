@@ -17,7 +17,7 @@
          )))
 
 (defun my/eshell-setup ()
-  (setenv "BUILDKIT_PROGRESS" "plain")
+  ;; (setenv "BUILDKIT_PROGRESS" "plain")
   )
 
 (add-hook 'eshell-mode-hook #'my/eshell-setup)
