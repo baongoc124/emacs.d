@@ -27,10 +27,11 @@
   (setq ngoc/prefix-keymap-alist
         '(("`" . evil-goto-mark)
           ("=" . ngoc/align-dwim)
-          ("3" . ngoc/cheatsheet)
+          ;; ("3" . ngoc/cheatsheet)
           ("M-b" . ibuffer)
           ("b" . counsel-switch-buffer)
           ("c" . evilnc-comment-operator)
+          ("d" . detached-open-session)
           ("e" . ngoc/eglot-transient)
           ("f" . project-find-file)
           ("M-f" . format-all-buffer)
