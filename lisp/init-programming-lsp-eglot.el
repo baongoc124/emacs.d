@@ -25,7 +25,9 @@
   (add-hook 'eglot-managed-mode-hook #'my/my-eglot-setup)
 
   (add-to-list 'eglot-server-programs
-               '(python-mode . ("uvx" "--offline" "--from" "python-lsp-server[all]>=1.12.2" "pylsp")))
+               ;; '(python-mode . ("uvx" "--offline" "--from" "python-lsp-server[all]>=1.12.2" "pylsp"))
+               '(python-mode . ("uvx" "--from" "rassumfrassum" "--with" "basedpyright,ruff" "rass" "basedruff"))
+               )
 
   ;; remove python from assoc list eglot-server-programs
   ;; (setq eglot-server-programs (cl-delete-if (lambda (entry) (eq (car entry) '(python-mode python-ts-mode))) eglot-server-programs))
