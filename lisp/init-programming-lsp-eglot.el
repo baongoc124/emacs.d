@@ -31,6 +31,8 @@
                '(python-mode . ("uvx" "--from" "rassumfrassum" "--with" "basedpyright,ruff" "rass" "basedruff"))
                )
 
+  (add-to-list 'eglot-server-programs
+               '((vue-mode vue-ts-mode) . ("uvx" "--from" "rassumfrassum" "rass" "myvue")))
   ;; remove python from assoc list eglot-server-programs
   ;; (setq eglot-server-programs (cl-delete-if (lambda (entry) (eq (car entry) '(python-mode python-ts-mode))) eglot-server-programs))
   (add-to-list 'eglot-server-programs
