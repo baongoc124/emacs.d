@@ -170,8 +170,9 @@
 
 (use-package dotenv-mode
   :config
-  ;; for optionally supporting additional file extensions such as `.env.test' with this major mode
-  (add-to-list 'auto-mode-alist '("\\.?env\\..*\\'" . dotenv-mode))
+  (add-to-list
+   'auto-mode-alist
+   '("\\.?env\\.\\(local\\|sample\\|stg\\|alpha\\|beta\\|prd\\)\\'" . dotenv-mode))
   )
 
 
