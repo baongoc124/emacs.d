@@ -68,6 +68,7 @@
 (require 'init-neotree)
 (require 'init-embark)
 (require 'init-ai)
+(require 'init-macro)
 
 (require 'init-evil-paste)
 (require 'init-fold)
