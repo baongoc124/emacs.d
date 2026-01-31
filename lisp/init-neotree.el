@@ -1,5 +1,5 @@
 (use-package neotree
-  :vc (:fetcher github :repo "baongoc124/emacs-neotree") ;; my fork with project.el support
+  :vc (:url "https://github.com/baongoc124/emacs-neotree") ;; my fork with project.el support
   :demand t
   :bind
   (

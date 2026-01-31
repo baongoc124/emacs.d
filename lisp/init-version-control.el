@@ -241,7 +241,7 @@
 
 
 (use-package difftastic-bindings
-  :vc (:fetcher github :repo "pkryger/difftastic.el")
+  :vc (:url "https://github.com/pkryger/difftastic.el")
   ;; :ensure difftastic ;; or nil if you prefer manual installation
   :config (difftastic-bindings-mode))
 

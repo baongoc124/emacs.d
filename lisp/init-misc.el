@@ -49,7 +49,7 @@
 (add-to-list 'auto-mode-alist '("\\.json5\\'" . js-json-mode))
 ;; (add-to-list 'auto-mode-alist '("\\.json5\\'" . js-ts-mode))
 (use-package flymake-eslint
-  :vc (:fetcher github :repo "orzechowskid/flymake-eslint")
+  :vc (:url "https://github.com/orzechowskid/flymake-eslint")
   :config
 
   (defun my/flymake-eslint-setup ()
@@ -100,7 +100,7 @@
 (use-package xcscope)
 
 (use-package ned-mode
-  :vc (:fetcher github :repo "dalwadani/ned-mode"))
+  :vc (:url "https://github.com/dalwadani/ned-mode"))
 
 (use-package envrc
   :hook (after-init . envrc-global-mode)

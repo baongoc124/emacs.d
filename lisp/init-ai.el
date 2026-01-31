@@ -63,7 +63,7 @@ When responding to me:
 
 
 (use-package aidermacs
-  :vc (:fetcher github :repo "MatthewZMD/aidermacs")
+  :vc (:url "https://github.com/MatthewZMD/aidermacs")
   :bind (("<f4>" . aidermacs-transient-menu))
   :config
   ; Set API_KEY in .bashrc, that will automatically picked up by aider or in elisp
@@ -82,7 +82,7 @@ When responding to me:
 
 
 (use-package minuet
-  :vc (:fetcher github :repo "milanglacier/minuet-ai.el")
+  :vc (:url "https://github.com/milanglacier/minuet-ai.el")
   :diminish minuet-auto-suggestion-mode
   :bind
   (
@@ -199,11 +199,21 @@ When responding to me:
 
 
 (use-package claudemacs
-  :vc (:fetcher github :repo "cpoile/claudemacs")
+  :vc (:url "https://github.com/cpoile/claudemacs")
+
+  :custom ((claudemacs-m-return-is-submit nil)
+           (claudemacs-use-shell-env t))
 
   :config
   (global-set-key (kbd "C-9") #'claudemacs-transient-menu)
   )
+
+
+;; (use-package claude-code-ide
+;;   :vc (:url "https://github.com/manzaltu/claude-code-ide.el" :rev :newest)
+;;   :bind ("C-9" . claude-code-ide-menu) ; Set your favorite keybinding
+;;   :config
+;;   (claude-code-ide-emacs-tools-setup)) ; Optionally enable Emacs MCP tools
 
 
 (provide 'init-ai)

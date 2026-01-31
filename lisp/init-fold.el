@@ -1,5 +1,5 @@
 (use-package ts-fold
-  :vc (:fetcher github :repo "emacs-tree-sitter/ts-fold")
+  :vc (:url "https://github.com/emacs-tree-sitter/ts-fold")
   )
 
 (with-eval-after-load 'evil

@@ -200,7 +200,7 @@
 ;; (require 'org-protocol)
 
 (use-package org-menu
-  :vc (:fetcher github :repo "sheijk/org-menu")
+  :vc (:url "https://github.com/sheijk/org-menu")
   :config
   (define-key org-mode-map (kbd "C-c m") 'org-menu))
 

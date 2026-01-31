@@ -1,5 +1,5 @@
 (use-package eat
-  :vc (:fetcher codeberg :repo "akib/emacs-eat")
+  :vc (:url "https://codeberg.org/akib/emacs-eat.git")
   :demand t
   :after ivy
   :hook ((eat-mode . compilation-shell-minor-mode)
@@ -185,7 +185,7 @@ and go back to emacs state when leaving."
   )
 
 ;; (use-package term-keys
-;;   :vc (:fetcher github :repo "CyberShadow/term-keys")
+;;   :vc (:url "https://github.com/CyberShadow/term-keys")
 ;;   :config
 ;;   (term-keys-mode 1)
 
