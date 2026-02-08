@@ -38,6 +38,11 @@
   ;; from 29.1
   (add-to-list 'project-vc-extra-root-markers ".ngoc-project")
 
+  ;; swap key for project-dired and project-find-dir
+  ;; because I don't use project-find-dir much
+  (keymap-set project-prefix-map "d" #'project-dired)
+  (keymap-set project-prefix-map "D" #'project-find-dir)
+
 
   ;; Disable project-try-vc for Docker TRAMP buffers because it makes Emacs hang
   (defun my/disable-project-vc-for-docker-tramp (orig-fun dir)
